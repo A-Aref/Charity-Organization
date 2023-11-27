@@ -1,0 +1,43 @@
+#SigninPage {
+  margin: 2rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 80vh;
+}
+
+
+
+#login {
+  width: 400px;
+  height: 400px;
+}
+
+
+#password {
+  display: flex;
+  align-content: space-between;
+  width: 370px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  padding: none;
+  background-color: #1a1a1a;
+  margin: 10px;
+}
+
+#pass {
+  margin: none;
+  width: 300px;
+  border: none;
+}
+
+#check {
+  padding: none;
+  border: none;
+  margin: none;
+  width: 15px;
+}

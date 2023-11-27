@@ -1,0 +1,15 @@
+
+#RegisterPage {
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 90vh;
+}
+
+#DOB {
+    width: 260px;
+}

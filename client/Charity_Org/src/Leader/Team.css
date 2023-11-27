@@ -1,0 +1,83 @@
+
+#teamPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#Title {
+    margin: 10px auto;
+}
+
+#sort {
+    margin: 10px 30px;
+    position: absolute;
+    left: 0;
+}
+
+#teamData {
+    background-color: #1a1a1a;
+    margin: 20px 30px;
+    border-radius: 10px;
+
+}
+
+#members {
+    overflow-y: auto;
+    height: 200px;
+}
+
+#tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+
+.member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 5px 30px;
+}
+
+.teamText {
+    display: block;
+    width: 200px;
+    text-align: left;
+    font-size: large;
+    font-weight: 600;
+}
+
+.Points {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.PointsAdd {
+    width: 60px;
+    text-align: center;
+    background-color: #373737;
+}
+
+.bestMember {
+    width: 150px; 
+}
+
+.radioBest {
+    width: 40px;
+    height: 20px;
+    margin: 0 30px;
+}
+
+#addPoints {
+    margin: 10px 30px;
+}
