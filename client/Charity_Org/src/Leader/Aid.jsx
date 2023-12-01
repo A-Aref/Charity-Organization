@@ -5,6 +5,7 @@ import "./Aid.css"
 function Aid() {
 
     const [beneficiaries,setBeneficiaries] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
+    
     const [popUpB,setPopUpB] = useState(false)
     const [fName,setFName] = useState('')
     const [lName,setLName] = useState('')

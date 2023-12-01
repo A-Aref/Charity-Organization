@@ -4,7 +4,7 @@ import "./Team.css"
 
 function Team() {
 
-    const [members,setMembers] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
+    const [members,setMembers] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":1000000,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
     const [points,setPoints] = useState([0,0,0])
     const [popUpV,setPopUpV] = useState(false)
     const [fName,setFName] = useState('')
@@ -124,8 +124,8 @@ function Team() {
                     <div className='member' key={member.key}>
                         <div className='teamText'>{member.id}</div>
                         <div className='teamText'>{member.name}</div>
-                        <div className='teamText Points'>
-                            {member.points}
+                        <div className='Points'>
+                            <div className='point'>{member.points}</div>
                             <input type="number" className='PointsAdd' min='0' max="500" value={points[member.key]} onChange={(e)=>{changePoints(e.target.value,member.key)}}/>
                         </div>
                         <div className='teamText'>{member.phone}</div>
