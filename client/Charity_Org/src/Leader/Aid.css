@@ -1,5 +1,5 @@
 
-#teamPage {
+#beneficiariesPage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,22 +11,16 @@
     margin: 10px auto;
 }
 
-#sort {
-    margin: 10px 30px;
-    position: absolute;
-    left: 0;
-}
 
 #teamData {
     background-color: #1a1a1a;
     margin: 20px 30px;
     border-radius: 10px;
-
 }
 
-#members {
+#beneficiaries {
     overflow-y: auto;
-    height: 200px;
+    height: 350px;
 }
 
 #tableHead {
@@ -56,33 +50,8 @@
     font-weight: 600;
 }
 
-.Points {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.PointsAdd {
-    width: 60px;
-    text-align: center;
-    background-color: #373737;
-}
-
-.bestMember {
-    width: 150px; 
-}
-
-.radioBest {
-    width: 40px;
-    height: 20px;
-    margin: 0 30px;
-}
-
-#addPoints {
-    margin: 10px 30px;
-}
-
-#popUpV {
+#popUpB,#popUpA {
     background-color: #373737;
     display: flex;
     flex-direction: column;
@@ -97,7 +66,7 @@
     padding-top: 0;
 }
 
-#popUpV > div {
+#popUpB > div ,#popUpA > div {
     margin: auto;
     display: flex;
     align-items: center;
@@ -105,24 +74,7 @@
     padding: 10px;
 }
 
-#popUpV > div > input{
+#popUpB> div > input,#popUpA > div > input{
     width: 200px;
 }
 
-#Gender {
-    display: flex;
-    align-items: center;
-    margin-left: 30px;
-}
-
-#gender {
-    margin-right: 50px;
-}
-
-#Gender > div {
-    display: flex;
-}
-
-#Gender > div >  input {
-    width: 80px;
-}
