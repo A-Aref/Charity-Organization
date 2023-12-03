@@ -3,7 +3,7 @@ import {Outlet,Navigate} from 'react-router-dom'
 
 function PrivateRoute (props) {
   return (
-    props.token ? <Outlet/> : <Navigate to='/'/>
+    props.viewSet === props.view ? <Outlet/> : <Navigate to='/'/>
   )
 }
 

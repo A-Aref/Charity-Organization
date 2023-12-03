@@ -38,7 +38,7 @@ function Signin(props) {
       if(data === "Not found")
       {
         setText(data)
-        props.login()
+        props.view('leader')
         navigate("/Leader")
       }
       else

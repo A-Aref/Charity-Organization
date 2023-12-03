@@ -42,7 +42,7 @@ function Account(props)
         </div>
         <br />
         <div>
-        <button id="Cancel" onClick={() =>props.logout()}>Cancel</button>
+        <button id="Cancel" onClick={() =>props.view('none')}>Cancel</button>
         <button id="Save">Save</button>
         </div>
        

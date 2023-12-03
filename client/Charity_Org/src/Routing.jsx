@@ -10,19 +10,16 @@ import './main.css'
 
 function Routing() {
 
-    const [isSigned,setIsSigned] = useState(false)
-
-    const login = () => setIsSigned(true)
-    const logout = () => setIsSigned(false)
+    const [view,setView] = useState('none')
 
 return(
     <>
         <Router>
             <Routes>
-                <Route path='/' element={<Signin login={login}/>}/>
+                <Route path='/' element={<Signin view={setView}/>}/>
                 <Route path='/Register' element={<Register/>}/>
-                <Route element={<PrivateRoute token={isSigned}/>}>
-                    <Route path='/Leader' element={<Leader logout={logout}/>} exact/>
+                <Route element={<PrivateRoute viewSet="leader" view={view}/>}>
+                    <Route path='/Leader' element={<Leader view={setView}/>} exact/>
                 </Route>
             </Routes>
         </Router>

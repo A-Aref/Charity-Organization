@@ -26,7 +26,7 @@ function Leader(props) {
         {select==1 && <Team/>}
         {select==3 && <Events/>}
         {select==2 && <Aid/>}
-        {select==4 && <Account logout={() =>props.logout()}/>}
+        {select==4 && <Account view={props.view}/>}
     </div>
 
     )
