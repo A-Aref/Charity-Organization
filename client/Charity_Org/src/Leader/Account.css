@@ -40,12 +40,16 @@
     text-align: center;
 }
 
-#Cancel {
+#logout {
     background-color: #1a1a1a;
     color: red;
+    position: fixed;
+    right: 30%;
+    top: 12%;
+    font-size:large;
 }
 
-#Cancel:hover {
+#logout:hover {
     background-color: rgb(220, 41, 41);;
     color: #1a1a1a;
 }

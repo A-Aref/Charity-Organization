@@ -10,7 +10,7 @@ import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('none')
+    const [view,setView] = useState('leader')
 
 return(
     <>

@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react'
 import "./Team.css"
 
-function Team() {
-
-    const [members,setMembers] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":1000000,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
+function Team(props) {
+    
     const [points,setPoints] = useState([0,0,0])
+    
     const [popUpV,setPopUpV] = useState(false)
     const [fName,setFName] = useState('')
     const [lName,setLName] = useState('')
@@ -51,15 +51,14 @@ function Team() {
         }
         if(gender.trim().length === 0) {
             setPopulated(false)
-            console.log(gender)
         }
     }
 
     useEffect(() => {
         if(populated) {
-            let temp = members
-            temp[members.length] = {key:members.length,"id": "V_1556", "name": "Abd-Allah Ahmad","points":0,"phone":"01026908500",best:false}
-            setMembers(temp)
+            let temp = props.volunteers
+            temp[props.volunteers.length] = {key:props.volunteers.length,"id": "V_1556", "name": `${fName} ${lName}`,"points":0,"phone":phone,best:false}
+            props.setVolunteers(temp)
             setPopUpV(false)
 
             setAddress('')
@@ -71,15 +70,29 @@ function Team() {
             setPhone('')
             setGender('')
             setPopulated(false)
+            //update database
         }
     },[populated])
+
+    function reset() {
+        setPopUpV(false)
+        setAddress('')
+        setDoB('')
+        setEmail('')
+        setFName('')
+        setJDate('')
+        setLName('')
+        setPhone('')
+        setGender('')
+        setPopulated(false)
+    }
 
 
     function AddPoints () {
         if(confirm("Are you sure you want to make this change"))
         {
             let temp = points
-            setMembers(members.map((member) => {
+            props.setVolunteers(props.volunteers.map((member) => {
                 const sumPoints = parseInt(member.points)+parseInt(points[member.key])
                 temp[member.key] = 0
                 return {
@@ -88,6 +101,7 @@ function Team() {
                 }
             }))
             setPoints({...temp})
+            //update database
         }
 
     }
@@ -95,20 +109,25 @@ function Team() {
     function changeBest (Rkey) {
         if(confirm("Are you sure you want to make this change"))
         {
-            setMembers(members.map((member) => {
+            props.setVolunteers(props.volunteers.map((member) => {
                 return {
                     ...member,
                     best: member.key == Rkey ? true:false
                 }
             }))
+            //update database
         } 
+    }
+
+    function Sort () {
+        //order by from database
     }
 
     return (
     <div id='teamPage'>
         <h1 id='Title'>Team Members</h1>
         <div id='sort'>
-            <button type="button" disabled={popUpV}>Sort on Points</button>
+            <button type="button" disabled={popUpV} onClick={Sort}>Sort on Points</button>
         </div>
 
         <div id='teamData'>
@@ -120,7 +139,7 @@ function Team() {
                 <div className='teamText bestMember'>Best member</div>
             </div>
             <div id='members'>
-                {members.map((member) => (
+                {props.volunteers.map((member) => (
                     <div className='member' key={member.key}>
                         <div className='teamText'>{member.id}</div>
                         <div className='teamText'>{member.name}</div>
@@ -190,7 +209,7 @@ function Team() {
                 </div>
             </div>
             <div>
-                <button type="button" onClick={() => setPopUpV(false)}>Cancel</button>
+                <button type="button" onClick={() => reset()}>Cancel</button>
                 <button type="button" onClick={addVolunteer}>Save</button>
             </div>
         </div>

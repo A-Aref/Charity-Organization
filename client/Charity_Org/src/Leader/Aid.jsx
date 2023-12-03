@@ -4,23 +4,23 @@ import "./Aid.css"
 
 function Aid() {
 
-    const [beneficiaries,setBeneficiaries] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
+    const [beneficiaries,setBeneficiaries] = useState([{"id":"1","FirstName": "Abd-Allah","LastName":"Ahmad","State":"poor","Address":"maadi","L_A_Date":"12/3/2021"},{"id":"2","FirstName": "Ahmad","LastName":"Ahmad","State":"disable","Address":"tagamo3","L_A_Date":"4/3/2021"},{"id":"3","FirstName": "salah","LastName":"shawky","State":"poor","Address":"maadi","L_A_Date":"12/3/2020"}])
     
     const [popUpB,setPopUpB] = useState(false)
     const [fName,setFName] = useState('')
     const [lName,setLName] = useState('')
-    const [phone,setPhone] = useState('')
     const [status,setStatus] = useState('')
     const [address,setAddress] = useState('')
-    const [doB,setDoB] = useState('')
     const [populatedB,setPopulatedB] = useState(false)
 
     const [popUpA,setPopUpA] = useState(false)
     const [quantity,setQuantity] = useState('')
     const [type,setType] = useState('')
+    const [b_ID,setB_ID] = useState('')
+    const [populatedA,setPopulatedA] = useState(false)
 
 
-
+    const date = (new Date()).toLocaleDateString()
 
 
     function addBeneficiary() {
@@ -33,22 +33,10 @@ function Aid() {
         if(lName.trim().length === 0) {
             setPopulatedB(false)
         }
-        if(phone.trim().length === 0) {
-            setPopulatedB(false)
-        }
-        if(email.trim().length === 0) {
+        if(status.trim().length === 0) {
             setPopulatedB(false)
         }
         if(address.trim().length === 0) {
-            setPopulatedB(false)
-        }
-        if(doB.trim().length === 0) {
-            setPopulatedB(false)
-        }
-        if(jDate.trim().length === 0) {
-            setPopulatedB(false)
-        }
-        if(gender.trim().length === 0) {
             setPopulatedB(false)
         }
     }
@@ -56,24 +44,63 @@ function Aid() {
     useEffect(() => {
         if(populatedB) {
             let temp = beneficiaries
-            temp[beneficiaries.length] = {key:beneficiaries.length,"id": "V_1556", "name": "Abd-Allah Ahmad","points":0,"phone":"01026908500",best:false}
+            temp[beneficiaries.length] = {"id":beneficiaries.length+2,"FirstName": fName,"LastName":lName,"State":status,"Address":address,"L_A_Date":date}
             setBeneficiaries(temp)
             setPopUpB(false)
 
             setAddress('')
-            setDoB('')
             setFName('')
             setStatus('')
             setLName('')
-            setPhone('')
             setPopulatedB(false)
         }
     },[populatedB])
 
 
+    function addAid() {
+
+        setPopulatedA(true)
+        
+        if(type.trim().length === 0) {
+            setPopulatedA(false)
+        }
+        if(quantity.trim().length === 0) {
+            setPopulatedA(false)
+        }
+    }
+
+    useEffect(() => {
+        if(populatedA) {
+            var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
+            //createAid() fetch
+            setPopUpA(false)
+
+            setQuantity('')
+            setType('')
+            setB_ID('')
+            setPopulatedA(false)
+        }
+    },[populatedA])
+
+
     function createAid (id) {
         setPopUpA(true)
+        setB_ID(id)
 
+    }
+
+    function reset() {
+        setAddress('')
+        setFName('')
+        setStatus('')
+        setLName('')
+        setQuantity('')
+        setType('')
+        setB_ID('')
+        setPopUpB(false)
+        setPopUpA(false)
+        setPopulatedB(false)
+        setPopulatedA(false)
     }
 
 
@@ -85,18 +112,20 @@ function Aid() {
         </div>
         <div id='teamData'>
             <div id='tableHead'>
-                <div className='teamText'>ID</div>
-                <div className='teamText'>Name</div>
-                <div className='teamText'>Phone</div>
-                <div className='teamText'>Best member</div>
+                <div className='benfText idtable'>ID</div>
+                <div className='benfText'>Name</div>
+                <div className='benfText'>State</div>
+                <div className='benfText'>Last Aid Date</div>
+                <div className='benfText buttonAid'>Create Aid</div>
             </div>
             <div id='beneficiaries'>
                 {beneficiaries.map((member) => (
-                    <div className='member' key={member.key}>
-                        <div className='teamText'>{member.id}</div>
-                        <div className='teamText'>{member.name}</div>
-                        <div className='teamText'>{member.phone}</div>
-                        <div className='teamText'>
+                    <div className='member' key={member.id}>
+                        <div className='benfText idtable'>{member.id}</div>
+                        <div className='benfText'>{`${member.FirstName}  ${member.LastName}`}</div>
+                        <div className='benfText'>{member.State}</div>
+                        <div className='benfText'>{member.L_A_Date}</div>
+                        <div className='benfText buttonAid'>
                             <button type="button" className='createAid' onClick={() => createAid(member.id)} disabled={popUpA || popUpB}>Create Aid</button>
                         </div>
                     </div>
@@ -123,18 +152,8 @@ function Aid() {
             </div>
             <div>
                 <div>
-                    <label htmlFor='Phone'>Phone</label>
-                    <input type="text" id="Phone" value={phone} onChange={(e) => setPhone(e.target.value)}/>
-                </div>
-                <div>
                     <label htmlFor='Address'>Address</label>
                     <input type="text" id="Address" value={address} onChange={(e) => setAddress(e.target.value)}/>
-                </div>  
-            </div>
-            <div>
-                <div>
-                    <label htmlFor='DoB'>Date of Birth</label>
-                    <input type="date" id="DoB" value={doB} onChange={(e) => setDoB(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='Status'>Status</label>
@@ -142,7 +161,7 @@ function Aid() {
                 </div>
             </div>
             <div>
-                <button type="button" onClick={() => setPopUpB(false)}>Cancel</button>
+                <button type="button" onClick={() => reset()}>Cancel</button>
                 <button type="button" onClick={addBeneficiary}>Save</button>
             </div>
         </div>
@@ -164,8 +183,8 @@ function Aid() {
                 </div>
             </div>
             <div>
-                <button type="button" onClick={() => setPopUpA(false)}>Cancel</button>
-                <button type="button" onClick={addBeneficiary}>Save</button>
+                <button type="button" onClick={() => reset()}>Cancel</button>
+                <button type="button" onClick={addAid}>Save</button>
             </div>
         </div>
         }
