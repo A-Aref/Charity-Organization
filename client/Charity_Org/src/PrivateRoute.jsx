@@ -1,10 +1,9 @@
 
 import {Outlet,Navigate} from 'react-router-dom'
 
-function PrivateRoute () {
-  let auth = {'token':true}
+function PrivateRoute (props) {
   return (
-    auth.token ? <Outlet/> : <Navigate to='/'/>
+    props.token ? <Outlet/> : <Navigate to='/'/>
   )
 }
 

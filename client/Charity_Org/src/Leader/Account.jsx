@@ -1,7 +1,7 @@
 
 import "./Account.css"
 
-function Account()
+function Account(props)
 {
   return (
     <div id='accountPage'>
@@ -42,7 +42,7 @@ function Account()
         </div>
         <br />
         <div>
-        <button id="Cancel">Cancel</button>
+        <button id="Cancel" onClick={() =>props.logout()}>Cancel</button>
         <button id="Save">Save</button>
         </div>
        

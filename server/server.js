@@ -20,6 +20,22 @@ con.connect((err) => {
   console.log("Connected!");
 });
 
+/*
+const con_online = mysql.createConnection({
+  host: "sql11.freemysqlhosting.net",
+  user: "sql11667038",
+  password: "y5ZKWH7dtf",
+  database: "sql11667038"
+});
+
+
+
+con_online.connect((err) => {
+  if (err) throw err;
+  console.log("Connected online!");
+});
+*/
+
 
 
 app.get("/api/v1",(req,res)=>{

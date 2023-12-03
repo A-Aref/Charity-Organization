@@ -3,7 +3,7 @@ import './Signin.css'
 import {Link, useNavigate} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
-function Signin() {
+function Signin(props) {
   
   const navigate = useNavigate()
   const [password , setpassword] = useState("")
@@ -38,11 +38,12 @@ function Signin() {
       if(data === "Not found")
       {
         setText(data)
+        props.login()
+        navigate("/Leader")
       }
       else
       {
         setText("")
-        navigate("/Register")
       }
 
       console.log(data)})
