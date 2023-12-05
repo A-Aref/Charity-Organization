@@ -31,6 +31,7 @@ function Events(props) {
     return (
 
     <div>
+        <h1>Events</h1>
         {events.map((event)=> (
             <div key={event.ID} className='Event'>
                 <img src={event.image}  className='event_img' />
