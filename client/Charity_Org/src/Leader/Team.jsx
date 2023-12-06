@@ -4,7 +4,8 @@ import "./Team.css"
 
 function Team(props) {
     
-    const [points,setPoints] = useState([0,0,0])
+    const [points,setPoints] = useState(Array(props.volunteers.length).fill(0))
+    
     
     const [popUpV,setPopUpV] = useState(false)
     const [fName,setFName] = useState('')
@@ -18,10 +19,12 @@ function Team(props) {
     const [populated,setPopulated] = useState(false)
 
     function changePoints (value,Rkey) {
-        let temp = points
-        temp[Rkey] = value
-        setPoints({...temp})
-
+        if(value <= 500 && value >= 0)
+        {
+            let temp = points
+            temp[Rkey] = value
+            setPoints({...temp})
+        }
     }
 
     function addVolunteer() {
@@ -59,17 +62,10 @@ function Team(props) {
             let temp = props.volunteers
             temp[props.volunteers.length] = {key:props.volunteers.length,"id": "V_1556", "name": `${fName} ${lName}`,"points":0,"phone":phone,best:false}
             props.setVolunteers(temp)
-            setPopUpV(false)
+            
+            reset()
+            setPoints(Array(props.volunteers.length).fill(0))
 
-            setAddress('')
-            setDoB('')
-            setEmail('')
-            setFName('')
-            setJDate('')
-            setLName('')
-            setPhone('')
-            setGender('')
-            setPopulated(false)
             //update database
         }
     },[populated])

@@ -11,6 +11,7 @@ function Signin(props) {
   const [id,setId] = useState("")
   const [text,setText] = useState("")
 
+  //useEffect(() => props.view('none'))
 
   function Submit()
   {
@@ -27,10 +28,10 @@ function Signin(props) {
     }
     else
     {
-      var Hi ={"ID": id,"password":password}
+      var Search = {"ID": id,"password":password}
     fetch("/api/v2", {
         method: "POST",
-        body:  JSON.stringify(Hi),
+        body:  JSON.stringify(Search),
         headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
     })
     .then((response)=>{return response.json()})
@@ -38,8 +39,6 @@ function Signin(props) {
       if(data === "Not found")
       {
         setText(data)
-        props.view('leader')
-        navigate("/Leader")
       }
       else
       {
