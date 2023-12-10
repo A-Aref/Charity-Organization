@@ -26,7 +26,7 @@ function Leader(props) {
         {select==1 && <Team volunteers={volunteers} setVolunteers={setVolunteers}/>}
         {select==2 && <Aid/>}
         {select==3 && <Events volunteers={volunteers} setVolunteers={setVolunteers}/>}
-        {select==4 && <Account view={props.view}/>}
+        {select==4 && <Account view={props.view} user={props.user}/>}
     </div>
 
     )
