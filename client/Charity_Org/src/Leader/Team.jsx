@@ -79,7 +79,7 @@ function Team(props) {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-            .then((data)=>{
+            .then(()=>{
                 fetch("/api/leader/selectTeam", {
                     method: "POST",
                     body:  JSON.stringify(props.user),
@@ -113,16 +113,30 @@ function Team(props) {
         if(confirm("Are you sure you want to make this change"))
         {
             let temp = points
-            props.setVolunteers(props.volunteers.map((member) => {
-                const sumPoints = parseInt(member.points)+parseInt(points[member.key])
-                temp[member.key] = 0
-                return {
-                    ...member,
-                    points: sumPoints
-                }
-            }))
-            setPoints({...temp})
             //update database
+        Promise.all(props.volunteers.map((member,key) => {
+            const sumPoints = parseInt(member.Points)+parseInt(points[key])
+            temp[key] = 0
+            fetch("/api/leader/updatePoints", {
+                method: "POST",
+                body:  JSON.stringify({V_ID:member.V_ID,Points:sumPoints}),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            })).then(()=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  console.log(JSON.parse(data))
+                  props.setVolunteers(JSON.parse(data))
+                }).then(() => setPoints(Array(props.volunteers.length).fill(0)))
+            })
+            
+            
         }
 
     }
@@ -137,18 +151,28 @@ function Team(props) {
                 }
             }))
             //update database
+            ///Add it to database
         } 
     }
 
     function Sort () {
-        //order by from database
+        fetch("/api/leader/selectTeamOrdered", {
+            method: "POST",
+            body:  JSON.stringify(props.user),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+          console.log(JSON.parse(data))
+          props.setVolunteers(JSON.parse(data))
+        })
     }
 
     return (
     <div id='teamPage'>
         <h1 id='Title'>Team Members</h1>
         <div id='sort'>
-            <button type="button" disabled={popUpV} onClick={Sort}>Sort on Points</button>
+            <button type="button" disabled={popUpV} onClick={Sort}>Sort by Points</button>
         </div>
 
         <div id='teamData'>
