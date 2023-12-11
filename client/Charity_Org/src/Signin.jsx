@@ -50,6 +50,11 @@ function Signin(props) {
           props.view('leader')
           navigate('/Leader')
         }
+        if(user.VRole === 'volunteer') 
+        {
+          props.view('volunteer')
+          navigate('/volunteer')
+        }
       }
     })
     }

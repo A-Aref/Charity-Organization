@@ -3,9 +3,20 @@ import { useEffect, useState } from 'react'
 import "./Participation.css"
 import moment from 'moment'
 
-function Participation() {
+function Participation(props) {
 
-    const [Participations,setParticipations] = useState([{"Volunteer id":"1","Participation Type": "Abd-Allah","Bonus Type":"Ahmad","Bonus Value":"poor","Date":"12/3/2021"}])
+  const [Participations,setParticipations] = useState([])
+
+  useEffect(() =>   {fetch("/api/volunteer/getParticipations", {
+    method: "POST",
+    body:  JSON.stringify({V_ID:props.user.V_ID}),
+    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+})
+.then((response)=>{return response.json()})
+.then((data)=>{
+  setParticipations(JSON.parse(data))
+})
+},[])
     
     const [popUpB,setPopUpB] = useState(false)
     const [v_id,setv_id] = useState('')
@@ -17,12 +28,6 @@ function Participation() {
 
     const date = moment().format('YYYY-MM-DD')
 
-    useEffect(() =>   {fetch("/api/leader/selectBenef")
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      setParticipations(JSON.parse(data))
-    })
-    },[])
 
     useEffect(() => {
         if(populatedB) {
@@ -41,14 +46,6 @@ function Participation() {
     },[populatedB])
 
 
-   
-    
-
-  
-
-
-
-
     return (
     <div id='ParticipationsPage'>
         <div>
@@ -63,24 +60,18 @@ function Participation() {
                 <div className='benfText buttonAid'>Date</div>
             </div>
             <div id='Participations'>
-                {Participations.map((member) => (
-                    <div className='member' key={member.v_id}>
-                        <div className='benfText idtable'>{member.v_id}</div>
-                        <div className='benfText'>{member.ptype}</div>
-                        <div className='benfText'>{member.btype}</div>
-                        <div className='benfText'>{member.bvalue}</div>
-                        <div className='benfText'>{member.date}</div>
+                {Participations.map((member,key) => (
+                    <div className='member' key={key}>
+                        <div className='benfText idtable'>{member.V_ID}</div>
+                        <div className='benfText'>{member.P_type}</div>
+                        <div className='benfText'>{member.Bonus_Type}</div>
+                        <div className='benfText'>{member.B_value}</div>
+                        <div className='benfText'>{member.P_Date}</div>
 
                     </div>
                 ))}
             </div>
         </div>
-
-
-        
-
-        
-       
          <RequestBox />
     </div>
     )

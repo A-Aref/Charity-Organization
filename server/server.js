@@ -195,4 +195,16 @@ app.post("/api/leader/selectVechicle", (req,res)=>{
 })
 
 
+app.post("/api/volunteer/getParticipations", (req,res)=>{
+  con.query('SELECT * FROM participation where V_ID = ?' ,[req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 var listener = app.listen(5000,()=>{console.log(listener.address().port)})

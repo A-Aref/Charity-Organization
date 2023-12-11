@@ -20,9 +20,10 @@ function Volunteer(props) {
 
     <div id="Head">
         <Navbar_V select={Select}/>
-        {select==2 && <Account view={props.view}/>}
-        {select==0 && <Participation/>}
-        {select==1 && <Events volunteers={volunteers} setVolunteers={setVolunteers}/>}
+        
+        {select==0 && <Participation user={props.user}/>}
+        {select==1 && <Events/>}
+        {select==2 && <Account view={props.view} user={props.user}/>}
  
     </div>
 
