@@ -50,8 +50,6 @@ con_online.connect((err) => {
 */
 
 
-
-
 app.post("/api/signin", (req,res)=>{
     con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
       if (err) throw err
