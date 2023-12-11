@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 import "./Aid.css"
 
 function Aid() {
@@ -20,8 +21,14 @@ function Aid() {
     const [populatedA,setPopulatedA] = useState(false)
 
 
-    const date = (new Date()).toLocaleDateString()
+    const date = moment().format('YYYY-MM-DD')
 
+    useEffect(() =>   {fetch("/api/leader/selectBenef")
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      setBeneficiaries(JSON.parse(data))
+    })
+    },[])
 
     function addBeneficiary() {
 
@@ -44,9 +51,22 @@ function Aid() {
     useEffect(() => {
         if(populatedB) {
             let temp = beneficiaries
-            temp[beneficiaries.length] = {"id":beneficiaries.length+2,"FirstName": fName,"LastName":lName,"State":status,"Address":address,"L_A_Date":date}
-            setBeneficiaries(temp)
+            let addedB = {"FirstName": fName,"LastName":lName,"State":status,"Address":address}
             setPopUpB(false)
+
+            fetch("/api/leader/addBenef", {
+                method: "POST",
+                body:  JSON.stringify(addedB),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then((data)=>{
+                fetch("/api/leader/selectBenef")
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  setBeneficiaries(JSON.parse(data))
+                })
+            })  
 
             setAddress('')
             setFName('')
@@ -73,6 +93,13 @@ function Aid() {
         if(populatedA) {
             var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
             //createAid() fetch
+            fetch("/api/leader/createAid", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
             setPopUpA(false)
 
             setQuantity('')
@@ -119,14 +146,14 @@ function Aid() {
                 <div className='benfText buttonAid'>Create Aid</div>
             </div>
             <div id='beneficiaries'>
-                {beneficiaries.map((member) => (
-                    <div className='member' key={member.id}>
-                        <div className='benfText idtable'>{member.id}</div>
+                {beneficiaries.map((member,key) => (
+                    <div className='member' key={key}>
+                        <div className='benfText idtable'>{member.ID}</div>
                         <div className='benfText'>{`${member.FirstName}  ${member.LastName}`}</div>
                         <div className='benfText'>{member.State}</div>
-                        <div className='benfText'>{member.L_A_Date}</div>
+                        <div className='benfText'>{member.Last_AID_ID != null ? member.Last_AID_ID : "-"}</div>
                         <div className='benfText buttonAid'>
-                            <button type="button" className='createAid' onClick={() => createAid(member.id)} disabled={popUpA || popUpB}>Create Aid</button>
+                            <button type="button" className='createAid' onClick={() => createAid(member.ID)} disabled={popUpA || popUpB}>Create Aid</button>
                         </div>
                     </div>
                 ))}

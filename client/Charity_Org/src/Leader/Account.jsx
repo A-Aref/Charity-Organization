@@ -5,13 +5,20 @@ import "./Account.css"
 function Account(props)
 {
 
-    const [user,setUser] = useState({"fName":"Aref","lName":"Mahmmoud","phone":"01236","email":"dodogames000","points":8787,"team":"c_125"})
-    const [tempUser,setTempUser] = useState({...user})
+    const [user,setUser] = useState(props.user)
+    const [tempUser,setTempUser] = useState(props.user)
 
     function Save () {
         setUser({...tempUser})
-        //udpate database
     }
+    //udpate database
+    useEffect(() =>   {fetch("/api/leader/updateAccount", {
+        method: "POST",
+        body:  JSON.stringify(user),
+        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+    })
+    .then((response)=>{return response.json()})
+    },[user])
 
   return (
     <div id='accountPage'>
@@ -23,38 +30,46 @@ function Account(props)
             <div className="Fields">
                 <div className="inFields">
                     <p>First Name</p>
-                    <input type="text" className="Account" value={tempUser.fName} onChange={(e) =>setTempUser({...tempUser, fName: e.target.value })}/>   
+                    <input type="text" className="Account" value={tempUser.FName} onChange={(e) =>setTempUser({...tempUser, FName: e.target.value })}/>   
                 </div>
                 <div className="inFields">
                     <p>Last Name</p>
-                    <input type="text" className="Account" value={tempUser.lName} onChange={(e) =>setTempUser({...tempUser, lName: e.target.value })}/>   
+                    <input type="text" className="Account" value={tempUser.LName} onChange={(e) =>setTempUser({...tempUser, LName: e.target.value })}/>   
                 </div> 
             </div>
             <div className="Fields">
                 <div className="inFields">
                     <p>Email</p>
-                    <input type="text" className="Account" value={tempUser.email} onChange={(e) =>setTempUser({...tempUser, email: e.target.value })}/>    
+                    <input type="text" className="Account" value={tempUser.Email} onChange={(e) =>setTempUser({...tempUser, Email: e.target.value })}/>    
                 </div>
                 <div className="inFields">
                     <p>Phone</p>
-                    <input type="text" className="Account" value={tempUser.phone} onChange={(e) =>setTempUser({...tempUser, phone: e.target.value })}/>   
+                    <input type="text" className="Account" value={tempUser.Phone} onChange={(e) =>setTempUser({...tempUser, Phone: e.target.value })}/>   
                 </div>   
+                  
             </div>
             <div className="Fields">
                 <div className="inFields">
                     <p>Points</p>
-                    <h2>{user.points}</h2>   
+                    <h2>{user.Points}</h2>   
                 </div>
                 <div className="inFields">
                     <p>Team_ID</p>
-                    <h2>{user.team}</h2>  
+                    <h2>{user.TeamID}</h2>  
                 </div>    
+            </div>
+            <div className="Fields">
+                <div className="inFields">
+                    <p>Password</p>
+                    <input type="text" className="Account" value={tempUser.Pass} onChange={(e) =>setTempUser({...tempUser, Pass: e.target.value })}/>   
+                </div>   
+                  
             </div>
         </div>
         <br />
         <div>
         <button id ="cancel" onClick={() => setTempUser({...user})}>Cancel</button>
-        <button id="Save" onClick={Save}>Save</button>
+        <button id="Save" onClick={() => Save()}>Save</button>
         </div>
        
     </div>

@@ -1,10 +1,13 @@
 
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 import "./Team.css"
 
 function Team(props) {
     
-    const [points,setPoints] = useState([0,0,0])
+    const [points,setPoints] = useState(Array(10).fill(0))
+    useEffect(() => setPoints(Array(props.volunteers.length).fill(0)),[props.volunteers])
+    
     
     const [popUpV,setPopUpV] = useState(false)
     const [fName,setFName] = useState('')
@@ -14,14 +17,15 @@ function Team(props) {
     const [gender,setGender] = useState('')
     const [address,setAddress] = useState('')
     const [doB,setDoB] = useState('')
-    const [jDate,setJDate] = useState('')
     const [populated,setPopulated] = useState(false)
 
     function changePoints (value,Rkey) {
-        let temp = points
-        temp[Rkey] = value
-        setPoints({...temp})
-
+        if(value <= 500 && value >= 0)
+        {
+            let temp = points
+            temp[Rkey] = value
+            setPoints({...temp})
+        }
     }
 
     function addVolunteer() {
@@ -46,9 +50,6 @@ function Team(props) {
         if(doB.trim().length === 0) {
             setPopulated(false)
         }
-        if(jDate.trim().length === 0) {
-            setPopulated(false)
-        }
         if(gender.trim().length === 0) {
             setPopulated(false)
         }
@@ -57,20 +58,37 @@ function Team(props) {
     useEffect(() => {
         if(populated) {
             let temp = props.volunteers
-            temp[props.volunteers.length] = {key:props.volunteers.length,"id": "V_1556", "name": `${fName} ${lName}`,"points":0,"phone":phone,best:false}
-            props.setVolunteers(temp)
-            setPopUpV(false)
+            let genderbit = 1
+            const date = moment().format('YYYY-MM-DD')
+            if(gender === 'female')
+            {
+                genderbit = 0
+            }
+            let addedV = {"FName": fName, "LName":lName,"VRole":"Volunteer","Email":email,"Phone":phone,"Pass":phone,"Join_Date":date,"DoB":doB,"Gender":genderbit,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":props.user.TeamID}
+            temp[props.volunteers.length] = addedV
+            
+            reset()
+            setPoints(Array(props.volunteers.length).fill(0))
 
-            setAddress('')
-            setDoB('')
-            setEmail('')
-            setFName('')
-            setJDate('')
-            setLName('')
-            setPhone('')
-            setGender('')
-            setPopulated(false)
             //update database
+            fetch("/api/leader/addVolunteer", {
+                method: "POST",
+                body:  JSON.stringify(addedV),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  props.setVolunteers(JSON.parse(data))
+                })
+            })  
+            
         }
     },[populated])
 
@@ -80,7 +98,6 @@ function Team(props) {
         setDoB('')
         setEmail('')
         setFName('')
-        setJDate('')
         setLName('')
         setPhone('')
         setGender('')
@@ -92,16 +109,29 @@ function Team(props) {
         if(confirm("Are you sure you want to make this change"))
         {
             let temp = points
-            props.setVolunteers(props.volunteers.map((member) => {
-                const sumPoints = parseInt(member.points)+parseInt(points[member.key])
-                temp[member.key] = 0
-                return {
-                    ...member,
-                    points: sumPoints
-                }
-            }))
-            setPoints({...temp})
             //update database
+        Promise.all(props.volunteers.map((member,key) => {
+            const sumPoints = parseInt(member.Points)+parseInt(points[key])
+            temp[key] = 0
+            fetch("/api/leader/updatePoints", {
+                method: "POST",
+                body:  JSON.stringify({V_ID:member.V_ID,Points:sumPoints}),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            })).then(()=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  props.setVolunteers(JSON.parse(data))
+                }).then(() => setPoints(Array(props.volunteers.length).fill(0)))
+            })
+            
+            
         }
 
     }
@@ -116,18 +146,27 @@ function Team(props) {
                 }
             }))
             //update database
+            ///Add it to database
         } 
     }
 
     function Sort () {
-        //order by from database
+        fetch("/api/leader/selectTeamOrdered", {
+            method: "POST",
+            body:  JSON.stringify(props.user),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+          props.setVolunteers(JSON.parse(data))
+        })
     }
 
     return (
     <div id='teamPage'>
         <h1 id='Title'>Team Members</h1>
         <div id='sort'>
-            <button type="button" disabled={popUpV} onClick={Sort}>Sort on Points</button>
+            <button type="button" disabled={popUpV} onClick={Sort}>Sort by Points</button>
         </div>
 
         <div id='teamData'>
@@ -139,17 +178,17 @@ function Team(props) {
                 <div className='teamText bestMember'>Best member</div>
             </div>
             <div id='members'>
-                {props.volunteers.map((member) => (
-                    <div className='member' key={member.key}>
-                        <div className='teamText'>{member.id}</div>
-                        <div className='teamText'>{member.name}</div>
+                {props.volunteers.map((member,key) => (
+                    <div className='member' key={key}>
+                        <div className='teamText'>{member.V_ID}</div>
+                        <div className='teamText'>{member.FName} {member.LName}</div>
                         <div className='Points'>
-                            <div className='point'>{member.points}</div>
-                            <input type="number" className='PointsAdd' min='0' max="500" value={points[member.key]} onChange={(e)=>{changePoints(e.target.value,member.key)}}/>
+                            <div className='point'>{member.Points}</div>
+                            <input type="number" className='PointsAdd' min='0' max="500" value={points[key]} onChange={(e)=>{changePoints(e.target.value,key)}}/>
                         </div>
-                        <div className='teamText'>{member.phone}</div>
+                        <div className='teamText'>{member.Phone}</div>
                         <div className='teamText bestMember'>
-                            <input type="radio" className='radioBest' checked={member.best} onChange={() => changeBest(member.key)}/>
+                            <input type="radio" className='radioBest' checked={member.best} onChange={() => changeBest(key)}/>
                         </div>
                     </div>
                 ))}
@@ -202,10 +241,6 @@ function Team(props) {
                 <div>
                     <label htmlFor='DoB'>Date of Birth</label>
                     <input type="date" id="DoB" value={doB} onChange={(e) => setDoB(e.target.value)}/>
-                </div>
-                <div>
-                    <label htmlFor='Join_Date'>Join Date</label>
-                    <input type="date" id="Join_Date" value={jDate} onChange={(e) => setJDate(e.target.value)}/>
                 </div>
             </div>
             <div>

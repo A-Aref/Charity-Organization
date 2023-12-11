@@ -9,8 +9,9 @@ function Signin(props) {
   const [password , setpassword] = useState("")
   const [showPassword , setShowPassword] = useState(true)
   const [id,setId] = useState("")
-  const [text,setText] = useState("")
+  const [errorText,setErrorText] = useState("")
 
+  useEffect(() => props.view('none'),[])
 
   function Submit()
   {
@@ -27,33 +28,37 @@ function Signin(props) {
     }
     else
     {
-      var Hi ={"ID": id,"password":password}
-    fetch("/api/v2", {
+      var Search = {"V_ID": id,"Pass":password}
+    fetch("/api/signin", {
         method: "POST",
-        body:  JSON.stringify(Hi),
+        body:  JSON.stringify(Search),
         headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
     })
     .then((response)=>{return response.json()})
     .then((data)=>{
       if(data === "Not found")
       {
-        setText(data)
-        props.view('leader')
-        navigate("/Leader")
+        setErrorText(data)
       }
       else
       {
-        setText("")
+        setErrorText("")
+        var user = JSON.parse(data)
+        props.setUser(user)
+        if(user.VRole === 'Head') 
+        {
+          props.view('leader')
+          navigate('/Leader')
+        }
       }
-
-      console.log(data)})
+    })
     }
   }
   
 
   return (
     <div id='SigninPage'>
-    <p>{text}</p>     
+    <p>{errorText}</p>     
       <fieldset id='login'>
         <h1>Sign in</h1>
         <input type="text" name="ID" placeholder='ID' value={id} onChange={(e)=>{setId(e.target.value)}}/>
