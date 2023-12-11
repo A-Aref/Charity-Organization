@@ -11,7 +11,7 @@ import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('leader')
+    const [view,setView] = useState('volunteer')
 
 return(
     <>
@@ -22,7 +22,7 @@ return(
                 <Route element={<PrivateRoute viewSet="leader" view={view}/>}>
                     <Route path='/Leader' element={<Leader view={setView}/>} exact/>
                 </Route>
-                <Route element={<PrivateRoute viewSet="Volunteer" view={view}/>}>
+                <Route element={<PrivateRoute viewSet="volunteer" view={view}/>}>
                     <Route path='/Volunteer' element={<Volunteer view={setView}/>} exact/>
                 </Route>
             </Routes>

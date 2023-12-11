@@ -1,5 +1,5 @@
 
-#beneficiariesPage {
+#ParticipationsPage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,6 +9,7 @@
 
 #Title {
     margin: 10px auto;
+    text-align: center;
 }
 
 
@@ -18,9 +19,9 @@
     border-radius: 10px;
 }
 
-#beneficiaries {
+#Participations {
     overflow-y: auto;
-    height: 350px;
+    height: 280px;
 }
 
 #tableHead {
@@ -87,3 +88,39 @@
     width: 200px;
 }
 
+.request-box {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    background-color: mediumseagreen;
+    color: rgb(38, 39, 38);
+    border: 1px solid rgb(34, 34, 34);
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .request-box img {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+  }
+  
+  .request-box p {
+    font-size: 16px;
+    margin-bottom: 0px;
+  }
+  
+  .request-box button {
+    background-color: mediumseagreen;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .request-box button:hover {
+    background-color: mediumseagreen;
+  }
