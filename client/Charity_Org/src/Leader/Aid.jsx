@@ -22,6 +22,13 @@ function Aid() {
 
     const date = (new Date()).toLocaleDateString()
 
+    useEffect(() =>   {fetch("/api/leader/selectBenef")
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      console.log(JSON.parse(data))
+      setBeneficiaries(JSON.parse(data))
+    })
+    },[])
 
     function addBeneficiary() {
 
@@ -44,9 +51,23 @@ function Aid() {
     useEffect(() => {
         if(populatedB) {
             let temp = beneficiaries
-            temp[beneficiaries.length] = {"id":beneficiaries.length+2,"FirstName": fName,"LastName":lName,"State":status,"Address":address,"L_A_Date":date}
-            setBeneficiaries(temp)
+            let addedB = {"FirstName": fName,"LastName":lName,"State":status,"Address":address}
             setPopUpB(false)
+
+            fetch("/api/leader/addBenef", {
+                method: "POST",
+                body:  JSON.stringify(addedB),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then((data)=>{
+                fetch("/api/leader/selectBenef")
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  console.log(JSON.parse(data))
+                  setBeneficiaries(JSON.parse(data))
+                })
+            })  
 
             setAddress('')
             setFName('')
@@ -119,12 +140,12 @@ function Aid() {
                 <div className='benfText buttonAid'>Create Aid</div>
             </div>
             <div id='beneficiaries'>
-                {beneficiaries.map((member) => (
-                    <div className='member' key={member.id}>
-                        <div className='benfText idtable'>{member.id}</div>
+                {beneficiaries.map((member,key) => (
+                    <div className='member' key={key}>
+                        <div className='benfText idtable'>{member.ID}</div>
                         <div className='benfText'>{`${member.FirstName}  ${member.LastName}`}</div>
                         <div className='benfText'>{member.State}</div>
-                        <div className='benfText'>{member.L_A_Date}</div>
+                        <div className='benfText'>{member.L_A_Date != null ? member.L_A_Date:"-"}</div>
                         <div className='benfText buttonAid'>
                             <button type="button" className='createAid' onClick={() => createAid(member.id)} disabled={popUpA || popUpB}>Create Aid</button>
                         </div>

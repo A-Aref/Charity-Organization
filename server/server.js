@@ -51,10 +51,6 @@ con_online.connect((err) => {
 
 
 
-app.get("/api/v1",(req,res)=>{
-    return res.json({"users" : "user2"})
-})
-
 
 app.post("/api/signin", (req,res)=>{
     con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
@@ -67,8 +63,7 @@ app.post("/api/signin", (req,res)=>{
     });
 })
 
-app.post("/api/updateAccount", (req,res)=>{
-  console.log(JSON.stringify(req.body.V_ID))
+app.post("/api/leader/updateAccount", (req,res)=>{
   con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ?  where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
@@ -77,6 +72,58 @@ app.post("/api/updateAccount", (req,res)=>{
       return res.json("Not found")
     }
     return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.post("/api/leader/selectTeam", (req,res)=>{
+  con.query('SELECT * FROM volunteers where TeamID = ? and V_ID != ?' ,[req.body.TeamID,req.body.V_ID], function (err, result) {
+    if (err) throw err
+    console.log(err)
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/addVolunteer", (req,res)=>{
+  con.query('INSERT INTO Volunteers (FName, LName, VRole, Email, Phone, Pass, Join_Date, DoB, Gender, Promoted, Event_Request, Points, TeamID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)' ,[req.body.FName,req.body.LName,req.body.VRole,req.body.Email,req.body.Phone,req.body.Pass,req.body.Join_Date,req.body.DoB,req.body.Gender,req.body.Promoted,req.body.Event_Request,req.body.Points,req.body.TeamID], function (err, result) {
+    if (err) throw err
+    console.log(err)
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/leader/selectBenef", (req,res)=>{
+  con.query('SELECT * FROM beneficiarires', function (err, result) {
+    if (err) throw err
+    console.log(err)
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/addBenef", (req,res)=>{
+  con.query('INSERT INTO beneficiarires (Address,FirstName, LastName, State) VALUES (?, ?, ?, ?)' ,[req.body.Address,req.body.FirstName,req.body.LastName,req.body.State], function (err, result) {
+    if (err) throw err
+    console.log(err)
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
   });
 })
 

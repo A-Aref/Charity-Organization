@@ -11,16 +11,16 @@ function Account(props)
     function Save () {
         setUser({...tempUser})
     }
-        //udpate database
-     useEffect(() =>   {fetch("/api/updateAccount", {
-            method: "POST",
-            body:  JSON.stringify(user),
-            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-        })
-        .then((response)=>{return response.json()})
-        .then((data)=>{
-          console.log(data)})
-        },[user])
+    //udpate database
+    useEffect(() =>   {fetch("/api/leader/updateAccount", {
+        method: "POST",
+        body:  JSON.stringify(user),
+        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+    })
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      console.log(data)})
+    },[user])
 
   return (
     <div id='accountPage'>

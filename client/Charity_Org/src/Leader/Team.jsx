@@ -4,7 +4,8 @@ import "./Team.css"
 
 function Team(props) {
     
-    const [points,setPoints] = useState(Array(props.volunteers.length).fill(0))
+    const [points,setPoints] = useState(Array(10).fill(0))
+    useEffect(() => setPoints(Array(props.volunteers.length).fill(0)),[props.volunteers])
     
     
     const [popUpV,setPopUpV] = useState(false)
@@ -60,13 +61,37 @@ function Team(props) {
     useEffect(() => {
         if(populated) {
             let temp = props.volunteers
-            temp[props.volunteers.length] = {key:props.volunteers.length,"id": "V_1556", "name": `${fName} ${lName}`,"points":0,"phone":phone,best:false}
-            props.setVolunteers(temp)
+            let genderbit = 1
+            if(gender === 'female')
+            {
+                genderbit = 0
+            }
+            let addedV = {"FName": fName, "LName":lName,"VRole":"Volunteer","Email":email,"Phone":phone,"Pass":phone,"Join_Date":jDate,"DoB":doB,"Gender":genderbit,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":props.user.TeamID}
+            temp[props.volunteers.length] = addedV
             
             reset()
             setPoints(Array(props.volunteers.length).fill(0))
 
             //update database
+            fetch("/api/leader/addVolunteer", {
+                method: "POST",
+                body:  JSON.stringify(addedV),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then((data)=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  console.log(JSON.parse(data))
+                  props.setVolunteers(JSON.parse(data))
+                })
+            })  
+            
         }
     },[populated])
 
@@ -135,17 +160,17 @@ function Team(props) {
                 <div className='teamText bestMember'>Best member</div>
             </div>
             <div id='members'>
-                {props.volunteers.map((member) => (
-                    <div className='member' key={member.key}>
-                        <div className='teamText'>{member.id}</div>
-                        <div className='teamText'>{member.name}</div>
+                {props.volunteers.map((member,key) => (
+                    <div className='member' key={key}>
+                        <div className='teamText'>{member.V_ID}</div>
+                        <div className='teamText'>{member.FName} {member.LName}</div>
                         <div className='Points'>
-                            <div className='point'>{member.points}</div>
-                            <input type="number" className='PointsAdd' min='0' max="500" value={points[member.key]} onChange={(e)=>{changePoints(e.target.value,member.key)}}/>
+                            <div className='point'>{member.Points}</div>
+                            <input type="number" className='PointsAdd' min='0' max="500" value={points[key]} onChange={(e)=>{changePoints(e.target.value,key)}}/>
                         </div>
-                        <div className='teamText'>{member.phone}</div>
+                        <div className='teamText'>{member.Phone}</div>
                         <div className='teamText bestMember'>
-                            <input type="radio" className='radioBest' checked={member.best} onChange={() => changeBest(member.key)}/>
+                            <input type="radio" className='radioBest' checked={member.best} onChange={() => changeBest(key)}/>
                         </div>
                     </div>
                 ))}
