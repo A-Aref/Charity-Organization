@@ -34,7 +34,7 @@ function Leader(props) {
         {select==0 && <Reports/>}
         {select==1 && <Team volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
         {select==2 && <Aid/>}
-        {select==3 && <Events volunteers={volunteers} setVolunteers={setVolunteers}/>}
+        {select==3 && <Events volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
         {select==4 && <Account view={props.view} user={props.user}/>}
     </div>
 

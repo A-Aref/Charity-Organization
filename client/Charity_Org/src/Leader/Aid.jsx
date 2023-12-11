@@ -21,7 +21,7 @@ function Aid() {
     const [populatedA,setPopulatedA] = useState(false)
 
 
-    const date = moment().format('yyyy-mm-dd')
+    const date = moment().format('YYYY-MM-DD')
 
     useEffect(() =>   {fetch("/api/leader/selectBenef")
     .then((response)=>{return response.json()})
@@ -93,6 +93,13 @@ function Aid() {
         if(populatedA) {
             var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
             //createAid() fetch
+            fetch("/api/leader/createAid", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
             setPopUpA(false)
 
             setQuantity('')
@@ -144,9 +151,9 @@ function Aid() {
                         <div className='benfText idtable'>{member.ID}</div>
                         <div className='benfText'>{`${member.FirstName}  ${member.LastName}`}</div>
                         <div className='benfText'>{member.State}</div>
-                        <div className='benfText'>{member.L_A_Date != null ? member.L_A_Date:"-"}</div>
+                        <div className='benfText'>{member.Last_AID_ID != null ? member.Last_AID_ID : "-"}</div>
                         <div className='benfText buttonAid'>
-                            <button type="button" className='createAid' onClick={() => createAid(member.id)} disabled={popUpA || popUpB}>Create Aid</button>
+                            <button type="button" className='createAid' onClick={() => createAid(member.ID)} disabled={popUpA || popUpB}>Create Aid</button>
                         </div>
                     </div>
                 ))}

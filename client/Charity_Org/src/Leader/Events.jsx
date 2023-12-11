@@ -5,26 +5,70 @@ import './Events.css'
 
 function Events(props) {
 
-    const [events,setEvents] = useState([{"ID":858,"name":"tr3a","image":"https://resala.org/wp-content/uploads/2019/12/%D8%A7%D8%B5%D8%AF%D9%82%D8%A7%D8%A1-%D8%A7%D9%84%D8%A8%D9%8A%D8%A6%D8%A9.jpg","location":"maadi"}])
+    const [events,setEvents] = useState([])
     const [selectVolunteer,setSelectVolunteer] = useState("")
 
+    useEffect(() =>   {fetch("/api/leader/getEvents")
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      setEvents(JSON.parse(data))
+    })
+    },[])
+
     const [popUpT,setPopUpT] = useState(false)
-    const [selectV_Type,setSelectV_Type] = useState("")
-    const [capacity,setCapacity] = useState("")
+    const [selectV_Type,setSelectV_Type] = useState("1")
     const [driverID,setDriverID] = useState("")
-    const [driverIDs,setDriverIDs] = useState(["885","75875","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585"])
+    const [drivers,setDrivers] = useState([])
+
 
 
     function select_Vehicle () {
-        //select vehicle
+
     }
 
+
+    useEffect( () => {
+        let cargo = 1
+        if (selectV_Type == "0")
+        {
+            cargo = 0
+        }
+        fetch("/api/leader/selectVechicle", {
+            method: "POST",
+            body:  JSON.stringify({Type:cargo}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+          setDrivers(JSON.parse(data))
+        })
+    },[drivers])
+
+    function sendRequest (id) {
+
+    fetch("/api/leader/eventRequest", {
+        method: "POST",
+        body:  JSON.stringify({Event:id,V_ID:selectVolunteer}),
+        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+    })
+    .then((response)=>{return response.json()})
+    .then(() =>   {fetch("/api/leader/selectTeam", {
+        method: "POST",
+        body:  JSON.stringify(props.user),
+        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+    })
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      props.setVolunteers(JSON.parse(data))
+    })
+    })
+
+    }
 
     function reset () {
         setPopUpT(false)
         setSelectV_Type("")
         setDriverID("")
-        setCapacity("")
     }
 
 
@@ -32,19 +76,19 @@ function Events(props) {
 
     <div>
         <h1>Events</h1>
-        {events.map((event)=> (
-            <div key={event.ID} className='Event'>
-                <img src={event.image}  className='event_img' />
-                <h2>{event.name}</h2>
+        {events.map((event,key)=> (
+            <div key={key} className='Event'>
+                <img src={event.url}  className='event_img' />
+                <h2>{event.Descrip}</h2>
                 <div>
                     <div>
                         <select name='select_volunteer' value={selectVolunteer} onChange={(e) => setSelectVolunteer(e.target.value)}>
                             <option value="" disabled >Select volunteer for event</option>
                             {props.volunteers.map((volunteer) => (
-                                volunteer.best === false && <option value={volunteer.id} key={volunteer.id}>{volunteer.id}</option>
+                                volunteer.Event_Request === null && <option value={volunteer.V_ID} key={volunteer.V_ID}>{volunteer.FName} {volunteer.LName}</option>
                             ))}
                         </select>   
-                        <button disabled={popUpT}>Send request</button>
+                        <button disabled={popUpT} onClick={() => sendRequest(event.ID)}>Send Request</button>
                     </div>
                     <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button>
                 </div> 
@@ -57,25 +101,18 @@ function Events(props) {
                 <div>
                     <label htmlFor='vehicle_select'>Select Vehicle type</label>
                     <select id="vehicle_select" value={selectV_Type} onChange={(e) => setSelectV_Type(e.target.value)}>
-                        <option value="" disabled >Select vehicle type</option>
-                        <option value="Cargo">Cargo</option>
-                        <option value="People">People</option>
+                        <option value="1">Cargo</option>
+                        <option value="0">People</option>
                     </select>
                 </div>
                 <div>
                     <label htmlFor='avialable_vehicle'>Avialable vehicles</label>
                     <select name="avialable_vehicle" value={driverID} onChange={(e) => setDriverID(e.target.value)}>
                         <option value="" disabled >Select vehicle</option>
-                        {driverIDs.map((driver) => (
-                            <option value={driver} key={driver}>{driver}</option>
+                        {drivers.map((driver,key) => (
+                            <option value={driver.D_ID} key={key}>ID:{driver.D_ID},  Capacity:{driver.Capacity}</option>
                         ))}
                     </select>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <label>Capacity</label>
-                    <h3>{capacity}</h3>
                 </div>
             </div>
             <div>

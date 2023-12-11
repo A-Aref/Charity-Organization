@@ -111,6 +111,19 @@ app.post("/api/leader/addVolunteer", (req,res)=>{
   });
 })
 
+app.post("/api/leader/updatePoints", (req,res)=>{
+  con.query('Update volunteers set Points = ? where V_ID = ?' ,[req.body.Points,req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+
 app.get("/api/leader/selectBenef", (req,res)=>{
   con.query('SELECT * FROM beneficiarires', function (err, result) {
     if (err) throw err
@@ -135,8 +148,20 @@ app.post("/api/leader/addBenef", (req,res)=>{
   });
 })
 
-app.post("/api/leader/updatePoints", (req,res)=>{
-  con.query('Update volunteers set Points = ? where V_ID = ?' ,[req.body.Points,req.body.V_ID], function (err, result) {
+app.post("/api/leader/createAid", (req,res)=>{
+  con.query('INSERT INTO aid (A_Type, A_Date, Quantity, B_ID) VALUES (?, ?, ?, ?)' ,[req.body.A_Type,req.body.A_Date,req.body.Quantity,req.body.B_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/eventRequest", (req,res)=>{
+  con.query('Update volunteers set Event_Request = ? where V_ID = ?' ,[req.body.Event,req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -144,6 +169,30 @@ app.post("/api/leader/updatePoints", (req,res)=>{
       return res.json("Not found")
     }
     return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.get("/api/leader/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events', function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/selectVechicle", (req,res)=>{
+  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result))
   });
 })
 
