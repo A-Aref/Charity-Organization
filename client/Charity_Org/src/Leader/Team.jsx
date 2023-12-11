@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 import "./Team.css"
 
 function Team(props) {
@@ -16,7 +17,6 @@ function Team(props) {
     const [gender,setGender] = useState('')
     const [address,setAddress] = useState('')
     const [doB,setDoB] = useState('')
-    const [jDate,setJDate] = useState('')
     const [populated,setPopulated] = useState(false)
 
     function changePoints (value,Rkey) {
@@ -50,9 +50,6 @@ function Team(props) {
         if(doB.trim().length === 0) {
             setPopulated(false)
         }
-        if(jDate.trim().length === 0) {
-            setPopulated(false)
-        }
         if(gender.trim().length === 0) {
             setPopulated(false)
         }
@@ -62,11 +59,12 @@ function Team(props) {
         if(populated) {
             let temp = props.volunteers
             let genderbit = 1
+            const date = moment().format('YYYY-MM-DD')
             if(gender === 'female')
             {
                 genderbit = 0
             }
-            let addedV = {"FName": fName, "LName":lName,"VRole":"Volunteer","Email":email,"Phone":phone,"Pass":phone,"Join_Date":jDate,"DoB":doB,"Gender":genderbit,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":props.user.TeamID}
+            let addedV = {"FName": fName, "LName":lName,"VRole":"Volunteer","Email":email,"Phone":phone,"Pass":phone,"Join_Date":date,"DoB":doB,"Gender":genderbit,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":props.user.TeamID}
             temp[props.volunteers.length] = addedV
             
             reset()
@@ -87,7 +85,6 @@ function Team(props) {
                 })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  console.log(JSON.parse(data))
                   props.setVolunteers(JSON.parse(data))
                 })
             })  
@@ -101,7 +98,6 @@ function Team(props) {
         setDoB('')
         setEmail('')
         setFName('')
-        setJDate('')
         setLName('')
         setPhone('')
         setGender('')
@@ -131,7 +127,6 @@ function Team(props) {
                 })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  console.log(JSON.parse(data))
                   props.setVolunteers(JSON.parse(data))
                 }).then(() => setPoints(Array(props.volunteers.length).fill(0)))
             })
@@ -163,7 +158,6 @@ function Team(props) {
         })
         .then((response)=>{return response.json()})
         .then((data)=>{
-          console.log(JSON.parse(data))
           props.setVolunteers(JSON.parse(data))
         })
     }
@@ -247,10 +241,6 @@ function Team(props) {
                 <div>
                     <label htmlFor='DoB'>Date of Birth</label>
                     <input type="date" id="DoB" value={doB} onChange={(e) => setDoB(e.target.value)}/>
-                </div>
-                <div>
-                    <label htmlFor='Join_Date'>Join Date</label>
-                    <input type="date" id="Join_Date" value={jDate} onChange={(e) => setJDate(e.target.value)}/>
                 </div>
             </div>
             <div>

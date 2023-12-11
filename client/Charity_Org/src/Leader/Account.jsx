@@ -18,8 +18,6 @@ function Account(props)
         headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
     })
     .then((response)=>{return response.json()})
-    .then((data)=>{
-      console.log(data)})
     },[user])
 
   return (
@@ -48,6 +46,7 @@ function Account(props)
                     <p>Phone</p>
                     <input type="text" className="Account" value={tempUser.Phone} onChange={(e) =>setTempUser({...tempUser, Phone: e.target.value })}/>   
                 </div>   
+                  
             </div>
             <div className="Fields">
                 <div className="inFields">
@@ -58,6 +57,13 @@ function Account(props)
                     <p>Team_ID</p>
                     <h2>{user.TeamID}</h2>  
                 </div>    
+            </div>
+            <div className="Fields">
+                <div className="inFields">
+                    <p>Password</p>
+                    <input type="text" className="Account" value={tempUser.Pass} onChange={(e) =>setTempUser({...tempUser, Pass: e.target.value })}/>   
+                </div>   
+                  
             </div>
         </div>
         <br />

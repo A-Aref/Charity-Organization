@@ -23,7 +23,6 @@ function Leader(props) {
     })
     .then((response)=>{return response.json()})
     .then((data)=>{
-      console.log(JSON.parse(data))
       setVolunteers(JSON.parse(data))
     })
     },[])

@@ -64,7 +64,7 @@ app.post("/api/signin", (req,res)=>{
 })
 
 app.post("/api/leader/updateAccount", (req,res)=>{
-  con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ?  where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.V_ID], function (err, result) {
+  con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {

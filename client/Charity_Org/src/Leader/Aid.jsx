@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react'
+import moment from 'moment'
 import "./Aid.css"
 
 function Aid() {
@@ -20,12 +21,11 @@ function Aid() {
     const [populatedA,setPopulatedA] = useState(false)
 
 
-    const date = (new Date()).toLocaleDateString()
+    const date = moment().format('yyyy-mm-dd')
 
     useEffect(() =>   {fetch("/api/leader/selectBenef")
     .then((response)=>{return response.json()})
     .then((data)=>{
-      console.log(JSON.parse(data))
       setBeneficiaries(JSON.parse(data))
     })
     },[])
@@ -64,7 +64,6 @@ function Aid() {
                 fetch("/api/leader/selectBenef")
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  console.log(JSON.parse(data))
                   setBeneficiaries(JSON.parse(data))
                 })
             })  
