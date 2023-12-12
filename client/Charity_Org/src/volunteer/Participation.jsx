@@ -17,13 +17,7 @@ function Participation() {
 
     const date = moment().format('YYYY-MM-DD')
 
-    useEffect(() =>   {fetch("/api/leader/selectBenef")
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      setParticipations(JSON.parse(data))
-    })
-    },[])
-
+   
     useEffect(() => {
         if(populatedB) {
             let temp = Participations
