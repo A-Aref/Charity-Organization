@@ -74,12 +74,15 @@ function Events(props) {
 
     return (
 
-    <div>
-        <h1>Events</h1>
+    <div id='eventPage'>
+        <div>
+            <h1>Events</h1>
+        </div>
         {events.map((event,key)=> (
             <div key={key} className='Event'>
                 <img src={event.url}  className='event_img' />
                 <h2>{event.Descrip}</h2>
+                <div>Location: {event.Location} </div> <div> Date: {(event.E_Date).slice(0,10)}</div>
                 <div>
                     <div>
                         <select name='select_volunteer' value={selectVolunteer} onChange={(e) => setSelectVolunteer(e.target.value)}>

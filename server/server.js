@@ -25,7 +25,7 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "1234",
-  database: "charity_org"
+  database: "charity_org1"
 });
 
 con.connect((err) => {
@@ -121,9 +121,21 @@ app.post("/api/leader/updatePoints", (req,res)=>{
   });
 })
 
+app.post("/api/leader/updateBest", (req,res)=>{
+  con.query('Update volunteers set best_member = ? where V_ID = ?' ,[req.body.best,req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
 
 app.get("/api/leader/selectBenef", (req,res)=>{
-  con.query('SELECT * FROM beneficiarires', function (err, result) {
+  con.query('SELECT * FROM beneficiaries', function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -135,7 +147,7 @@ app.get("/api/leader/selectBenef", (req,res)=>{
 })
 
 app.post("/api/leader/addBenef", (req,res)=>{
-  con.query('INSERT INTO beneficiarires (Address,FirstName, LastName, State) VALUES (?, ?, ?, ?)' ,[req.body.Address,req.body.FirstName,req.body.LastName,req.body.State], function (err, result) {
+  con.query('INSERT INTO beneficiaries (Address,FirstName, LastName, State) VALUES (?, ?, ?, ?)' ,[req.body.Address,req.body.FirstName,req.body.LastName,req.body.State], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
