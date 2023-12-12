@@ -11,7 +11,7 @@ import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('none')
+    const [view,setView] = useState('volunteer')
     const [user,setUser] = useState({})
 
 return(
