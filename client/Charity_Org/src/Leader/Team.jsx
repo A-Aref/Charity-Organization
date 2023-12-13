@@ -6,6 +6,7 @@ import "./Team.css"
 function Team(props) {
     
     const [points,setPoints] = useState(Array(10).fill(0))
+    const [bestSelect,setbestSelect] = useState('')
     useEffect(() => setPoints(Array(props.volunteers.length).fill(0)),[props.volunteers])
     
     
@@ -139,14 +140,31 @@ function Team(props) {
     function changeBest (Rkey) {
         if(confirm("Are you sure you want to make this change"))
         {
-            props.setVolunteers(props.volunteers.map((member) => {
-                return {
-                    ...member,
-                    best: member.key == Rkey ? true:false
-                }
-            }))
-            //update database
-            ///Add it to database
+           Promise.all(props.volunteers.map((member) => {
+            let selected = false
+            if (member.V_ID === Rkey)
+            {
+                selected =true
+                setbestSelect(member.V_ID)
+            }
+            
+            fetch("/api/leader/updateBest", {
+                method: "POST",
+                body:  JSON.stringify({V_ID:member.V_ID,best:selected}),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            })).then(()=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  props.setVolunteers(JSON.parse(data))
+                })
+            })
         } 
     }
 
@@ -188,7 +206,7 @@ function Team(props) {
                         </div>
                         <div className='teamText'>{member.Phone}</div>
                         <div className='teamText bestMember'>
-                            <input type="radio" className='radioBest' checked={member.best} onChange={() => changeBest(key)}/>
+                            <input type="radio" className='radioBest' checked={member.V_ID == bestSelect} onChange={() => changeBest(member.V_ID)}/>
                         </div>
                     </div>
                 ))}

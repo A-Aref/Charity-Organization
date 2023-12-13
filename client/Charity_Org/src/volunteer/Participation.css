@@ -21,7 +21,7 @@
 
 #Participations {
     overflow-y: auto;
-    height: 250px;
+    height: 350px;
 }
 
 #tableHead {
@@ -88,7 +88,7 @@
     width: 200px;
 }
 
-.request-box {
+/* .request-box {
     position: fixed;
     bottom: 10px;
     left: 50%;
@@ -123,4 +123,4 @@
   
   .request-box button:hover {
     background-color: mediumseagreen;
-  }
+  } */
