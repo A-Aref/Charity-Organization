@@ -24,7 +24,7 @@ const mysql = require('mysql');
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234",
+  password: "Ahmed207@",
   database: "charity_org1"
 });
 
@@ -195,6 +195,18 @@ app.get("/api/leader/getEvents", (req,res)=>{
   });
 })
 
+app.get("/api/volunteer/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events', function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 app.post("/api/leader/selectVechicle", (req,res)=>{
   con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
     if (err) throw err
@@ -202,6 +214,18 @@ app.post("/api/leader/selectVechicle", (req,res)=>{
     {
       console.log(err)
       return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/volunteer/selectVechicle", (req,res)=>{
+  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
     }
     return res.json(JSON.stringify(result))
   });

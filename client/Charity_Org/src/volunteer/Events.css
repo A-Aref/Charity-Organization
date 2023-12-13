@@ -42,3 +42,40 @@
 #popUpT > div > input{
     width: 200px;
 }
+
+.request-box {
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    background-color: mediumseagreen;
+    color: rgb(38, 39, 38);
+    border: 1px solid rgb(34, 34, 34);
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .request-box img {
+    width: 150px ;
+    height: 150px ;
+    margin: 0 auto;
+  }
+  
+  .request-box p {
+    font-size: 16px;
+    margin-bottom: 0px;
+  }
+  
+  .request-box button {
+    background-color: mediumseagreen;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .request-box button:hover {
+    background-color: mediumseagreen;
+  }
