@@ -1,14 +1,24 @@
 
 
+  
 #accountPage {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    margin: auto;
-    padding: 20px;
-}
+  }
+  
+  #accountPage label {
+    width: 100px; 
+    text-align: left;
+    margin-bottom: 20px; 
+  }
+  
+  #accountPage input {
+    width:250px; 
+    margin-bottom: 10px; 
+    box-sizing: border-box;
+  }
+  
 
 
 #Data {

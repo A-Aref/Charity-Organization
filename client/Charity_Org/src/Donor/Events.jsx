@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './Events.css'
-import moment from 'moment'
+
 
 function Events(props) {
 
@@ -9,6 +9,7 @@ function Events(props) {
 
     const [popUpT, setPopUpT] = useState(false)
    
+    const [descrp, setdescrp] = useState("")
     const [email, setemail] = useState("")
     const [pass, setpass] = useState("")
     const [populatedE,setPopulatedE] = useState(false)
@@ -34,15 +35,15 @@ function Events(props) {
 }
 
     return (
-        <div>
-            <h1>Upcoming Events</h1>
-            <div id='teamData'>
+        <div id='eventsPage'>
+            <h1 id='Title'>Upcoming Events</h1>
+            <div id='eventData'>
                 <div id='tableHead'>
                 <div className='benfText'>Description</div>
                 <div className='benfText'>Location</div>
                 <div className='benfText buttonAid'>Date</div>
             </div>
-            <div id='Participations'>
+            <div id='events'>
                 {events.map((eevents,key) => (
                     <div className='member' key={key}>
                         
@@ -54,7 +55,7 @@ function Events(props) {
             </div>
         </div>
 
-            <div className='buttonContainer'>
+            <div >
                 <button onClick={() => setPopUpT(true)}>Register</button>
             </div>
         {
@@ -72,8 +73,17 @@ function Events(props) {
                         <input type="text" id="Pass" value={pass} onChange={(e) => setpass(e.target.value)}/>
                     </div>   
             </div>
+            <div>
+                <label htmlFor='vehicle_select'>Select event</label>
+                <select id="vehicle_select" value={descrp} onChange={(e) => setdescrp(e.target.value)}>
+                    <option value="" disabled>Select description</option>
+                    <option value="ter3a">ter3a</option>
+                    <option value="7aflaa">7aflaa</option>
+                    <option value="General">General Donations</option>
+                </select>
+            </div>
             </>
-            <div className='buttonContainer'>
+            <div>
             <button type="button" onClick={() => reset()}>Cancel</button>
             <button type="button" onClick={createregestration}>Save</button>
             </div>

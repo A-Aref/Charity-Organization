@@ -58,7 +58,7 @@
 
 
 
-#ParticipationsPage {
+#eventsPage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -72,13 +72,13 @@
 }
 
 
-#teamData {
+#eventData {
     background-color: #1a1a1a;
     margin: 20px 30px;
     border-radius: 10px;
 }
 
-#Participations {
+#events {
     overflow-y: auto;
     height: 250px;
 }
@@ -120,77 +120,3 @@
 }
 
 
-#popUpB,#popUpA {
-    background-color: #373737;
-    display: flex;
-    flex-direction: column;
-    border-radius: 20px;
-    position: absolute;
-    width: 800px;
-    z-index: 1;
-    right: 20%;
-    left: 20%;
-    top: 15%;
-    padding: 50px;
-    padding-top: 0;
-}
-
-#popUpB > div ,#popUpA > div {
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 10px;
-}
-
-#popUpB> div > input,#popUpA > div > input{
-    width: 200px;
-}
-
-.request-box {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
-    background-color: mediumseagreen;
-    color: rgb(38, 39, 38);
-    border: 1px solid rgb(34, 34, 34);
-    padding: 30px;
-    text-align: center;
-  }
-  
-  .request-box img {
-    width: 100px ;
-    height: 100px ;
-    margin: 0 auto;
-  }
-  
-  .request-box p {
-    font-size: 16px;
-    margin-bottom: 0px;
-  }
-  
-  .request-box button {
-    background-color: mediumseagreen;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-right: 10px;
-  }
-  
-  .request-box button:hover {
-    background-color: mediumseagreen;
-  }
-
-  .buttonContainer {
-    text-align: center;
-  }
-  
-  .buttonContainer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px; /* Adjust the margin as needed */
-  }
-  
