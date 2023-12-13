@@ -57,6 +57,15 @@ function Participation(props) {
       if(bvalue.trim().length === 0) {
           setPopulatedP(false)
       }
+
+    function reset() {
+        setv_id('')
+        setptype('')
+        setbtype('')
+        setbvalue('')
+        setPopUpP(false)
+        setPopulatedP(false)
+    }
   }
 
     return (

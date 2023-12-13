@@ -5,20 +5,41 @@ import './Events.css'
 
 function Events(props) {
 
-    const [events,setEvents] = useState([{"ID":858,"name":"tr3a","image":"https://resala.org/wp-content/uploads/2019/12/%D8%A7%D8%B5%D8%AF%D9%82%D8%A7%D8%A1-%D8%A7%D9%84%D8%A8%D9%8A%D8%A6%D8%A9.jpg","location":"maadi"}])
-    const [selectVolunteer,setSelectVolunteer] = useState("")
+    const [events,setEvents] = useState([])
+    useEffect(() =>   {fetch("/api/volunteer/getEvents")
+    .then((response)=>{return response.json()})
+    .then((data)=>{
+      setEvents(JSON.parse(data))
+    })
+    },[])
 
+   
     const [popUpT,setPopUpT] = useState(false)
-    const [selectV_Type,setSelectV_Type] = useState("")
-    const [capacity,setCapacity] = useState("")
+    const [selectV_Type,setSelectV_Type] = useState("1")
     const [driverID,setDriverID] = useState("")
-    const [driverIDs,setDriverIDs] = useState(["885","75875","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585","7585"])
+    const [drivers,setDrivers] = useState([])
 
 
     function select_Vehicle () {
         //select vehicle
     }
-
+    
+    useEffect( () => {
+        let cargo = 1
+        if (selectV_Type == "0")
+        {
+            cargo = 0
+        }
+        fetch("/api/volunteer/selectVechicle", {
+            method: "POST",
+            body:  JSON.stringify({Type:cargo}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+          setDrivers(JSON.parse(data))
+        })
+    },[drivers])
 
     function reset () {
         setPopUpT(false)
@@ -45,62 +66,46 @@ function Events(props) {
             ) : (
               <img src="data:image/jpeg;base64,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" alt="rejected" />
             )}
-            <p>Would you like to participate in an event?</p>
+            <p>Would you like to participate in this event?</p>
             <button onClick={handleAccept}>Yes</button>
             <button onClick={handleReject}>No</button>
           </div>
         );
       }
-
+      
 
     return (
 
-    <div>
-        <h1>Events</h1>
-        {/* {events.map((event)=> (
-            <div key={event.ID} className='Event'>
-                <img src={event.image}  className='event_img' />
-                <h2>{event.name}</h2>
+    <div id='eventPage'>
+        <h1>Upcoming Event</h1>
+        <div className='Event'>
+                <img src={null}  className='event_img' />
+                <h2>{'clothes collection'}</h2>
+                <div>Location: {'maadi'} </div> <div> Date: {('2023-05-20').slice(0,10)}</div>
+                
                 <div>
-                    <div>
-                        <select name='select_volunteer' value={selectVolunteer} onChange={(e) => setSelectVolunteer(e.target.value)}>
-                            <option value="" disabled >Select volunteer for event</option>
-                            {props.volunteers.map((volunteer) => (
-                                volunteer.best === false && <option value={volunteer.id} key={volunteer.id}>{volunteer.id}</option>
-                            ))}
-                        </select>   
-                        <button disabled={popUpT}>Send request</button>
-                    </div>
-                    <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button>
+                    {1 && <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button>}
                 </div> 
             </div>
-        ))}
-        {popUpT&&
+            {popUpT&&
         <div id='popUpT'>
             <h2>Add Transportation</h2>
             <div>
                 <div>
                     <label htmlFor='vehicle_select'>Select Vehicle type</label>
                     <select id="vehicle_select" value={selectV_Type} onChange={(e) => setSelectV_Type(e.target.value)}>
-                        <option value="" disabled >Select vehicle type</option>
-                        <option value="Cargo">Cargo</option>
-                        <option value="People">People</option>
+                        <option value="1">Cargo</option>
+                        <option value="0">People</option>
                     </select>
                 </div>
                 <div>
                     <label htmlFor='avialable_vehicle'>Avialable vehicles</label>
                     <select name="avialable_vehicle" value={driverID} onChange={(e) => setDriverID(e.target.value)}>
                         <option value="" disabled >Select vehicle</option>
-                        {driverIDs.map((driver) => (
-                            <option value={driver} key={driver}>{driver}</option>
+                        {drivers.map((driver,key) => (
+                            <option value={driver.D_ID} key={key}>ID:{driver.D_ID},  Capacity:{driver.Capacity}</option>
                         ))}
                     </select>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <label>Capacity</label>
-                    <h3>{capacity}</h3>
                 </div>
             </div>
             <div>
@@ -108,7 +113,8 @@ function Events(props) {
                 <button type="button" onClick={select_Vehicle}>Select Vehicle</button>
             </div>
         </div>
-                        */}
+        }
+    
         <RequestBox />
     </div> 
 
