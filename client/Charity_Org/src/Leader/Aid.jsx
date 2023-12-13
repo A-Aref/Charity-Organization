@@ -29,7 +29,7 @@ function Aid() {
         .then((data)=>{setBeneficiaries(JSON.parse(data))})
     },[])
 
-    useEffect(()=> {console.log(beneficiaries)},[beneficiaries])
+
 
     function addBeneficiary() {
 

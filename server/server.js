@@ -24,7 +24,7 @@ const mysql = require('mysql');
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Ahmed207@",
+  password: "1234",
   database: "charity_org1"
 });
 
@@ -132,7 +132,6 @@ app.post("/api/leader/updateBest", (req,res)=>{
     return res.json(JSON.stringify(result[0]))
   });
 })
-
 
 app.get("/api/leader/selectBenef", (req,res)=>{
   con.query('SELECT ID, FirstName, LastName, State, Max(A_Date) as Last_AID_Date FROM beneficiaries left join aid on B_ID = ID group by ID', function (err, result) {

@@ -5,9 +5,17 @@ import "./Team.css"
 
 function Team(props) {
     
-    const [points,setPoints] = useState(Array(10).fill(0))
+    const [points,setPoints] = useState([Array(10).fill(0)])
     const [bestSelect,setbestSelect] = useState('')
-    useEffect(() => setPoints(Array(props.volunteers.length).fill(0)),[props.volunteers])
+    useEffect(() => {
+        setPoints(Array(props.volunteers.length).fill(0))
+        props.volunteers.forEach(element => {
+            if(element.best_member.data[0] === 1)
+            {
+                setbestSelect(element.V_ID)
+            }    
+        })
+    },[props.volunteers])
     
     
     const [popUpV,setPopUpV] = useState(false)
