@@ -9,7 +9,7 @@ function Participation(props) {
 
   useEffect(() =>   {fetch("/api/volunteer/getParticipations", {
     method: "POST",
-    body:  JSON.stringify({V_ID:7}),
+    body:  JSON.stringify({V_ID:6}),
     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
 })
 .then((response)=>{return response.json()})
@@ -57,7 +57,7 @@ function Participation(props) {
       if(bvalue.trim().length === 0) {
           setPopulatedP(false)
       }
-
+    }
     function reset() {
         setv_id('')
         setptype('')
@@ -66,7 +66,7 @@ function Participation(props) {
         setPopUpP(false)
         setPopulatedP(false)
     }
-  }
+  
 
     return (
     <div id='ParticipationsPage'>
