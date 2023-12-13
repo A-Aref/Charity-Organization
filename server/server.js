@@ -24,7 +24,7 @@ const mysql = require('mysql');
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Ahmed207@",
+  password: "1234",
   database: "charity_org1"
 });
 
@@ -133,9 +133,8 @@ app.post("/api/leader/updateBest", (req,res)=>{
   });
 })
 
-
 app.get("/api/leader/selectBenef", (req,res)=>{
-  con.query('SELECT * FROM beneficiaries', function (err, result) {
+  con.query('SELECT ID, FirstName, LastName, State, Max(A_Date) as Last_AID_Date FROM beneficiaries left join aid on B_ID = ID group by ID', function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -169,6 +168,7 @@ app.post("/api/leader/createAid", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
+
 
 app.post("/api/leader/eventRequest", (req,res)=>{
   con.query('Update volunteers set Event_Request = ? where V_ID = ?' ,[req.body.Event,req.body.V_ID], function (err, result) {

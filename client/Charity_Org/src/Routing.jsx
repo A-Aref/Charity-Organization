@@ -6,6 +6,7 @@ import Signin from './Signin.jsx'
 import Register from './Register.jsx'
 import Leader from './Leader/Leader.jsx'
 import Volunteer from './volunteer/volunteer.jsx'
+import Donor from './Donor/Donor.jsx'
 import PrivateRoute from './PrivateRoute.jsx'
 import './main.css'
 
@@ -26,9 +27,10 @@ return(
                 <Route element={<PrivateRoute viewSet="volunteer" view={view}/>}>
                     <Route path='/Volunteer' element={<Volunteer view={setView} user={user}/>} exact/>
                 </Route>
-                <Route element={<PrivateRoute viewSet="volunteer" view={view}/>}>
-                    <Route path='/Volunteer' element={<Volunteer view={setView}/>} exact/>
+                <Route element={<PrivateRoute viewSet="Donor" view={view}/>}>
+                    <Route path='/Donor' element={<Donor view={setView} user={user}/>} exact/>
                 </Route>
+               
             </Routes>
         </Router>
     </>

@@ -5,7 +5,7 @@ import "./Aid.css"
 
 function Aid() {
 
-    const [beneficiaries,setBeneficiaries] = useState([{"id":"1","FirstName": "Abd-Allah","LastName":"Ahmad","State":"poor","Address":"maadi","L_A_Date":"12/3/2021"},{"id":"2","FirstName": "Ahmad","LastName":"Ahmad","State":"disable","Address":"tagamo3","L_A_Date":"4/3/2021"},{"id":"3","FirstName": "salah","LastName":"shawky","State":"poor","Address":"maadi","L_A_Date":"12/3/2020"}])
+    const [beneficiaries,setBeneficiaries] = useState([])
     
     const [popUpB,setPopUpB] = useState(false)
     const [fName,setFName] = useState('')
@@ -23,12 +23,13 @@ function Aid() {
 
     const date = moment().format('YYYY-MM-DD')
 
-    useEffect(() =>   {fetch("/api/leader/selectBenef")
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      setBeneficiaries(JSON.parse(data))
-    })
+    useEffect(() =>   {
+        fetch("/api/leader/selectBenef")
+        .then((response)=>{return response.json()})
+        .then((data)=>{setBeneficiaries(JSON.parse(data))})
     },[])
+
+
 
     function addBeneficiary() {
 
@@ -151,7 +152,7 @@ function Aid() {
                         <div className='benfText idtable'>{member.ID}</div>
                         <div className='benfText'>{`${member.FirstName}  ${member.LastName}`}</div>
                         <div className='benfText'>{member.State}</div>
-                        <div className='benfText'>{member.Last_AID_ID != null ? member.Last_AID_ID : "-"}</div>
+                        <div className='benfText'>{member.Last_AID_Date != null ? (member.Last_AID_Date).slice(0,10) : "-"}</div>
                         <div className='benfText buttonAid'>
                             <button type="button" className='createAid' onClick={() => createAid(member.ID)} disabled={popUpA || popUpB}>Create Aid</button>
                         </div>
