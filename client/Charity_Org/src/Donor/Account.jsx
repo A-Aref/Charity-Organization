@@ -38,7 +38,7 @@ function Account(props)
         <button id="logout" onClick={() =>props.view('none')}>Logout</button>
 
         <>
-                <div>
+                
                     <div>
                         <label htmlFor='Fname'>First Name</label>
                         <input type="text" id="fname" value={fname} onChange={(e) => setfname(e.target.value)}/>
@@ -48,8 +48,8 @@ function Account(props)
                         <label htmlFor='Lname'>Last Name</label>
                         <input type="text" id="Lname" value={lname} onChange={(e) => setlname(e.target.value)}/>
                     </div>   
-                </div>
-                <div>
+                
+                
                     <div>
                         <label htmlFor='Phone'>Phone</label>
                         <input type="text" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)}/>
@@ -59,8 +59,8 @@ function Account(props)
                         <label htmlFor='Email'>Email</label>
                         <input type="text" id="Email" value={email} onChange={(e) => setemail(e.target.value)}/>
                     </div>   
-                </div>
-                <div>
+                
+               
                     <div>
                         <label htmlFor='Address'>Address</label>
                         <input type="text" id="Address" value={address} onChange={(e) => setaddress(e.target.value)}/>
@@ -70,7 +70,7 @@ function Account(props)
                         <label htmlFor='Pass'>Password</label>
                         <input type="text" id="Pass" value={pass} onChange={(e) => setpass(e.target.value)}/>
                     </div>   
-                </div>
+                
                 
         </>
         <br />
