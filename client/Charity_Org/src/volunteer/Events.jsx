@@ -18,6 +18,7 @@ function Events(props) {
     const [selectV_Type,setSelectV_Type] = useState("1")
     const [driverID,setDriverID] = useState("")
     const [drivers,setDrivers] = useState([])
+    const [status,setStatus] = useState(false)
 
 
     function select_Vehicle () {
@@ -53,10 +54,12 @@ function Events(props) {
       
         const handleAccept = () => {
           setIsAccepted(true);
+          setStatus(true);
         };
       
         const handleReject = () => {
           setIsAccepted(false);
+          setStatus(false);
         };
       
         return (
@@ -84,12 +87,12 @@ function Events(props) {
                 <div>Location: {'maadi'} </div> <div> Date: {('2023-05-20').slice(0,10)}</div>
                 
                 <div>
-                    {1 && <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button>}
+                    {status && <button onClick={() => setPopUpT(true)} disabled={popUpT}>Check Available Transportation</button>}
                 </div> 
             </div>
             {popUpT&&
         <div id='popUpT'>
-            <h2>Add Transportation</h2>
+            <h2>Check Available Transportation</h2>
             <div>
                 <div>
                     <label htmlFor='vehicle_select'>Select Vehicle type</label>
