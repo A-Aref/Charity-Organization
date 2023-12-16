@@ -1,0 +1,66 @@
+
+
+#accountPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: auto;
+    padding: 20px;
+}
+
+#Data {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+.Account {
+    font-size: 20px;
+    background-color: #242424;
+    text-align: center;
+}
+
+.Account::placeholder {
+    color: ghostwhite;
+}
+
+.Fields {
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+
+}
+
+.inFields {
+    margin: 0 50px;
+    text-align: center;
+}
+
+#logout {
+    background-color: #1a1a1a;
+    color: red;
+    position: fixed;
+    right: 30%;
+    top: 12%;
+    font-size:large;
+}
+
+#logout:hover {
+    background-color: rgb(220, 41, 41);;
+    color: #1a1a1a;
+}
+
+#Save {
+    background-color: #1a1a1a;
+    color: dodgerblue;
+}
+
+#Save:hover {
+    background-color: dodgerblue;
+    color: #1a1a1a;
+}
+
