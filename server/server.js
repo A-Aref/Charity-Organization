@@ -133,6 +133,18 @@ app.post("/api/leader/updateBest", (req,res)=>{
   });
 })
 
+app.post("/api/leader/updatePromoted", (req,res)=>{
+  con.query('Update volunteers set Promoted = 1 where V_ID = ?' ,[req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
 app.get("/api/leader/selectBenef", (req,res)=>{
   con.query('SELECT ID, FirstName, LastName, State, Max(A_Date) as Last_AID_Date FROM beneficiaries left join aid on B_ID = ID group by ID', function (err, result) {
     if (err) throw err
