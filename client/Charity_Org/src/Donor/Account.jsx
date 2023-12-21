@@ -33,7 +33,7 @@ function Account(props)
 
   return (
     <div id='accountPage'>
-
+        <fieldset id='account'>
         <h1 id="Title">Edit Profile</h1>
         <button id="logout" onClick={() =>props.view('none')}>Logout</button>
 
@@ -73,12 +73,14 @@ function Account(props)
                 
                 
         </>
+       
         <br />
         <div>
        
         <button type="button" onClick={() => reset()}>Cancel</button>
         <button id="Save" onClick={Save}>Save</button>
         </div>
+        </fieldset>
        
     </div>
   )
