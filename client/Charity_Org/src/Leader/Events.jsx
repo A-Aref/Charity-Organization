@@ -113,7 +113,7 @@ function Events(props) {
                     <select name="avialable_vehicle" value={driverID} onChange={(e) => setDriverID(e.target.value)}>
                         <option value="" disabled >Select vehicle</option>
                         {drivers.map((driver,key) => (
-                            <option value={driver.D_ID} key={key}>ID:{driver.D_ID},  Capacity:{driver.Capacity}</option>
+                            <option value={driver.D_ID} key={key}>Plate: {driver.Plate},Name: {driver.FirstName},Capacity: {driver.Capacity} {driver.Is_Cargo.data[0] === 1 ? "kg" : ""}</option>
                         ))}
                     </select>
                 </div>

@@ -185,7 +185,11 @@ function Aid() {
                 </div>
                 <div>
                     <label htmlFor='Status'>Status</label>
-                    <input type="text" id="Status" value={status} onChange={(e) => setStatus(e.target.value)}/>
+                    <select name="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                        <option value="well">Well</option>
+                        <option value="fair">Fair</option>
+                        <option value="dire">Dire</option>
+                    </select>
                 </div>
             </div>
             <div>
@@ -202,11 +206,19 @@ function Aid() {
             <h2>Create Aid</h2>
             <div>
                 <div>
-                    <label htmlFor='type'>Type</label>
-                    <input type="text" id="type" value={type} onChange={(e) => setType(e.target.value)}/>
+                    <label htmlFor='Type'>Type</label>
+                    <select name="Type" value={type} onChange={(e) => setType(e.target.value)}>
+                        <option value="food">Food</option>
+                        <option value="clothes">Clothes</option>
+                        <option value="medicine">Medicine</option>
+                        <option value="blankets">Blankets</option>
+                        <option value="books">Books</option>
+                        <option value="money">Money</option>
+                    </select>
                 </div>
                 <div>
                     <label htmlFor='quantity'>Quantity</label>
+                    <p>Avialabe: {}</p>
                     <input type="text" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
                 </div>
             </div>

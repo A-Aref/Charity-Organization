@@ -211,7 +211,7 @@ app.get("/api/leader/getEvents", (req,res)=>{
 })
 
 app.post("/api/leader/selectVechicle", (req,res)=>{
-  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+  con.query('SELECT * FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {

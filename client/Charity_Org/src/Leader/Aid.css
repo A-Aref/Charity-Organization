@@ -83,7 +83,7 @@
     padding: 10px;
 }
 
-#popUpB> div > input,#popUpA > div > input{
-    width: 200px;
+#popUpB> div > input,#popUpA > div > input,#popUpB> div > div >select,#popUpA> div > div >select{
+    width: 350px;
 }
 
