@@ -1,26 +1,15 @@
 
-
+const cors = require("cors")
+const mysql = require('mysql')
 const express = require("express")
 const bodyParser = require('body-parser')
-const cors = require("cors")
+
+
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-/*
-const mysql = require('mysql');
-const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "1234",
-  database: "lab1"
-});
 
-con.connect((err) => {
-  if (err) throw err;
-  console.log("Connected!");
-});
-*/ 
-const mysql = require('mysql');
+
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -49,7 +38,7 @@ con_online.connect((err) => {
 });
 */
 
-
+// Signin 
 app.post("/api/signin", (req,res)=>{
     con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
       if (err) throw err
@@ -61,6 +50,9 @@ app.post("/api/signin", (req,res)=>{
     });
 })
 
+
+
+//Leader
 app.post("/api/leader/updateAccount", (req,res)=>{
   con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
     if (err) throw err
@@ -206,18 +198,6 @@ app.get("/api/leader/getEvents", (req,res)=>{
   });
 })
 
-app.get("/api/volunteer/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events', function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("No team members")
-    }
-    return res.json(JSON.stringify(result))
-  });
-})
-
 app.post("/api/leader/selectVechicle", (req,res)=>{
   con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
     if (err) throw err
@@ -225,31 +205,6 @@ app.post("/api/leader/selectVechicle", (req,res)=>{
     {
       console.log(err)
       return res.json("No Beneficiariaries")
-    }
-    return res.json(JSON.stringify(result))
-  });
-})
-
-app.post("/api/volunteer/selectVechicle", (req,res)=>{
-  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("No team members")
-    }
-    return res.json(JSON.stringify(result))
-  });
-})
-
-
-app.post("/api/volunteer/getParticipations", (req,res)=>{
-  con.query('SELECT * FROM participation where V_ID = ?' ,[req.body.V_ID], function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("No team members")
     }
     return res.json(JSON.stringify(result))
   });
@@ -279,6 +234,49 @@ app.post("/api/leader/addtrans", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
+
+
+//Volunteer
+app.get("/api/volunteer/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events', function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+
+
+app.post("/api/volunteer/selectVechicle", (req,res)=>{
+  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+
+app.post("/api/volunteer/getParticipations", (req,res)=>{
+  con.query('SELECT * FROM participation where V_ID = ?' ,[req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+//Admin
 
 app.post("/api/Admin/addevent", (req,res)=>{
   con.query('INSERT INTO events (Descrip, url, Location, E_Date) VALUES (?, ?, ?, ?)' ,[req.body.Descrip,req.body.url,req.body.Location,req.body.E_Date], function (err, result) {
