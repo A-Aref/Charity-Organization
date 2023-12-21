@@ -28,6 +28,8 @@ function Team(props) {
     const [doB,setDoB] = useState('')
     const [populated,setPopulated] = useState(false)
 
+    const [request,setRequest] = useState('')
+
     function changePoints (value,Rkey) {
         if(value <= 500 && value >= 0)
         {
@@ -138,11 +140,8 @@ function Team(props) {
                 .then((data)=>{
                   props.setVolunteers(JSON.parse(data))
                 }).then(() => setPoints(Array(props.volunteers.length).fill(0)))
-            })
-            
-            
+            })   
         }
-
     }
 
     function changeBest (Rkey) {
@@ -188,6 +187,29 @@ function Team(props) {
         })
     }
 
+    function updatePromoted (Rkey) {
+        if(confirm("Are you sure you want to make this change"))
+        {
+            fetch("/api/leader/updatePromoted", {
+                method: "POST",
+                body:  JSON.stringify({V_ID:request}),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/leader/selectTeam", {
+                    method: "POST",
+                    body:  JSON.stringify(props.user),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  props.setVolunteers(JSON.parse(data))
+                })
+            })
+        } 
+    }
+
     return (
     <div id='teamPage'>
         <h1 id='Title'>Team Members</h1>
@@ -224,6 +246,15 @@ function Team(props) {
         <div id='addPoints'>
             <button type="button" onClick={() => setPopUpV(true)} disabled={popUpV}>Add Volunteer</button>
             <button type="button" onClick={AddPoints} disabled={popUpV}>Add points</button>
+        </div>
+        <div>
+            <select name='select_volunteer' value={request} onChange={(e) => setRequest(e.target.value)}>
+                <option value="" disabled >Request Promotion for volunteer</option>
+                {props.volunteers.map((volunteer,key) => (
+                volunteer.Promoted.data[0] === 0 && <option value={volunteer.V_ID} key={key}>{volunteer.FName} {volunteer.LName}</option>
+                ))}
+            </select> 
+            <button type="button" onClick={updatePromoted} disabled={popUpV}>Request Promotion</button>
         </div>
         {popUpV &&
         <div id='popUpV'>

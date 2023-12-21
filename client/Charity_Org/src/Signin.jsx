@@ -55,6 +55,11 @@ function Signin(props) {
           props.view('volunteer')
           navigate('/volunteer')
         }
+        if(user.VRole === 'Admin') 
+        {
+          props.view('Admin')
+          navigate('/Admin')
+        }
       }
     })
     }

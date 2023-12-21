@@ -1,0 +1,51 @@
+
+#eventPage {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+}
+
+
+.Event {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+}
+
+.event_img {
+    width: 500px;
+    margin: auto;
+}
+
+#popUpT
+ {
+    background-color: #373737;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    position: absolute;
+    width: 800px;
+    z-index: 1;
+    right: 20%;
+    left: 20%;
+    top: 15%;
+    padding: 50px;
+    padding-top: 0;
+}
+
+#popUpT > div {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    text-align: center; 
+    justify-content: space-around;
+    padding: 10px;
+}
+
+
+
+#popUpT > div > input{
+    width: 200px;
+}

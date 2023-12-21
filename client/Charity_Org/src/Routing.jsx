@@ -7,12 +7,13 @@ import Register from './Register.jsx'
 import Leader from './Leader/Leader.jsx'
 import Volunteer from './volunteer/volunteer.jsx'
 import Donor from './Donor/Donor.jsx'
+import Admin from './Admin/Admin.jsx'
 import PrivateRoute from './PrivateRoute.jsx'
 import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('Donor')
+    const [view,setView] = useState('leader')
     const [user,setUser] = useState({})
 
 return(
@@ -30,7 +31,10 @@ return(
                 <Route element={<PrivateRoute viewSet="Donor" view={view}/>}>
                     <Route path='/Donor' element={<Donor view={setView} user={user}/>} exact/>
                 </Route>
-               
+                <Route element={<PrivateRoute viewSet="Admin" view={view}/>}>
+                    <Route path='/Admin' element={<Admin view={setView} user={user}/>} exact/>
+                </Route>
+
             </Routes>
         </Router>
     </>
