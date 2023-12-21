@@ -9,7 +9,7 @@ function Signin(props) {
   const [password , setpassword] = useState("")
   const [showPassword , setShowPassword] = useState(true)
   const [id,setId] = useState("")
-  const [errorText,setErrorText] = useState("")
+  const [errorText,setErrorText] = useState("  ")
 
   useEffect(() => props.view('none'),[])
 
@@ -19,50 +19,82 @@ function Signin(props) {
     {
       if(id === "")
       {
-        console.log("Enter the ID")
+        setErrorText("Enter the ID")
       }
       if(password === "")
       {
-        console.log("Enter the password")
+        setErrorText("Enter the password")
       }
     }
     else
     {
-      var Search = {"V_ID": id,"Pass":password}
-    fetch("/api/signin", {
-        method: "POST",
-        body:  JSON.stringify(Search),
-        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-    })
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      if(data === "Not found")
+
+      let sID = id.slice(2)
+      let Search = {"ID": sID,"Pass":password}
+      if (id[0] == 'V' && id[1] == '_')
       {
-        setErrorText(data)
+        fetch("/api/signinV", {
+          method: "POST",
+          body:  JSON.stringify(Search),
+          headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+        if(data === "Not found")
+        {
+          setErrorText(data)
+        }
+        else
+        {
+          setErrorText("  ")
+          var user = JSON.parse(data)
+          props.setUser(user)
+          if(user.VRole === 'Head') 
+          {
+            props.view('leader')
+            navigate('/Leader')
+          }
+          if(user.VRole === 'volunteer') 
+          {
+            props.view('volunteer')
+            navigate('/volunteer')
+          }
+          if(user.VRole === 'Admin') 
+          {
+            props.view('Admin')
+            navigate('/Admin')
+          }
+        }
+        })
+      }
+      else if (id[0] == 'D' && id[1] == '_')
+      {
+        fetch("/api/signinD", {
+          method: "POST",
+          body:  JSON.stringify(Search),
+          headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+        if(data === "Not found")
+        {
+          setErrorText(data)
+        }
+        else
+        {
+          setErrorText(" ")
+          var user = JSON.parse(data)
+          props.setUser(user)
+          props.view('Donor')
+          navigate('/Donor')
+        }
+        })
       }
       else
       {
-        setErrorText("")
-        var user = JSON.parse(data)
-        props.setUser(user)
-        if(user.VRole === 'Head') 
-        {
-          props.view('leader')
-          navigate('/Leader')
-        }
-        if(user.VRole === 'volunteer') 
-        {
-          props.view('volunteer')
-          navigate('/volunteer')
-        }
-        if(user.VRole === 'Admin') 
-        {
-          props.view('Admin')
-          navigate('/Admin')
-        }
+        setErrorText("Invalid username")
       }
-    })
-    }
+    }   
   }
   
 

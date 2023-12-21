@@ -77,7 +77,7 @@ function Register(props)
       if (populated && fname.trim() && lname.trim() && email.trim() && phone.trim() && address.trim() && pass.trim() && cpass.trim()) {
        
         var temp = {"Fname":fname,"Lname":lname,"Email":email,"Password":pass,"Phone":phone,"Address":address};
-        fetch("/api/Register/createRegestration", {
+        fetch("/api/Register", {
           method: "POST",
           body:  JSON.stringify(temp),
           headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 

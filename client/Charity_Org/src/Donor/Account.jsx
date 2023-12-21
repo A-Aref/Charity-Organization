@@ -5,82 +5,64 @@ import "./Account.css"
 function Account(props)
 {
 
-    
-    const [fname,setfname] = useState('')
-    const [lname,setlname] = useState('')
-    const [phone,setphone] = useState('')
-    const [address,setaddress] = useState('')
-    const [pass,setpass] = useState('')
-    const [email,setemail] = useState('')
-    const [populated,setPopulated] = useState('false')
+    const [user,setUser] = useState(props.user)
+    const [tempUser,setTempUser] = useState(props.user)
 
-
-    function reset() {
-       
-        setaddress('')
-        setpass('')
-        setemail('')
-        setfname('')
-        setlname('')
-        setphone('')
-    
-        setPopulated(false)
-    }
     function Save () {
         setUser({...tempUser})
-        //udpate database
     }
+    //udpate database
+    useEffect(() =>   {fetch("/api/Donor/updateAccount", {
+        method: "POST",
+        body:  JSON.stringify(user),
+        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+    })
+    .then((response)=>{return response.json()})
+    },[user])
 
   return (
     <div id='accountPage'>
-        <fieldset id='account'>
+
         <h1 id="Title">Edit Profile</h1>
         <button id="logout" onClick={() =>props.view('none')}>Logout</button>
 
-        <>
-                
-                    <div>
-                        
-                        <input type="text" id="fname" value={fname} onChange={(e) => setfname(e.target.value)}  placeholder="First Name"/>
-                    </div>
-
-                    <div>
-                     
-                        <input type="text" id="Lname" value={lname} onChange={(e) => setlname(e.target.value)} placeholder='Last Name'/>
-                    </div>   
-                
-                
-                    <div>
-                        
-                        <input type="text" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)} placeholder='Phone'/>
-                    </div>
-
-                    <div>
-                        
-                        <input type="text" id="Email" value={email} onChange={(e) => setemail(e.target.value)} placeholder='Email'/>
-                    </div>   
-                
-               
-                    <div>
-                        
-                        <input type="text" id="Address" value={address} onChange={(e) => setaddress(e.target.value)} placeholder='Address'/>
-                    </div>
-
-                    <div>
-
-                        <input type="text" id="Pass" value={pass} onChange={(e) => setpass(e.target.value)} placeholder='Password'/>
-                    </div>   
-                
-                
-        </>
-       
+        <div id="Data">
+            <div className="Fields">
+                <div className="inFields">
+                    <p>First Name</p>
+                    <input type="text" className="Account" value={tempUser.Fname} onChange={(e) =>setTempUser({...tempUser, Fname: e.target.value })}/>   
+                </div>
+                <div className="inFields">
+                    <p>Last Name</p>
+                    <input type="text" className="Account" value={tempUser.Lname} onChange={(e) =>setTempUser({...tempUser, Lname: e.target.value })}/>   
+                </div> 
+            </div>
+            <div className="Fields">
+                <div className="inFields">
+                    <p>Email</p>
+                    <input type="text" className="Account" value={tempUser.Email} onChange={(e) =>setTempUser({...tempUser, Email: e.target.value })}/>    
+                </div>
+                <div className="inFields">
+                    <p>Phone</p>
+                    <input type="text" className="Account" value={tempUser.Phone} onChange={(e) =>setTempUser({...tempUser, Phone: e.target.value })}/>   
+                </div>   
+            </div>
+            <div className="Fields">
+                <div className="inFields">
+                    <p>Address</p>
+                    <input type="text" className="Account" value={tempUser.Address} onChange={(e) =>setTempUser({...tempUser, Address: e.target.value })}/>    
+                </div>
+                <div className="inFields">
+                    <p>Password</p>
+                    <input type="text" className="Account" value={tempUser.Pass} onChange={(e) =>setTempUser({...tempUser, Pass: e.target.value })}/>   
+                </div>   
+            </div>
+        </div>
         <br />
         <div>
-       
-        <button type="button" onClick={() => reset()}>Cancel</button>
-        <button id="Save" onClick={Save}>Save</button>
+        <button id ="cancel" onClick={() => setTempUser({...user})}>Cancel</button>
+        <button id="Save" onClick={() => Save()}>Save</button>
         </div>
-        </fieldset>
        
     </div>
   )
