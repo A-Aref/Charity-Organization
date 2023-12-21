@@ -15,7 +15,7 @@ function Routing() {
 
     const [view,setView] = useState('leader')
     const [user,setUser] = useState({})
-
+    
 return(
     <>
         <Router>
