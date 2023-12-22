@@ -1,5 +1,5 @@
 
-#beneficiariesPage {
+#teamPage {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,16 +11,22 @@
     margin: 10px auto;
 }
 
+#sort {
+    margin: 10px 30px;
+    position: absolute;
+    left: 0;
+}
 
 #teamData {
     background-color: #1a1a1a;
     margin: 20px 30px;
     border-radius: 10px;
+
 }
 
-#beneficiaries {
+#members {
     overflow-y: auto;
-    height: 350px;
+    height: 200px;
 }
 
 #tableHead {
@@ -34,7 +40,6 @@
     margin-bottom: 10px;
 }
 
-
 .member {
     display: flex;
     justify-content: space-between;
@@ -43,7 +48,7 @@
     padding: 5px 30px;
 }
 
-.benfText {
+.teamText {
     display: block;
     width: 200px;
     text-align: left;
@@ -51,16 +56,38 @@
     font-weight: 600;
 }
 
-.idtable {
+.Points {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.point {
     width: 100px;
+    text-align: left;
 }
 
-.buttonAid {
+.PointsAdd {
+    width: 60px;
     text-align: center;
+    background-color: #373737;
 }
 
+.bestMember {
+    width: 150px; 
+}
 
-#popUpB,#popUpA {
+.radioBest {
+    width: 40px;
+    height: 20px;
+    margin: 0 30px;
+}
+
+#addPoints {
+    margin: 10px 30px;
+}
+
+#popUpV {
     background-color: #373737;
     display: flex;
     flex-direction: column;
@@ -75,7 +102,7 @@
     padding-top: 0;
 }
 
-#popUpB > div ,#popUpA > div {
+#popUpV > div {
     margin: auto;
     display: flex;
     align-items: center;
@@ -83,7 +110,24 @@
     padding: 10px;
 }
 
-#popUpB> div > input,#popUpA > div > input,#popUpB> div > div >select,#popUpA> div > div >select{
-    width: 350px;
+#popUpV > div > input{
+    width: 200px;
 }
 
+#Gender {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+#gender {
+    margin-right: 50px;
+}
+
+#Gender > div {
+    display: flex;
+}
+
+#Gender > div >  input {
+    width: 80px;
+}

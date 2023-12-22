@@ -21,9 +21,11 @@ function Events(props) {
         setPopUpT(false);
         setpass("")
         setemail("")
+        setdescrp("")
+        setPopulatedE("")
        
     }
-    function createregestration () {
+    function createregistration () {
         setPopulatedE(true)
         if(pass.trim().length === 0) {
           setPopulatedE(false)
@@ -32,7 +34,17 @@ function Events(props) {
     if(email.trim().length === 0) {
         setPopulatedE(false)
   }
+  if(descrp.trim().length === 0) {
+    setPopulatedE(false)
 }
+}
+
+
+
+
+
+
+
 
     return (
         <div id='eventsPage'>
@@ -85,7 +97,7 @@ function Events(props) {
             </>
             <div>
             <button type="button" onClick={() => reset()}>Cancel</button>
-            <button type="button" onClick={createregestration}>Save</button>
+            <button type="button" onClick={createregistration}>Save</button>
             </div>
         </div>
         }

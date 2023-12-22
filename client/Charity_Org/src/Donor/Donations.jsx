@@ -7,7 +7,8 @@ function Donations(props) {
 
     const [donations,setDonations] = useState([])
 //khaly balak mn donation.Describeall fee el mapping
-    
+
+
     const [popUpD,setPopUpD] = useState(false)
     const [selectD_Type,setSelectD_Type] = useState('')
     const [amount,setAmount] = useState('')
@@ -50,23 +51,164 @@ function Donations(props) {
 
     function createDonation() {
 
-      setPopulatedD(true)
-      if(selectD_Type === "Money" && amount.trim().length === 0) {
+    setPopulatedD(true)
+      if(selectD_Type === "Money") {
+        
+      
+      if(amount.trim().length === 0) {
         setPopulatedD(false)
+        
     }
+    if( date.trim().length === 0) {
+        setPopulatedD(false)
+        
+    }
+    if(delivery.trim().length === 0) {
+        setPopulatedD(false)
+        
+    }
+    if(purpose.trim().length === 0) {
+        setPopulatedD(false)
+        
+    }
+    if(currency.trim().length === 0) {
+        setPopulatedD(false)
+        
+    }
+}
 
-    }
+
+if(selectD_Type === "Clothes") {
+    
+  
+  if(quality.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+if( date.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+if(delivery.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+if(capacity.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+if(size.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+if(type.trim().length === 0) {
+    setPopulatedD(false)
+    
+}
+}
+
+
+if(selectD_Type === "General") {
+    
+  
+    if(quantity.trim().length === 0) {
+      setPopulatedD(false)
+      
+  }
+  if( date.trim().length === 0) {
+      setPopulatedD(false)
+      
+  }
+  if(delivery.trim().length === 0) {
+      setPopulatedD(false)
+      
+  }
+  if(descr.trim().length === 0) {
+      setPopulatedD(false)
+      
+  }
+  
+  }
+
+}
 
     useEffect(() => {
         if(populatedD) {
-            let temp = donations
-            temp[donations.length] = {"id":Participations.length+2,"Volunteer id": v_id,"Participation Type":ptype,"Bonus Type":btype,"Bonus Value":bvalue,"Date":date}
+           if(selectD_Type==="Money")
+           {
+            var temp1=0
+            if (delivery==="1")
+            {temp1=1}
+            var temp = {"D_Date":date,"Delivery":temp1,"Purpose":purpose,"Currency":currency,"Amount":amount}
+          
+            fetch("/api/Donor/createmoneydonation", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
             setPopUpD(false)
 
-
+            setdate('')
+            setAmount('')
+            setdelivery('')
+            setpurpose('')
+            setcurrency('')
             setPopulatedD(false)
-        }
+           }
+           if(selectD_Type==="Clothes")
+           {
+            var temp1=0
+            if (delivery==="1")
+            {temp1=1}
+            var temp = {"D_Date":date,"Delivery":temp1,"Size":size,"Quality":quality,"C_Type":type,"Capacity":capacity}
+          
+            fetch("/api/Donor/createclothesdonation", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
+            setPopUpD(false)
+
+            setdate('')
+            setquality('')
+            setdelivery('')
+            setcapacity('')
+            settype('')
+            setsize('')
+            setPopulatedD(false)
+           }
+           if(selectD_Type==="General")
+           {
+            var temp1=0
+            if (delivery==="1")
+            {temp1=1}
+            var temp = {"D_Date":date,"Delivery":temp1,"Descrip":descr,"Quantity":quantity}
+          
+            fetch("/api/Donor/creategeneraldonation", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
+            setPopUpD(false)
+
+            setdate('')
+            setquantity('')
+            setdelivery('')
+            setdescr('')
+            
+          
+            setPopulatedD(false)
+           }
+    }
     },[populatedD])
+
+   
 
 
     return (

@@ -6,7 +6,6 @@ import Account from "./Account"
 import Team from "./Team"
 import Aid from "./Aid"
 import Events from './Events'
-import Reports from './Reports'
 import "./Leader.css"
 
 function Leader(props) {
@@ -31,11 +30,10 @@ function Leader(props) {
 
     <div id="Head">
         <Navbar_H select={Select}/>
-        {select==0 && <Reports/>}
-        {select==1 && <Team volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
-        {select==2 && <Aid/>}
-        {select==3 && <Events volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
-        {select==4 && <Account view={props.view} user={props.user}/>}
+        {select==0 && <Team volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
+        {select==1 && <Aid/>}
+        {select==2 && <Events volunteers={volunteers} setVolunteers={setVolunteers} user={props.user}/>}
+        {select==3 && <Account view={props.view} user={props.user}/>}
     </div>
 
     )

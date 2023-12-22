@@ -7,12 +7,12 @@ import Donations from "./Donations"
 import Events from './Events'
 import "./Donor.css"
 
-function Volunteer(props) {
+function Donor(props) {
     
     const [select,setSelect] = useState(0)
     const Select = (num) => setSelect(num)
 
-    const [volunteers,setVolunteers] = useState([{key:0,"id": "V_19956", "name": "tofa Ahmad","points":1000000,"phone":"01026908100",best:true},{key:1,"id": "V_156", "name": "Salah Mohamed","points":77777,"phone":"01026908200",best:false},{key:2,"id": "H_19956", "name": "tofa Ahmad","points":19988,"phone":"01026908100",best:false}])
+    
 
     
 
@@ -30,4 +30,4 @@ function Volunteer(props) {
     )
   }
   
-  export default Volunteer
+  export default Donor
