@@ -12,7 +12,7 @@ import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('voluinteer')
+    const [view,setView] = useState('leader')
     const [user,setUser] = useState({})
 
 return(
