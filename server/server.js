@@ -52,7 +52,8 @@ con_online.connect((err) => {
 */
 
 // Signin 
-app.post("/api/signin", (req,res)=>{
+
+app.post("/api/signinV", (req,res)=>{
     con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
       if (err) throw err
       if (result[0] === undefined)
@@ -61,6 +62,16 @@ app.post("/api/signin", (req,res)=>{
       }
       return res.json(JSON.stringify(result[0]))
     });
+}) 
+app.post("/api/signinD", (req,res)=>{
+  con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
 }) 
 
 
