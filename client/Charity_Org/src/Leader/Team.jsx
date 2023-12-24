@@ -5,7 +5,7 @@ import "./Team.css"
 
 function Team(props) {
     
-    const [points,setPoints] = useState([Array(10).fill(0)])
+    const [points,setPoints] = useState([])
     const [bestSelect,setbestSelect] = useState('')
     useEffect(() => {
         setPoints(Array(props.volunteers.length).fill(0))
@@ -232,7 +232,7 @@ function Team(props) {
                         <div className='teamText'>{member.FName} {member.LName}</div>
                         <div className='Points'>
                             <div className='point'>{member.Points}</div>
-                            <input type="number" className='PointsAdd' min='0' max="500" value={points[key]} onChange={(e)=>{changePoints(e.target.value,key)}}/>
+                            <input type="number" className='PointsAdd' value={points[key] || '0'} onChange={(e)=>{changePoints(e.target.value,key)}}/>
                         </div>
                         <div className='teamText'>{member.Phone}</div>
                         <div className='teamText bestMember'>
