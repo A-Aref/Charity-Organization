@@ -8,25 +8,12 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-/*
-const mysql = require('mysql');
+
+
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "1234",
-  database: "lab1"
-});
-
-con.connect((err) => {
-  if (err) throw err;
-  console.log("Connected!");
-});
-*/
-const mysql = require('mysql');
-const con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "0504217246T1s2M3m4M5",
   database: "charity_org1"
 });
 
@@ -54,7 +41,7 @@ con_online.connect((err) => {
 // Signin 
 
 app.post("/api/signinV", (req,res)=>{
-    con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
+    con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
       if (err) throw err
       if (result[0] === undefined)
       {
@@ -63,8 +50,9 @@ app.post("/api/signinV", (req,res)=>{
       return res.json(JSON.stringify(result[0]))
     });
 }) 
+
 app.post("/api/signinD", (req,res)=>{
-  con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.V_ID,req.body.Pass], function (err, result) {
+  con.query('SELECT * FROM donors where DonorID = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -75,8 +63,8 @@ app.post("/api/signinD", (req,res)=>{
 }) 
 
 
-
 //Leader
+
 app.post("/api/leader/updateAccount", (req,res)=>{
   con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
     if (err) throw err
@@ -150,7 +138,7 @@ app.post("/api/leader/updateBest", (req,res)=>{
 })
 
 app.post("/api/leader/updatePromoted", (req,res)=>{
-  con.query('Update volunteers set Promoted = 1 where V_ID = ?' ,[req.body.V_ID], function (err, result) {
+  con.query('CALL UpdatePromoted(?)' ,[req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -162,14 +150,14 @@ app.post("/api/leader/updatePromoted", (req,res)=>{
 })
 
 app.get("/api/leader/selectBenef", (req,res)=>{
-  con.query('SELECT ID, FirstName, LastName, State, Max(A_Date) as Last_AID_Date FROM beneficiaries left join aid on B_ID = ID group by ID', function (err, result) {
+  con.query('CALL SelectBeneficiaries()', function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No Beneficiariaries")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
@@ -192,6 +180,19 @@ app.post("/api/leader/createAid", (req,res)=>{
     {
       console.log(err)
       return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/avialableQuantity", (req,res)=>{
+  console.log(req.body)
+  con.query('Select  Quantity FROM total_quantity where D_Type = ?' ,[req.body.type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("0")
     }
     return res.json(JSON.stringify(result))
   });
@@ -223,14 +224,14 @@ app.get("/api/leader/getEvents", (req,res)=>{
 })
 
 app.post("/api/leader/selectVechicle", (req,res)=>{
-  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+  con.query('CALL SelectVehicle(?)',[req.body.Type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No Beneficiariaries")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
@@ -261,6 +262,7 @@ app.post("/api/leader/addtrans", (req,res)=>{
 
 
 //Volunteer
+
 app.get("/api/volunteer/getEvents", (req,res)=>{
   con.query('SELECT * FROM Events', function (err, result) {
     if (err) throw err
@@ -300,6 +302,21 @@ app.post("/api/volunteer/getParticipations", (req,res)=>{
   });
 }) 
 
+//Donor
+
+
+app.post("/api/Donor/updateAccount", (req,res)=>{
+  con.query('Update donors set Fname = ? , Lname = ? , Email = ? , Phone = ? , Pass = ? , Address = ? where DonorID = ?' ,[req.body.Fname,req.body.Lname,req.body.Email,req.body.Phone,req.body.Pass,req.body.Address,req.body.DonorID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
 app.post("/api/Donor/createmoneydonation", (req,res)=>{
   con.query('INSERT INTO moneydonations (D_Date,Delivery,Purpose,Currency,Amount) VALUES (?, ?, ?, ?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Purpose,req.body.Currency,req.body.Amount], function (err, result) {
     console.log("hello")
@@ -312,6 +329,8 @@ app.post("/api/Donor/createmoneydonation", (req,res)=>{
     return res.json(JSON.stringify(result))
   });  
 }) 
+
+
 app.post("/api/Donor/createclothesdonation", (req,res)=>{
   con.query('INSERT INTO clothes (D_Date,Delivery,Size,Quality,C_Type,Quantity) VALUES (?, ?, ?, ?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Size,req.body.Quality,req.body.C_Type,req.body.Capacity], function (err, result) {
     console.log("aywaan")
@@ -338,7 +357,7 @@ app.post("/api/Donor/creategeneraldonation", (req,res)=>{
   });  
 }) 
 
-app.post("/api/Register/createRegestration", (req,res)=>{
+app.post("/api/Register", (req,res)=>{
   con.query('INSERT INTO donors(Phone,Email,Address,Fname,Lname,Pass) VALUES (?, ?, ?, ?,?,?)' ,[req.body.Phone,req.body.Email,req.body.Address,req.body.Fname,req.body.Lname,req.body.Password], function (err, result) {
     console.log("aywaan registrationnn")
     if (err) throw err 
@@ -351,9 +370,6 @@ app.post("/api/Register/createRegestration", (req,res)=>{
   });  
 }) 
 
-
-
-var listener = app.listen(5000,()=>{console.log(listener.address().port)}) 
 //Admin
 
 app.post("/api/Admin/addevent", (req,res)=>{

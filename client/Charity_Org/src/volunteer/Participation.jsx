@@ -9,7 +9,7 @@ function Participation(props) {
 
   useEffect(() =>   {fetch("/api/volunteer/getParticipations", {
     method: "POST",
-    body:  JSON.stringify({V_ID:6}),
+    body:  JSON.stringify({V_ID:7}),
     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
 })
 .then((response)=>{return response.json()})

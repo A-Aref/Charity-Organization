@@ -16,7 +16,8 @@ function Aid() {
 
     const [popUpA,setPopUpA] = useState(false)
     const [quantity,setQuantity] = useState('')
-    const [type,setType] = useState('')
+    const [avialableQuantity,setAvialableQuantity] = useState('')
+    const [type,setType] = useState('food')
     const [b_ID,setB_ID] = useState('')
     const [populatedA,setPopulatedA] = useState(false)
 
@@ -91,6 +92,7 @@ function Aid() {
     }
 
     useEffect(() => {
+
         if(populatedA) {
             var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
             //createAid() fetch
@@ -114,8 +116,17 @@ function Aid() {
     function createAid (id) {
         setPopUpA(true)
         setB_ID(id)
-
     }
+
+    useEffect(() => {
+        fetch("/api/leader/avialableQuantity", {
+            method: "POST",
+            body:  JSON.stringify({type:type}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data) => {setAvialableQuantity(data)})
+    },[type])
 
     function reset() {
         setAddress('')
@@ -185,7 +196,11 @@ function Aid() {
                 </div>
                 <div>
                     <label htmlFor='Status'>Status</label>
-                    <input type="text" id="Status" value={status} onChange={(e) => setStatus(e.target.value)}/>
+                    <select name="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                        <option value="well">Well</option>
+                        <option value="fair">Fair</option>
+                        <option value="dire">Dire</option>
+                    </select>
                 </div>
             </div>
             <div>
@@ -202,11 +217,18 @@ function Aid() {
             <h2>Create Aid</h2>
             <div>
                 <div>
-                    <label htmlFor='type'>Type</label>
-                    <input type="text" id="type" value={type} onChange={(e) => setType(e.target.value)}/>
+                    <label htmlFor='Type'>Type</label>
+                    <select name="Type" value={type} onChange={(e) => setType(e.target.value)}>
+                        <option value="food">Food</option>
+                        <option value="clothes">Clothes</option>
+                        <option value="medicine">Medicine</option>
+                        <option value="blankets">Blankets</option>
+                        <option value="books">Books</option>
+                        <option value="money">Money</option>
+                    </select>
                 </div>
                 <div>
-                    <label htmlFor='quantity'>Quantity</label>
+                    <label htmlFor='quantity'>Quantity   Avialable: {avialableQuantity}</label>
                     <input type="text" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
                 </div>
             </div>
