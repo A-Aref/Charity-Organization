@@ -54,7 +54,7 @@ function Signin(props) {
             props.view('leader')
             navigate('/Leader')
           }
-          if(user.VRole === 'volunteer') 
+          if(user.VRole === 'volunteer' || user.VRole === 'Volunteer') 
           {
             props.view('volunteer')
             navigate('/volunteer')

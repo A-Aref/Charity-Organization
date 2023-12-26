@@ -77,6 +77,18 @@ app.post("/api/leader/updateAccount", (req,res)=>{
   });
 })
 
+app.post("/api/volunteer/updateAccount", (req,res)=>{
+  con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
 app.post("/api/leader/selectTeam", (req,res)=>{
   con.query('SELECT * FROM volunteers where TeamID = ? and V_ID != ?' ,[req.body.TeamID,req.body.V_ID], function (err, result) {
     if (err) throw err
@@ -88,6 +100,19 @@ app.post("/api/leader/selectTeam", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
+
+app.post("/api/volunteer/selectvolunteer", (req,res)=>{
+  con.query('SELECT * FROM volunteers where  V_ID = ?' ,[req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No volunteers")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 
 app.post("/api/leader/selectTeamOrdered", (req,res)=>{
   con.query('SELECT * FROM volunteers where TeamID = ? and V_ID != ? order by Points DESC' ,[req.body.TeamID,req.body.V_ID], function (err, result) {
@@ -173,6 +198,17 @@ app.post("/api/leader/addBenef", (req,res)=>{
   });
 })
 
+app.post("/api/volunteer/addpart", (req,res)=>{
+  con.query('INSERT INTO participation VALUES (?, ?, ?, ?, ?)' ,[req.body.P_Date,req.body.P_type,req.body.B_value,req.body.Bonus_Type, req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
 app.post("/api/leader/createAid", (req,res)=>{
   con.query('INSERT INTO aid (A_Type, A_Date, Quantity, B_ID) VALUES (?, ?, ?, ?)' ,[req.body.A_Type,req.body.A_Date,req.body.Quantity,req.body.B_ID], function (err, result) {
     if (err) throw err
@@ -250,8 +286,8 @@ app.post("/api/leader/addtrans", (req,res)=>{
 
 //Volunteer
 
-app.get("/api/volunteer/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events', function (err, result) {
+app.post("/api/volunteer/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events where E_ID = ?',[req.body.E_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -265,7 +301,20 @@ app.get("/api/volunteer/getEvents", (req,res)=>{
 
 
 app.post("/api/volunteer/selectVechicle", (req,res)=>{
-  con.query('SELECT D_ID , Capacity FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+  con.query('SELECT * FROM transportation where Is_Cargo = 0 and next_event = ?',[req.body.E_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+
+app.post("/api/volunteer/comfirmtransportation", (req,res)=>{
+  con.query('insert into event_v values(?,?,?)',[req.body.EventsID, req.body.DriverID,req.body.VolunteerID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
