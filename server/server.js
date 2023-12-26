@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Ahmed207@",
+  password: "1234",
   database: "charity_org1"
 });
 
@@ -163,7 +163,7 @@ app.post("/api/leader/updateBest", (req,res)=>{
 })
 
 app.post("/api/leader/updatePromoted", (req,res)=>{
-  con.query('Update volunteers set Promoted = 1 where V_ID = ?' ,[req.body.V_ID], function (err, result) {
+  con.query('CALL UpdatePromoted(?)' ,[req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -175,14 +175,14 @@ app.post("/api/leader/updatePromoted", (req,res)=>{
 })
 
 app.get("/api/leader/selectBenef", (req,res)=>{
-  con.query('SELECT ID, FirstName, LastName, State, Max(A_Date) as Last_AID_Date FROM beneficiaries left join aid on B_ID = ID group by ID', function (err, result) {
+  con.query('CALL SelectBeneficiaries()', function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No Beneficiariaries")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
@@ -221,6 +221,19 @@ app.post("/api/leader/createAid", (req,res)=>{
   });
 })
 
+app.post("/api/leader/avialableQuantity", (req,res)=>{
+  console.log(req.body)
+  con.query('Select  Quantity FROM total_quantity where D_Type = ?' ,[req.body.type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("0")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 
 app.post("/api/leader/eventRequest", (req,res)=>{
   con.query('Update volunteers set Event_Request = ? where V_ID = ?' ,[req.body.Event,req.body.V_ID], function (err, result) {
@@ -247,14 +260,14 @@ app.get("/api/leader/getEvents", (req,res)=>{
 })
 
 app.post("/api/leader/selectVechicle", (req,res)=>{
-  con.query('SELECT * FROM transportation where Is_Cargo = ? and next_event = null',[req.body.Type], function (err, result) {
+  con.query('CALL SelectVehicle(?)',[req.body.Type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No Beneficiariaries")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
