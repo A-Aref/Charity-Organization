@@ -16,7 +16,8 @@ function Aid() {
 
     const [popUpA,setPopUpA] = useState(false)
     const [quantity,setQuantity] = useState('')
-    const [type,setType] = useState('')
+    const [avialableQuantity,setAvialableQuantity] = useState('')
+    const [type,setType] = useState('food')
     const [b_ID,setB_ID] = useState('')
     const [populatedA,setPopulatedA] = useState(false)
 
@@ -91,6 +92,7 @@ function Aid() {
     }
 
     useEffect(() => {
+
         if(populatedA) {
             var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
             //createAid() fetch
@@ -114,8 +116,17 @@ function Aid() {
     function createAid (id) {
         setPopUpA(true)
         setB_ID(id)
-
     }
+
+    useEffect(() => {
+        fetch("/api/leader/avialableQuantity", {
+            method: "POST",
+            body:  JSON.stringify({type:type}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data) => {setAvialableQuantity(data)})
+    },[type])
 
     function reset() {
         setAddress('')
@@ -217,8 +228,7 @@ function Aid() {
                     </select>
                 </div>
                 <div>
-                    <label htmlFor='quantity'>Quantity</label>
-                    <p>Avialabe: {}</p>
+                    <label htmlFor='quantity'>Quantity   Avialable: {avialableQuantity}</label>
                     <input type="text" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
                 </div>
             </div>
