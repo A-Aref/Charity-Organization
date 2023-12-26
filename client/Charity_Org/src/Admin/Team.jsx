@@ -61,9 +61,6 @@ function Team(props) {
         if(dep.trim().length === 0) {
             setPopulated(false)
         }
-        if(pts.trim().length === 0) {
-            setPopulated(false)
-        }
         if(leader.trim().length === 0) {
             setPopulated(false)
         }
@@ -238,18 +235,18 @@ function Team(props) {
             <div>
                 <div>
                     <label htmlFor='First_Name'>Location</label>
-                    <input type="text" id="First_Name" value={loc} onChange={(e) => setFName(e.target.value)}/>
+                    <input type="text" id="First_Name" value={loc} onChange={(e) => setloc(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='Last_Name'>Department</label>
-                    <input type="text" id="Last_Name" value={dep} onChange={(e) => setLName(e.target.value)}/>
+                    <input type="text" id="Last_Name" value={dep} onChange={(e) => setdep(e.target.value)}/>
                 </div>
             </div>
             <div>
                 
                 <div>
                     <label htmlFor='Email'>Leader</label>
-                    <input type="text" id="Email" value={leader} onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="text" id="Email" value={leader} onChange={(e) => setleader(e.target.value)}/>
                 </div>
             </div>
 
