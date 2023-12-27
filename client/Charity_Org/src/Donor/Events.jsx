@@ -53,6 +53,8 @@ function Events(props) {
 }
 }
 
+
+
 useEffect(() => {
 
     if(populatedE) {
@@ -64,6 +66,7 @@ useEffect(() => {
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})
+
         setPopUpT(false)
         setID('')
         setPopulatedE(false)

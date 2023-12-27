@@ -468,6 +468,8 @@ app.post("/api/Donor/event_registeration", (req,res)=>{
 })
 
 
+
+
 app.post("/api/Donor/old_money_donations", (req,res)=>{
   con.query('SELECT D_Date, Delivery, Purpose, Currency, Amount FROM moneydonations WHERE DonorID= ? AND D_Date<=? ',[req.body.donorid,req.body.date], function (err, result) {
     console.log(result)
