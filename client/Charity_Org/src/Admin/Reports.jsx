@@ -1,7 +1,8 @@
 
 
 import { useEffect, useState } from 'react'
-import { format } from 'date-fns';
+import { format } from 'date-fns'
+import "./Reports.css"
 
 function Reports() {
     
@@ -10,6 +11,7 @@ function Reports() {
     const [maxdate,setmaxdate] = useState('')
     const [aidcount,setaidcout] = useState(0)
     const [tq,settq] = useState([])
+    const [ar2,setar2] = useState([])
     const [report1,setreport1] = useState([])
     const [report2,setreport2] = useState([])
 
@@ -117,6 +119,17 @@ function Reports() {
                 setaidcout(JSON.parse(data))
                 console.log(JSON.parse(data))
             })
+
+            fetch("/api/Admin/ar2", {
+                method: "POST",
+                body:  JSON.stringify(addedB),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{ return response.json()})
+            .then((data)=>{
+                setar2(JSON.parse(data))
+                console.log(JSON.parse(data))
+            })
             
 
             fetch("/api/Admin/get_tq")
@@ -125,7 +138,7 @@ function Reports() {
                   settq(JSON.parse(data))
                   console.log(JSON.parse(data))
                 })
-            setPopulatedB(false)
+            
 
         }
     },[popUpB])
@@ -193,7 +206,7 @@ function Reports() {
             <div className="Fields">
                 <div className="inFields">
                     <p>Aids:</p>
-                    <p>{aidcount[0]}</p>   
+                    <p>{aidcount[1]}</p>   
                 </div>
                 <div className="inFields">
                     <p>Quantity Handed Out</p>
@@ -202,7 +215,7 @@ function Reports() {
             </div>
             <div className="Fields">
                 <div className="inFields">
-                    <p>Qunatity Added </p>
+                    <p>Quantity Added </p>
                         
                 </div>
                 <div className="inFields">

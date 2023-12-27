@@ -557,6 +557,19 @@ app.post("/api/Admin/aidcount", (req,res)=>{
   });
 })
 
+app.post("/api/Admin/ar2", (req,res)=>{
+  con.query('select A_Type, sum(Quantity) from aid where A_Date>=dmin and A_Date<=dmax group by A_Type',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No aids Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 app.get("/api/Admin/get_tq", (req,res)=>{
   con.query('select * from total_quantity', function (err, result) {
     console.log(result)
