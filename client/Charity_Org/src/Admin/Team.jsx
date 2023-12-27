@@ -140,17 +140,17 @@ function Team(props) {
     function changeBest (Rkey) {
         if(confirm("Are you sure you want to make this change"))
         {
-           Promise.all(props.volunteers.map((member) => {
+           Promise.all(props.teams.map((member) => {
             let selected = false
-            if (member.V_ID === Rkey)
+            if (member.T_ID === Rkey)
             {
                 selected =true
-                setbestSelect(member.V_ID)
+                setbestSelect(member.T_ID)
             }
             
-            fetch("/api/leader/updateBest", {
+            fetch("/api/admin/updatebestteam", {
                 method: "POST",
-                body:  JSON.stringify({V_ID:member.V_ID,best:selected}),
+                body:  JSON.stringify({T_ID:member.T_ID,best:selected}),
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
@@ -169,23 +169,20 @@ function Team(props) {
     }
 
     function Sort () {
-        fetch("/api/leader/selectTeamOrdered", {
-            method: "POST",
-            body:  JSON.stringify(props.user),
-            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-        })
-        .then((response)=>{return response.json()})
-        .then((data)=>{
-          props.setVolunteers(JSON.parse(data))
-        })
+        fetch("/api/admin/orderteams")
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  setteams(JSON.parse(data))
+                  console.log(JSON.parse(data))
+                })
     }
 
     return (
     <div id='teamPage'>
         <h1 id='Title'>Teams</h1>
-        {/* <div id='sort'>
-            <button type="button" disabled={popUpV} onClick={Sort}>Sort by Points</button>
-        </div> */}
+        <div id='sort'>
+            <button type="button" disabled={popUpV} onClick={() => Sort()}>Sort by Points</button>
+        </div>
 
         <div id='teamData'>
             <div id='tableHead'>

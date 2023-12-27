@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "Ahmed207@",
+  password: "1234",
   database: "charity_org1"
 });
 
@@ -550,7 +550,7 @@ app.get("/api/Admin/selectprom", (req,res)=>{
 })
 
 app.post("/api/Admin/aidcount", (req,res)=>{
-  con.query('select count(A_ID) from aid where A_Date>=? and A_Date<=?',[req.body.mindate,req.body.maxdate], function (err, result) {
+  con.query('call assets_report1(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -558,12 +558,12 @@ app.post("/api/Admin/aidcount", (req,res)=>{
       console.log(err)
       return res.json("No aids Yet ya 7ob")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
 app.post("/api/Admin/ar2", (req,res)=>{
-  con.query('select A_Type, sum(Quantity) from aid where A_Date>=dmin and A_Date<=dmax group by A_Type',[req.body.mindate,req.body.maxdate], function (err, result) {
+  con.query('call assets_report2(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -576,7 +576,7 @@ app.post("/api/Admin/ar2", (req,res)=>{
 })
 
 app.get("/api/Admin/get_tq", (req,res)=>{
-  con.query('select * from total_quantity', function (err, result) {
+  con.query('call get_tq', function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -584,12 +584,12 @@ app.get("/api/Admin/get_tq", (req,res)=>{
       console.log(err)
       return res.json("No quantities Yet ya 7ob")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
 app.post("/api/Admin/pr1", (req,res)=>{
-  con.query(' select distinct TeamID,count(TeamID) as Participations from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=? ) group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+  con.query('call participation_report1(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -597,12 +597,12 @@ app.post("/api/Admin/pr1", (req,res)=>{
       console.log(err)
       return res.json("pr1 No Teams Participated yet pr1")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
 app.post("/api/Admin/pr2", (req,res)=>{
-  con.query('select TeamID,sum(Points) as Individual from volunteers where TeamID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID)group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+  con.query('call participation_report2(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -610,18 +610,42 @@ app.post("/api/Admin/pr2", (req,res)=>{
       console.log(err)
       return res.json("pr2 No Teams Participated yet pr2")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
 app.post("/api/Admin/pr3", (req,res)=>{
-  con.query('select T_ID,TPoints from teams where T_ID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID) order by T_ID',[req.body.mindate,req.body.maxdate], function (err, result) {
+  con.query('call participation_report3(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("pr3 No Teams Participated yet")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.post("/api/admin/updatebestteam", (req,res)=>{
+  con.query('Update teams set Best_Team = ? where T_ID = ?' ,[req.body.best,req.body.T_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.get("/api/admin/orderteams", (req,res)=>{
+  con.query('SELECT * FROM teams order by TPoints DESC' , function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
     }
     return res.json(JSON.stringify(result))
   });
