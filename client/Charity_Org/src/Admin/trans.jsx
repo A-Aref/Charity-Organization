@@ -67,11 +67,13 @@ function trans() {
     useEffect(() => {
         if(populatedB) {
             let cargo= 1
+            let trips=0
+            let nevent=null
             if (iscargo === "0")
             {
                 cargo = 0
             }
-            let addedB = {"FirstName": fname,"LastName":lname,"Phone":phone,"Plate":plate, "Production_Year": prodyear,"Is_Cargo": cargo, "Capacity": capacity}
+            let addedB = {"FirstName": fname,"LastName":lname,"Phone":phone,"Plate":plate, "Production_Year": prodyear,"Is_Cargo": cargo, "Capacity": capacity,"Total_Trips":trips,"next_event":nevent}
             setPopUpB(false)
 
             fetch("/api/leader/addtrans", {
