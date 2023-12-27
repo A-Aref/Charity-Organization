@@ -249,7 +249,7 @@ app.get("/api/leader/selecttrans", (req,res)=>{
 })
 
 app.post("/api/leader/addtrans", (req,res)=>{
-  con.query('INSERT INTO transportation (FirstName, LastName, Capacity, Is_Cargo, Production_Year, Plate, Phone) VALUES (?, ?, ?, ?, ?, ?, ?)' ,[req.body.FirstName,req.body.LastName,req.body.Capacity,req.body.Is_Cargo,req.body.Production_Year,req.body.Plate,req.body.Phone], function (err, result) {
+  con.query('INSERT INTO transportation (FirstName, LastName, Capacity, Is_Cargo, Production_Year, Plate, Phone,Total_Trips,next_event) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)' ,[req.body.FirstName,req.body.LastName,req.body.Capacity,req.body.Is_Cargo,req.body.Production_Year,req.body.Plate,req.body.Phone,req.body.Total_Trips,req.body.next_event], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -428,6 +428,57 @@ app.post("/api/Admin/addleader", (req,res)=>{
     {
       console.log(err)
       return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/addteam", (req,res)=>{
+  con.query('INSERT INTO teams (Location, Department, TPoints, Leader, Best_Team) VALUES (?, ?, ?, ?,?)' ,[req.body.Location,req.body.Department,req.body.TPoints,req.body.Leader,req.body.Best_Team], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("error ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/Admin/selectprom", (req,res)=>{
+  con.query('SELECT V_ID, FName, LName, TeamID FROM volunteers WHERE Promoted=1', function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No promotions Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/Admin/aidcount", (req,res)=>{
+  con.query('call assets_report1(?,?)',[req.body.Descrip,req.body.url], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No aids Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/Admin/get_tq", (req,res)=>{
+  con.query('call get_tq()', function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No quantities Yet ya 7ob")
     }
     return res.json(JSON.stringify(result))
   });
