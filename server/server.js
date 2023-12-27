@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "0504217246T1s2M3m4M5",
+  password: "1234",
   database: "charity_org1"
 });
 
@@ -344,14 +344,30 @@ app.post("/api/volunteer/selectVechicle", (req,res)=>{
   });
 })
 
+app.post("/api/volunteer/checkevent", (req,res)=>{
+  con.query('SELECT * FROM event_v where EventsID = ? and VolunteerID = ?',[req.body.E_ID, req.body.V_ID ], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {  
+      console.log(err)
+      return res.json("no events found") 
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
 
 app.post("/api/volunteer/comfirmtransportation", (req,res)=>{
+  if (req.body.DriverID==="null")
+  {
+    req.body.DriverID=null
+  }
   con.query('insert into event_v values(?,?,?)',[req.body.EventsID, req.body.DriverID,req.body.VolunteerID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
-      return res.json("No team members")
+      return res.json("No team members") 
     }
     return res.json(JSON.stringify(result))
   });
@@ -396,6 +412,8 @@ app.post("/api/Donor/updateAccount", (req,res)=>{
     return res.json(JSON.stringify(result[0]))
   });
 })
+
+
 
 app.post("/api/Donor/createmoneydonation", (req,res)=>{
   
