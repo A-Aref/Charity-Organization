@@ -87,3 +87,21 @@
     width: 200px;
 }
 
+
+#Gender {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+#cargo {
+    margin-right: 50px;
+}
+
+#Gender > div {
+    display: flex;
+}
+
+#Gender > div >  input {
+    width: 80px;
+}

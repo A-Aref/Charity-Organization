@@ -52,7 +52,7 @@ app.post("/api/signinV", (req,res)=>{
 }) 
 
 app.post("/api/signinD", (req,res)=>{
-  con.query('SELECT * FROM donors where DonorID = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
+  con.query('SELECT * FROM donors where Email = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -191,8 +191,19 @@ app.post("/api/leader/createAid", (req,res)=>{
 })
 
 app.post("/api/leader/avialableQuantity", (req,res)=>{
-  console.log(req.body)
   con.query('Select  Quantity FROM total_quantity where D_Type = ?' ,[req.body.type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("0")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.post("/api/leader/updateTotalQuantity", (req,res)=>{
+  con.query('Update total_quantity set Quantity= ? where D_Type = ?' ,[req.body.newQunantity,req.body.type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -202,7 +213,6 @@ app.post("/api/leader/avialableQuantity", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
-
 
 app.post("/api/leader/eventRequest", (req,res)=>{
   con.query('Update volunteers set Event_Request = ? where V_ID = ?' ,[req.body.Event,req.body.V_ID], function (err, result) {
@@ -216,8 +226,8 @@ app.post("/api/leader/eventRequest", (req,res)=>{
   });
 })
 
-app.get("/api/leader/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events', function (err, result) {
+app.post("/api/leader/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events where E_Date >= ?',[req.body.date], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -228,7 +238,7 @@ app.get("/api/leader/getEvents", (req,res)=>{
   });
 })
 
-app.post("/api/leader/selectVechicle", (req,res)=>{
+app.post("/api/leader/selectVechicles", (req,res)=>{
   con.query('CALL SelectVehicle(?)',[req.body.Type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
@@ -239,6 +249,20 @@ app.post("/api/leader/selectVechicle", (req,res)=>{
     return res.json(JSON.stringify(result[0]))
   });
 })
+
+app.post("/api/leader/selectedVechicle", (req,res)=>{
+  con.query('Update transportation set next_event = ? where D_ID = ?',[req.body.next,req.body.ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+
 
 app.get("/api/leader/selecttrans", (req,res)=>{
   con.query('SELECT D_ID, FirstName, LastName, Capacity, Is_Cargo FROM transportation', function (err, result) {
@@ -254,7 +278,7 @@ app.get("/api/leader/selecttrans", (req,res)=>{
 })
 
 app.post("/api/leader/addtrans", (req,res)=>{
-  con.query('INSERT INTO transportation (FirstName, LastName, Capacity, Is_Cargo, Production_Year, Plate, Phone) VALUES (?, ?, ?, ?, ?, ?, ?)' ,[req.body.FirstName,req.body.LastName,req.body.Capacity,req.body.Is_Cargo,req.body.Production_Year,req.body.Plate,req.body.Phone], function (err, result) {
+  con.query('INSERT INTO transportation (FirstName, LastName, Capacity, Is_Cargo, Production_Year, Plate, Phone,Total_Trips,next_event) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)' ,[req.body.FirstName,req.body.LastName,req.body.Capacity,req.body.Is_Cargo,req.body.Production_Year,req.body.Plate,req.body.Phone,req.body.Total_Trips,req.body.next_event], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -411,9 +435,20 @@ app.post("/api/Donor/creategeneraldonation", (req,res)=>{
   });  
 }) 
 
+app.post("/api/RegisterCheck", (req,res)=>{
+  con.query('select * from donors where Email = ?' ,[req.body.Email], function (err, result) {
+    if (err) throw err 
+    if (result[0] === undefined) 
+    {
+      console.log(err)
+      return res.json("Inserted successfully")
+    }
+    return res.json("Another account is using the same email") 
+  });  
+}) 
+
 app.post("/api/Register", (req,res)=>{
   con.query('INSERT INTO donors(Phone,Email,Address,Fname,Lname,Pass) VALUES (?, ?, ?, ?,?,?)' ,[req.body.Phone,req.body.Email,req.body.Address,req.body.Fname,req.body.Lname,req.body.Password], function (err, result) {
-    console.log("aywaan registrationnn")
     if (err) throw err 
     if (result[0] === undefined) 
     {
@@ -439,7 +474,9 @@ app.post("/api/Admin/addevent", (req,res)=>{
 })
 
 app.post("/api/Admin/updateevent", (req,res)=>{
+  console.log(req.body)
   con.query('Update events set Descrip = ? , url = ? , Location = ? , E_date = ? where E_ID = ?' ,[req.body.Descrip,req.body.url,req.body.Location,req.body.E_Date,req.body.E_ID], function (err, result) {
+    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -482,6 +519,96 @@ app.post("/api/Admin/addleader", (req,res)=>{
     {
       console.log(err)
       return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/leader/addteam", (req,res)=>{
+  con.query('INSERT INTO teams (Location, Department, TPoints, Leader, Best_Team) VALUES (?, ?, ?, ?,?)' ,[req.body.Location,req.body.Department,req.body.TPoints,req.body.Leader,req.body.Best_Team], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("error ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/Admin/selectprom", (req,res)=>{
+  con.query('SELECT V_ID, FName, LName, TeamID FROM volunteers WHERE Promoted=1', function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No promotions Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/aidcount", (req,res)=>{
+  con.query('select count(A_ID) from aid where A_Date>=? and A_Date<=?',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No aids Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.get("/api/Admin/get_tq", (req,res)=>{
+  con.query('select * from total_quantity', function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No quantities Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr1", (req,res)=>{
+  con.query(' select distinct TeamID,count(TeamID) as Participations from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=? ) group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr1 No Teams Participated yet pr1")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr2", (req,res)=>{
+  con.query('select TeamID,sum(Points) as Individual from volunteers where TeamID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID)group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr2 No Teams Participated yet pr2")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr3", (req,res)=>{
+  con.query('select T_ID,TPoints from teams where T_ID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID) order by T_ID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr3 No Teams Participated yet")
     }
     return res.json(JSON.stringify(result))
   });

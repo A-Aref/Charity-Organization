@@ -29,10 +29,11 @@ function Signin(props) {
     else
     {
 
-      let sID = id.slice(2)
-      let Search = {"ID": sID,"Pass":password}
+      
       if (id[0] == 'V' && id[1] == '_')
       {
+        let sID = id.slice(2)
+        let Search = {"ID": sID,"Pass":password}
         fetch("/api/signinV", {
           method: "POST",
           body:  JSON.stringify(Search),
@@ -67,8 +68,9 @@ function Signin(props) {
         }
         })
       }
-      else if (id[0] == 'D' && id[1] == '_')
+      else
       {
+        let Search = {"ID": id,"Pass":password}
         fetch("/api/signinD", {
           method: "POST",
           body:  JSON.stringify(Search),
@@ -89,10 +91,6 @@ function Signin(props) {
           navigate('/Donor')
         }
         })
-      }
-      else
-      {
-        setErrorText("Invalid username")
       }
     }   
   }

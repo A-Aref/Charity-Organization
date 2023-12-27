@@ -69,35 +69,26 @@ function Team(props) {
 
     useEffect(() => {
         if(populated) {
-            let temp = props.volunteers
-            let genderbit = 1
-            const date = moment().format('YYYY-MM-DD')
-            if(gender === 'female')
-            {
-                genderbit = 0
-            }
-            let addedV = {"FName": fName, "LName":lName,"VRole":"Volunteer","Email":email,"Phone":phone,"Pass":phone,"Join_Date":date,"DoB":doB,"Gender":genderbit,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":props.user.TeamID}
-            temp[props.volunteers.length] = addedV
             
-            reset()
-            setPoints(Array(props.volunteers.length).fill(0))
+            let addt = {"Location": loc, "Department":dep,"TPoints":0,"Leader":leader,"Best_Team":0}
+            
 
             //update database
-            fetch("/api/leader/addVolunteer", {
+            fetch("/api/leader/addteam", {
                 method: "POST",
-                body:  JSON.stringify(addedV),
+                body:  JSON.stringify(addt),
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
             .then(()=>{
-                fetch("/api/leader/selectTeam", {
+                fetch("/api/leader/selectallteams", {
                     method: "POST",
                     body:  JSON.stringify(props.user),
                     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
                 })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  props.setVolunteers(JSON.parse(data))
+                  props.setteams(JSON.parse(data))
                 })
             })  
             
