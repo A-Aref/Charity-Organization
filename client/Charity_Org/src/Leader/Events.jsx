@@ -14,7 +14,7 @@ function Events(props) {
     useEffect(() =>   {
         fetch("/api/leader/getEvents", {
             method: "POST",
-            body:  JSON.stringify({date:"2000-11-11"}),
+            body:  JSON.stringify({date:date}),
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})

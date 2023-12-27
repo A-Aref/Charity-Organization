@@ -52,7 +52,6 @@ function Aid() {
 
     useEffect(() => {
         if(populatedB) {
-            let temp = beneficiaries
             let addedB = {"FirstName": fName,"LastName":lName,"State":status,"Address":address}
             setPopUpB(false)
 
@@ -74,6 +73,7 @@ function Aid() {
             setFName('')
             setStatus('')
             setLName('')
+            setPopUpB(false)
             setPopulatedB(false)
         }
     },[populatedB])
@@ -114,6 +114,7 @@ function Aid() {
             setQuantity('')
             setType('')
             setB_ID('')
+            setPopUpA(false)
             setPopulatedA(false)
         }
     },[populatedA])
@@ -211,6 +212,7 @@ function Aid() {
                 <div>
                     <label htmlFor='Status'>Status</label>
                     <select name="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
+                        <option value="" disabled>Select Status</option>
                         <option value="well">Well</option>
                         <option value="fair">Fair</option>
                         <option value="dire">Dire</option>

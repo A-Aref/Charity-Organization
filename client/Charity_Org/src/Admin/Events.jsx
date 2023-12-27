@@ -48,22 +48,28 @@ function Events(props) {
 
         setPopulatedu(true)
         
-        if(descrip.trim().length === 0) {
+        if(descripu.trim().length === 0) {
             setPopulatedu(false)
         }
-        if(url.trim().length === 0) {
+        if(urlu.trim().length === 0) {
             setPopulatedu(false)
         }
-        if(location.trim().length === 0) {
+        if(locationu.trim().length === 0) {
             setPopulatedu(false)
         }
     }
 
-    useEffect(() =>   {fetch("/api/leader/getEvents")
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      setEvents(JSON.parse(data))
-    })
+
+    useEffect(() =>   {
+        fetch("/api/leader/getEvents", {
+            method: "POST",
+            body:  JSON.stringify({date:"1950-01-01"}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+        setEvents(JSON.parse(data))
+        })
     },[])
 
 
@@ -79,11 +85,15 @@ function Events(props) {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-            .then((data)=>{
-                fetch("/api/leader/getEvents")
+            .then(()=>{
+                fetch("/api/leader/getEvents", {
+                    method: "POST",
+                    body:  JSON.stringify({date:currentDate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  setEvents(JSON.parse(data))
+                setEvents(JSON.parse(data))
                 })
             })  
 
@@ -98,7 +108,7 @@ function Events(props) {
         if(populatedu) {
             
             let newe = {"Descrip": descripu,"url":urlu,"Location":locationu,"E_Date":dateu,"E_ID":idu}
-            setPopUpu(false)
+            
 
             fetch("/api/Admin/updateevent", {
                 method: "POST",
@@ -106,18 +116,23 @@ function Events(props) {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-            .then((data)=>{
-                fetch("/api/leader/getEvents")
+            .then(()=>{
+                fetch("/api/leader/getEvents", {
+                    method: "POST",
+                    body:  JSON.stringify({date:currentDate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  setEvents(JSON.parse(data))
+                setEvents(JSON.parse(data))
                 })
             })  
 
             setdescripu('')
             seturlu('')
             setlocationu('')
-            setpopulatedu(false)
+            setPopUpu(false)
+            setPopulatedu(false)
         }
     },[populatedu])
    
@@ -147,6 +162,11 @@ function Events(props) {
         <div>
             <h1>Events</h1>
         </div>
+        <div>
+        <button onClick={() => setPopUp(true)} disabled={popUp}>Add Event</button>
+        </div>
+        <br />
+        <br />
         {events.map((event,key)=> (
             <div key={key} className='Event'>
                 <img src={event.url}  className='event_img' />
@@ -154,39 +174,25 @@ function Events(props) {
                 <div>Location: {event.Location} </div> <div> Date: {(event.E_Date).slice(0,10)}</div>
                 <div>
                 <button onClick={()=>upbutt(event.E_ID)} disabled={popUpu}>Update</button>
-                    {/* <div>
-                        <select name='select_volunteer' value={selectVolunteer} onChange={(e) => setSelectVolunteer(e.target.value)}>
-                            <option value="" disabled >Select volunteer for event</option>
-                            {props.volunteers.map((volunteer) => (
-                                volunteer.Event_Request === null && <option value={volunteer.V_ID} key={volunteer.V_ID}>{volunteer.FName} {volunteer.LName}</option>
-                            ))}
-                        </select>   
-                        <button disabled={popUpT} onClick={() => sendRequest(event.ID)}>Send Request</button>
-                    </div>
-                    <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button> */}
                 </div> 
             </div>
         ))}
-        <div>
-        <button onClick={() => setPopUp(true)} disabled={popUp}>Add Event</button>
-        </div>
+        
         {popUp&&
-        <div id='popUpT'>
+        <div id='popUpu'>
             <h2>Add Event</h2>
             <div>
                 <div>
                     <label htmlFor='descrip'>description</label>
                     <input type="text" id="descrip" value={descrip} onChange={(e) => setdescrip(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='url'>url</label>
                     <input type="url" id="url" value={url} onChange={(e) => seturl(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='location'>Location</label>
                     <input type="text" id="location" value={location} onChange={(e) => setlocation(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='date'>Date</label>
                     <input type="date" id="date" value={date} onChange={(e) => setdate(e.target.value)}/>
                 </div>
@@ -205,16 +211,14 @@ function Events(props) {
                 <div>
                     <label htmlFor='descrip'>description</label>
                     <input type="text" id="descrip" value={descripu} onChange={(e) => setdescripu(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='url'>url</label>
                     <input type="url" id="url"  value={urlu} onChange={(e) => seturlu(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='location'>Location</label>
                     <input type="text" id="location"  value={locationu} onChange={(e) => setlocationu(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='date'>Date</label>
                     <input type="date" id="date" value={dateu} onChange={(e) => setdateu(e.target.value)}/>
                 </div>
