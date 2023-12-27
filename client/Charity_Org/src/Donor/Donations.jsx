@@ -5,7 +5,10 @@ import moment from 'moment'
 
 function Donations(props) {
 
-    const [donations,setDonations] = useState([])
+    const [moneydonation,setmoneyDonations] = useState([])
+    const [generaldonation,setgeneralDonations] = useState([])
+    const [clothes,setclothes] = useState([])
+
 //khaly balak mn donation.Describeall fee el mapping
 
 
@@ -24,10 +27,11 @@ function Donations(props) {
     
     const [descr,setdescr] = useState('')
     const [quantity,setquantity] = useState('')
+    
    
     const [populatedD,setPopulatedD] = useState(false)
 
-
+    const currdate = moment().format('YYYY-MM-DD')
     function reset() {
         setPopUpD(false)
         setSelectD_Type('')
@@ -46,9 +50,42 @@ function Donations(props) {
         setsize('')
         settype('')
     }
-  
+    
+    useEffect(() =>   {
+        fetch("/api/Donor/old_money_donations", {
+            method: "POST",
+            body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{setmoneyDonations(JSON.parse(data))
+        console.log(JSON.parse(data))})
+    },[])
 
+    useEffect(() =>   {
+        fetch("/api/Donor/old_general_donations", {
+            method: "POST",
+            body:  JSON.stringify({donorid:props.user.DonorID,"date":currdate}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{setgeneralDonations(JSON.parse(data))
+        console.log(JSON.parse(data))})
+    },[])
 
+    
+    useEffect(() =>   {
+        fetch("/api/Donor/old_clothes_donations", {
+            method: "POST",
+            body:  JSON.stringify({donorid:props.user.DonorID,"date":currdate}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{setclothes(JSON.parse(data))
+        console.log(JSON.parse(data))})
+    },[])
+
+    
     function createDonation() {
 
     setPopulatedD(true)
@@ -132,6 +169,10 @@ if(selectD_Type === "General") {
 
 }
 
+
+
+
+
     useEffect(() => {
         if(populatedD) {
            if(selectD_Type==="Money")
@@ -139,7 +180,7 @@ if(selectD_Type === "General") {
             var temp1=0
             if (delivery==="1")
             {temp1=1}
-            var temp = {"D_Date":date,"Delivery":temp1,"Purpose":purpose,"Currency":currency,"Amount":amount}
+            var temp = {"D_Date":date,"Delivery":temp1,"Purpose":purpose,"Currency":currency,"Amount":amount,"DonorID":props.user.DonorID}
           
             fetch("/api/Donor/createmoneydonation", {
                 method: "POST",
@@ -147,22 +188,39 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            
+            var AmountLE=amount;
+            if (currency==="EUR")
+            {
+                AmountLE=AmountLE*2
+            }
+            if (currency==="USD")
+            {
+                AmountLE=AmountLE*3
+            }
+            var hazl2oom6 = {"Quantity":AmountLE,"Type":"Money"}
+            fetch("/api/Donor/T_Total_assets", {
+                method: "POST",
+                body:  JSON.stringify(hazl2oom6),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
 
-            setPopUpD(false)
+            reset();
 
-            setdate('')
-            setAmount('')
-            setdelivery('')
-            setpurpose('')
-            setcurrency('')
-            setPopulatedD(false)
+           
+            
+            
+    
+         
+
            }
            if(selectD_Type==="Clothes")
            {
             var temp1=0
             if (delivery==="1")
             {temp1=1}
-            var temp = {"D_Date":date,"Delivery":temp1,"Size":size,"Quality":quality,"C_Type":type,"Capacity":capacity}
+            var temp = {"D_Date":date,"Delivery":temp1,"Size":size,"Quality":quality,"C_Type":type,"Capacity":capacity,"DonorID":props.user.DonorID}
           
             fetch("/api/Donor/createclothesdonation", {
                 method: "POST",
@@ -171,22 +229,23 @@ if(selectD_Type === "General") {
             })
             .then((response)=>{return response.json()})
 
-            setPopUpD(false)
+           
+            var hazl2oom6 = {"Quantity":capacity,"Type":"Clothes"}
+            fetch("/api/Donor/T_Total_assets", {
+                method: "POST",
+                body:  JSON.stringify(hazl2oom6),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
 
-            setdate('')
-            setquality('')
-            setdelivery('')
-            setcapacity('')
-            settype('')
-            setsize('')
-            setPopulatedD(false)
+            reset();
            }
            if(selectD_Type==="General")
            {
             var temp1=0
             if (delivery==="1")
             {temp1=1}
-            var temp = {"D_Date":date,"Delivery":temp1,"Descrip":descr,"Quantity":quantity}
+            var temp = {"D_Date":date,"Delivery":temp1,"Descrip":descr,"Quantity":quantity,"DonorID":props.user.DonorID}
           
             fetch("/api/Donor/creategeneraldonation", {
                 method: "POST",
@@ -194,16 +253,21 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-
-            setPopUpD(false)
-
-            setdate('')
-            setquantity('')
-            setdelivery('')
-            setdescr('')
             
-          
-            setPopulatedD(false)
+              
+            var hazl2oom6 = {"Quantity":quantity,"Type":descr}
+            fetch("/api/Donor/T_Total_assets", {
+                method: "POST",
+                body:  JSON.stringify(hazl2oom6),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+
+
+
+
+
+            reset();
            }
     }
     },[populatedD])
@@ -217,28 +281,90 @@ if(selectD_Type === "General") {
             <h1 id='Title'>Previous Donations</h1>
         </div>
         <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>Money Donations </h2>
+        </div>
             <div id='tableHead'>
             
-                <div className='benfText'>Description</div>
-                <div className='benfText'>Quantity</div>
                 <div className='benfText'>Amount</div>
+                <div className='benfText'>Currency</div>
+                <div className='benfText'>Purpose</div>
                 <div className='benfText'>Delivery</div>
                 <div className='benfText buttonAid'>Date</div>
             </div>
             <div id='Participations'>
-                {donations.map((donation,key) => (
+                {moneydonation.map((moneydonation,key) => (
                     <div className='member' key={key}>
                         
-                        <div className='benfText'>{donation.Describeall}</div>
-                        <div className='benfText'>{donation.Quantity}</div>
-                        <div className='benfText'>{donation.Amount}</div>
-                        <div className='benfText'>{donation.Delivery}</div>
-                        <div className='benfText'>{donation.D_Date}</div>
+                        <div className='benfText'>{moneydonation.Amount}</div>
+                        <div className='benfText'>{moneydonation.Currency}</div>
+                        <div className='benfText'>{moneydonation.Purpose}</div>
+                        <div className='benfText'>{moneydonation.Delivery.data[0]}</div>
+                        <div className='benfText'>{(moneydonation.D_Date).slice(0,10)}</div>
 
                     </div>
                 ))}
             </div>
         </div>
+
+
+        <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>General Donations </h2>
+        </div>
+            <div id='tableHead'>
+            
+                <div className='benfText'>Description</div>
+                <div className='benfText'>Quantity</div>
+                <div className='benfText'>Delivery</div>
+                <div className='benfText buttonAid'>Date</div>
+            </div>
+            <div id='Participations'>
+                {generaldonation.map((generaldonation,key) => (
+                    <div className='member' key={key}>
+                        
+                        <div className='benfText'>{generaldonation.Descrip}</div>
+                        <div className='benfText'>{generaldonation.Quantity}</div>
+                        <div className='benfText'>{generaldonation.Delivery.data[0]}</div>
+                        <div className='benfText'>{(generaldonation.D_Date).slice(0,10)}</div>
+
+                    </div>
+                ))}
+            </div>
+        </div>
+
+
+
+        <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>Clothes Donations </h2>
+        </div>
+            <div id='tableHead'>
+            
+                <div className='benfText'>Quantity</div>
+                <div className='benfText'>Type</div>
+                <div className='benfText'>Quality</div>
+                <div className='benfText'>Size</div>
+                <div className='benfText'>Delivery</div>
+                <div className='benfText buttonAid'>Date</div>
+            </div>
+            <div id='Participations'>
+                {clothes.map((clothes,key) => (
+                    <div className='member' key={key}>
+                        
+                        <div className='benfText'>{clothes.Quantity}</div>
+                        <div className='benfText'>{clothes.C_Type}</div>
+                        <div className='benfText'>{clothes.Quality}</div>
+                        <div className='benfText'>{clothes.Size}</div>
+                        <div className='benfText'>{clothes.Delivery.data[0]}</div>
+                        <div className='benfText'>{(clothes.D_Date).slice(0,10)}</div>
+
+                    </div>
+                ))}
+            </div>
+        </div>
+
+
         <div>
           <button onClick={() => setPopUpD(true)}>New Donation</button>
         </div>
@@ -261,11 +387,11 @@ if(selectD_Type === "General") {
                 <div>
                     <div>
                         <label htmlFor='Amount'>Amount</label>
-                        <input type="text" id="Amount" value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                        <input type="number" id="Amount" value={amount} onChange={(e) => setAmount(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
-                        <input type="text" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
+                        <input type="date" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
                     </div>
                 </div>
                 <div>
@@ -279,10 +405,14 @@ if(selectD_Type === "General") {
                     </div>
                 </div>
                 <div>
-                    <div>
-                        <label htmlFor='Currency'>Currency</label>
-                        <input type="text" id="Currency" value={currency} onChange={(e) => setcurrency(e.target.value)}/>
-                    </div>
+                    
+                    <label htmlFor='Currency'>Currency</label>
+                    <select name="Currency" value={currency} onChange={(e) => setcurrency(e.target.value)}>
+                    <option value="" disabled>Select Currency</option>
+                        <option value="LE">LE</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                    </select>
                 </div>
             </>
             }
@@ -291,12 +421,12 @@ if(selectD_Type === "General") {
             <>
                 <div>
                     <div>
-                        <label htmlFor='Capacity'>Capacity</label>
-                        <input type="text" id="Capacity" value={capacity} onChange={(e) => setcapacity(e.target.value)}/>
+                        <label htmlFor='Capacity'>Quantity</label>
+                        <input type="number" id="Capacity" value={capacity} onChange={(e) => setcapacity(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
-                        <input type="text" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
+                        <input type="date" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
                     </div>
                 </div>
                 <div>
@@ -304,20 +434,39 @@ if(selectD_Type === "General") {
                         <label htmlFor='Delivery'>Delivery</label>  
                         <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
                     </div>
+                   
                     <div>
-                        <label htmlFor='Type'>Type</label>
-                        <input type="text" id="Type" value={type} onChange={(e) => settype(e.target.value)}/>
-                    </div>
+                   
+                   <label htmlFor='Type'>Type</label>
+                   <select name="Type" value={type} onChange={(e) => settype(e.target.value)}>
+                   <option value="" disabled>Select Type</option>
+                       <option value="Men">Men</option>
+                       <option value="Women">Women</option>
+                       <option value="Children">Children</option>
+                   </select>
+               </div>
                 </div>
                 <div>
-                    <div>
-                        <label htmlFor='Quality'>Quality</label>
-                        <input type="text" id="Quality" value={quality} onChange={(e) => setquality(e.target.value)}/>
-                    </div>
-                    <div>
-                        <label htmlFor='Size'>Size</label>
-                        <input type="text" id="Size" value={size} onChange={(e) => setsize(e.target.value)}/>
-                    </div>
+                <div>
+                    <label htmlFor='Quality'>Quality</label>
+                   <select name="Quality" value={quality} onChange={(e) => setquality(e.target.value)}>
+                   <option value="" disabled>Select Quality</option>
+                       <option value="Good">Good</option>
+                       <option value="Very Good">Very Good</option>
+                       <option value="Excellent">Excellent</option>
+                   </select>
+               </div>
+               <div>
+                    <label htmlFor='Size'>Size</label>
+                   <select name="Size" value={size} onChange={(e) => setsize(e.target.value)}>
+                   <option value="" disabled>Select Size</option>
+                        <option value="XSmall">XSmall</option>
+                       <option value="Small">Small</option>
+                       <option value="Medium">Medium</option>
+                       <option value="Large">Large</option>
+                       <option value="XLarge">XLarge</option>
+                   </select>
+               </div>
                 </div>
             </>
             )}
@@ -327,11 +476,11 @@ if(selectD_Type === "General") {
                 <div>
                     <div>
                         <label htmlFor='Quantity'>Quantity</label>
-                        <input type="text" id="Quantity" value={quantity} onChange={(e) => setquantity(e.target.value)}/>
+                        <input type="number" id="Quantity" value={quantity} onChange={(e) => setquantity(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
-                        <input type="text" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
+                        <input type="date" id="Date" value={date} onChange={(e) => setdate(e.target.value)}/>
                     </div>
                 </div>
                 <div>
@@ -339,10 +488,18 @@ if(selectD_Type === "General") {
                         <label htmlFor='Delivery'>Delivery</label>  
                         <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
                     </div>
+                   
                     <div>
-                        <label htmlFor='Descr'>Describtion</label>
-                        <input type="text" id="Descr" value={descr} onChange={(e) => setdescr(e.target.value)}/>
-                    </div>
+                    <label htmlFor='Descr'>Description</label>
+                    <select name="Descr" value={descr} onChange={(e) => setdescr(e.target.value)}>
+                    <option value="" disabled>Select Description</option>
+                        <option value="books">Books</option>
+                        <option value="food">Food</option>
+                        <option value="toys">Toys</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="blankets">Blankets</option>
+                    </select>
+                </div>
                 </div>
                 
             </>
