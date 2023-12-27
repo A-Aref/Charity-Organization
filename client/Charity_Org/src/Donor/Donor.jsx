@@ -22,7 +22,7 @@ function Donor(props) {
         <Navbar_D select={Select}/>
         
         {select==0 && <Donations user={props.user}/>}
-        {select==1 && <Events/>}
+        {select==1 && <Events user={props.user}/>}
         {select==2 && <Account view={props.view} user={props.user}/>}
  
     </div>
