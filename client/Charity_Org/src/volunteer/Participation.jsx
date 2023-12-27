@@ -9,7 +9,7 @@ function Participation(props) {
 
   useEffect(() =>   {fetch("/api/volunteer/getParticipations", {
     method: "POST",
-    body:  JSON.stringify({V_ID:7}),
+    body:  JSON.stringify({V_ID:props.user.V_ID}),
     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
 })
 .then((response)=>{return response.json()})
@@ -31,10 +31,23 @@ function Participation(props) {
    
     useEffect(() => {
         if(populatedP) {
-            let temp = Participations
-            temp[Participations.length] = {"id":Participations.length+2,"Volunteer id": v_id,"Participation Type":ptype,"Bonus Type":btype,"Bonus Value":bvalue,"Date":date}
-            setParticipations(temp)
+            let temp = {"P_type":ptype,"Bonus_Type":btype,"B_value":bvalue,"P_Date":date,'V_ID':props.user.V_ID}
             setPopUpP(false)
+            fetch("/api/volunteer/addpart", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+                .then((response)=>{return response.json()})
+                .then(() =>fetch("/api/volunteer/getParticipations", {
+                    method: "POST",
+                    body:  JSON.stringify({V_ID:props.user.V_ID}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  setParticipations(JSON.parse(data))}
+                ))
 
             setv_id('')
             setptype('')
