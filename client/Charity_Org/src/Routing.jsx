@@ -13,7 +13,7 @@ import './main.css'
 
 function Routing() {
 
-    const [view,setView] = useState('none')
+    const [view,setView] = useState('leader')
     const [user,setUser] = useState({})
     
 return(
