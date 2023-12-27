@@ -35,6 +35,7 @@
 }
 
 
+
 .member {
     display: flex;
     justify-content: space-between;
@@ -60,7 +61,7 @@
 }
 
 
-#popUpB,#popUpA {
+#popUpB {
     background-color: #373737;
     display: flex;
     flex-direction: column;
@@ -75,7 +76,22 @@
     padding-top: 0;
 }
 
-#popUpB > div ,#popUpA > div {
+#popUpA {
+    background-color: #373737;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    position: absolute;
+    width: 500px;
+    z-index: 1;
+    right: 20%;
+    left: 30%;
+    top: 15%;
+    padding: 50px;
+    padding-top: 0;
+}
+
+#popUpB > div {
     margin: auto;
     display: flex;
     align-items: center;
@@ -83,7 +99,53 @@
     padding: 10px;
 }
 
+#popUpA > div {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: none;
+}
+
 #popUpB> div > input,#popUpA > div > input{
     width: 200px;
 }
 
+#PromotionData {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#Promotions {
+    overflow-y: auto;
+    height: 350px;
+}
+
+#tableHeadP {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+.promoted {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 5px 30px;
+}
+
+.promotedText {
+    display: block;
+    width: 150px;
+    text-align: left;
+    font-size: large;
+    font-weight: 600;
+
+}

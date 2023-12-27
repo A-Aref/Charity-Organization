@@ -12,12 +12,24 @@ function Events(props) {
     const [url,seturl] = useState('')
     const [location,setlocation] = useState('')
     const [date,setdate] = useState('')
+
+    const [descripu,setdescripu] = useState('')
+    const [urlu,seturlu] = useState('')
+    const [locationu,setlocationu] = useState('')
+    const [dateu,setdateu] = useState('')
+    const [idu,setidu] = useState('')
+
     const [populated,setPopulated] = useState(false)
     const [populatedu,setPopulatedu] = useState(false)
     const [popUp,setPopUp] = useState(false)
     const [popUpu,setPopUpu] = useState(false)
 
 
+    function upbutt(id)
+    {
+        setPopUpu(true)
+        setidu(id)
+    }
     function addevent() {
 
         setPopulated(true)
@@ -36,21 +48,28 @@ function Events(props) {
 
         setPopulatedu(true)
         
-        if(descrip.trim().length === 0) {
+        if(descripu.trim().length === 0) {
             setPopulatedu(false)
         }
-        if(url.trim().length === 0) {
+        if(urlu.trim().length === 0) {
             setPopulatedu(false)
         }
-        if(location.trim().length === 0) {
+        if(locationu.trim().length === 0) {
             setPopulatedu(false)
         }
     }
-    useEffect(() =>   {fetch("/api/leader/getEvents")
-    .then((response)=>{return response.json()})
-    .then((data)=>{
-      setEvents(JSON.parse(data))
-    })
+
+
+    useEffect(() =>   {
+        fetch("/api/leader/getEvents", {
+            method: "POST",
+            body:  JSON.stringify({date:"1950-01-01"}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+        setEvents(JSON.parse(data))
+        })
     },[])
 
 
@@ -66,11 +85,15 @@ function Events(props) {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-            .then((data)=>{
-                fetch("/api/leader/getEvents")
+            .then(()=>{
+                fetch("/api/leader/getEvents", {
+                    method: "POST",
+                    body:  JSON.stringify({date:currentDate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  setEvents(JSON.parse(data))
+                setEvents(JSON.parse(data))
                 })
             })  
 
@@ -81,32 +104,37 @@ function Events(props) {
         }
     },[populated])
 
-    // useEffect(() => {
-    //     if(populatedu) {
+    useEffect(() => {
+        if(populatedu) {
             
-    //         let newe = {"Descrip": descrip,"url":url,"Location":location,"E_Date":date}
-    //         setPopUpu(false)
+            let newe = {"Descrip": descripu,"url":urlu,"Location":locationu,"E_Date":dateu,"E_ID":idu}
+            
 
-    //         fetch("/api/Admin/updateevent", {
-    //             method: "POST",
-    //             body:  JSON.stringify(newe),
-    //             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-    //         })
-    //         .then((response)=>{return response.json()})
-    //         .then((data)=>{
-    //             fetch("/api/leader/getEvents")
-    //             .then((response)=>{return response.json()})
-    //             .then((data)=>{
-    //               setEvents(JSON.parse(data))
-    //             })
-    //         })  
+            fetch("/api/Admin/updateevent", {
+                method: "POST",
+                body:  JSON.stringify(newe),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/leader/getEvents", {
+                    method: "POST",
+                    body:  JSON.stringify({date:currentDate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                setEvents(JSON.parse(data))
+                })
+            })  
 
-    //         setdescrip('')
-    //         seturl('')
-    //         setlocation('')
-    //         setPopulatedu(false)
-    //     }
-    // },[populatedu])
+            setdescripu('')
+            seturlu('')
+            setlocationu('')
+            setPopUpu(false)
+            setPopulatedu(false)
+        }
+    },[populatedu])
    
 
     function reset () {
@@ -118,6 +146,15 @@ function Events(props) {
         setPopulated(false)
     }
 
+    function resetu () {
+        setPopUpu(false)
+        seturlu("")
+        setdateu("")
+        setlocationu("")
+        setdescripu("")
+        setPopulatedu(false)
+    }
+
 
     return (
 
@@ -125,46 +162,37 @@ function Events(props) {
         <div>
             <h1>Events</h1>
         </div>
+        <div>
+        <button onClick={() => setPopUp(true)} disabled={popUp}>Add Event</button>
+        </div>
+        <br />
+        <br />
         {events.map((event,key)=> (
             <div key={key} className='Event'>
                 <img src={event.url}  className='event_img' />
                 <h2>{event.Descrip}</h2>
                 <div>Location: {event.Location} </div> <div> Date: {(event.E_Date).slice(0,10)}</div>
                 <div>
-                <button onClick={() => setPopUpu(true)} disabled={popUpu}>Update</button>
-                    {/* <div>
-                        <select name='select_volunteer' value={selectVolunteer} onChange={(e) => setSelectVolunteer(e.target.value)}>
-                            <option value="" disabled >Select volunteer for event</option>
-                            {props.volunteers.map((volunteer) => (
-                                volunteer.Event_Request === null && <option value={volunteer.V_ID} key={volunteer.V_ID}>{volunteer.FName} {volunteer.LName}</option>
-                            ))}
-                        </select>   
-                        <button disabled={popUpT} onClick={() => sendRequest(event.ID)}>Send Request</button>
-                    </div>
-                    <button onClick={() => setPopUpT(true)} disabled={popUpT}>Add Transportation</button> */}
+                <button onClick={()=>upbutt(event.E_ID)} disabled={popUpu}>Update</button>
                 </div> 
             </div>
         ))}
-        <div>
-        <button onClick={() => setPopUp(true)} disabled={popUp}>Add Event</button>
-        </div>
+        
         {popUp&&
-        <div id='popUpT'>
+        <div id='popUpu'>
             <h2>Add Event</h2>
             <div>
                 <div>
                     <label htmlFor='descrip'>description</label>
                     <input type="text" id="descrip" value={descrip} onChange={(e) => setdescrip(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='url'>url</label>
                     <input type="url" id="url" value={url} onChange={(e) => seturl(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='location'>Location</label>
                     <input type="text" id="location" value={location} onChange={(e) => setlocation(e.target.value)}/>
-                </div>
-                <div>
+
                     <label htmlFor='date'>Date</label>
                     <input type="date" id="date" value={date} onChange={(e) => setdate(e.target.value)}/>
                 </div>
@@ -182,23 +210,21 @@ function Events(props) {
             <div>
                 <div>
                     <label htmlFor='descrip'>description</label>
-                    <input type="text" id="descrip" placeholder={descrip} value={descrip} onChange={(e) => setdescrip(e.target.value)}/>
-                </div>
-                <div>
+                    <input type="text" id="descrip" value={descripu} onChange={(e) => setdescripu(e.target.value)}/>
+
                     <label htmlFor='url'>url</label>
-                    <input type="url" id="url" placeholder={url} value={url} onChange={(e) => seturl(e.target.value)}/>
+                    <input type="url" id="url"  value={urlu} onChange={(e) => seturlu(e.target.value)}/>
                 </div>
                 <div>
                     <label htmlFor='location'>Location</label>
-                    <input type="text" id="location" placeholder={location} value={location} onChange={(e) => setlocation(e.target.value)}/>
-                </div>
-                <div>
+                    <input type="text" id="location"  value={locationu} onChange={(e) => setlocationu(e.target.value)}/>
+
                     <label htmlFor='date'>Date</label>
-                    <input type="date" id="date" placeholder={date} value={date} onChange={(e) => setdate(e.target.value)}/>
+                    <input type="date" id="date" value={dateu} onChange={(e) => setdateu(e.target.value)}/>
                 </div>
             </div>
             <div>
-                <button type="button" onClick={() => reset()}>Cancel</button>
+                <button type="button" onClick={() => resetu()}>Cancel</button>
                 <button type="button" onClick={updateevent}>Save</button>
             </div>
         </div>

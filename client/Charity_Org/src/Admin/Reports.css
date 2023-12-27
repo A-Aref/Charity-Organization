@@ -1,0 +1,196 @@
+
+#teamPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#Title {
+    margin: 10px auto;
+}
+
+#sort {
+    margin: 10px 30px;
+    position: absolute;
+    left: 0;
+}
+
+#teamData {
+    background-color: #1a1a1a;
+    margin: 20px 30px;
+    border-radius: 10px;
+
+}
+
+#members {
+    overflow-y: auto;
+    height: 200px;
+}
+
+#tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+
+.member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 5px 30px;
+}
+
+.teamText {
+    display: block;
+    width: 200px;
+    text-align: left;
+    font-size: large;
+    font-weight: 600;
+}
+
+.Points {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.point {
+    width: 100px;
+    text-align: left;
+}
+
+.PointsAdd {
+    width: 60px;
+    text-align: center;
+    background-color: #373737;
+}
+
+.bestMember {
+    width: 150px; 
+}
+
+.radioBest {
+    width: 40px;
+    height: 20px;
+    margin: 0 30px;
+}
+
+#addPoints {
+    margin: 10px 30px;
+}
+
+#popUpA {
+    background-color: #373737;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    position: absolute;
+    width: 500px;
+    z-index: 1;
+    right: 20%;
+    left: 30%;
+    top: 15%;
+    padding: 50px;
+    padding-top: 0;
+}
+
+
+#tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+
+#popUpA > div {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: none;
+}
+
+#popUpV > div > input{
+    width: 200px;
+}
+
+#Gender {
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+#gender {
+    margin-right: 50px;
+}
+
+#Gender > div {
+    display: flex;
+}
+
+#Gender > div >  input {
+    width: 80px;
+}
+
+#popUpA > div {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: none;
+}
+
+#popUpB> div > input,#popUpA > div > input{
+    width: 200px;
+}
+
+#teamData {
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#beneficiaries {
+    overflow-y: auto;
+    height: 350px;
+}
+
+#tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
+}
+.promoted {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 5px 30px;
+}
+
+.benfText {
+    display: block;
+    width: 150px;
+    text-align: left;
+    font-size: large;
+    font-weight: 600;
+
+}

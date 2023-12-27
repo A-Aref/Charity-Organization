@@ -5,6 +5,7 @@ import "./Leaders.css"
 
 function leaders() {
     const [leaders,setleaders] = useState([])
+    const [prom,setprom] = useState([])
     const [phone,setphone] = useState('')
     const [email,setemail] = useState('')
     const [gender,setgender] = useState('')
@@ -56,8 +57,18 @@ function leaders() {
         
     }
 
+    function resetc() {
+
+        setPopUpC(false)
+        setPopulatedC(false)
+        
+    }
+
     const [popUpB,setPopUpB] = useState(false)
     const [populatedB,setPopulatedB] = useState(false)
+
+    const [popUpC,setPopUpC] = useState(false)
+    const [populatedC,setPopulatedC] = useState(false)
 
     useEffect(() =>   {
         fetch("/api/Admin/selectleaders")
@@ -69,7 +80,13 @@ function leaders() {
 
     useEffect(() => {
         if(populatedB) {
-            let addedB = {"FName": fname,"LName":lname,"VRole":"Head", "Email":email,"Phone":phone,"Pass": phone, "Join_Date": date,"DoB": dob,"Gender":gender,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":null, "best_member":null}
+            let g=1
+            if (gender === "0")
+            {
+                g = 0
+            }
+
+            let addedB = {"FName": fname,"LName":lname,"VRole":"Head", "Email":email,"Phone":phone,"Pass": phone, "Join_Date": date,"DoB": dob,"Gender":g,"Promoted":0,"Event_Request":null,"Points":0,"TeamID":null, "best_member":null}
             setPopUpB(false)
 
             fetch("/api/Admin/addleader", {
@@ -97,6 +114,19 @@ function leaders() {
         }
     },[populatedB])
 
+    useEffect(() => {
+        if(popUpC) {
+
+                fetch("/api/Admin/selectprom")
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  setprom(JSON.parse(data))
+                  console.log(JSON.parse(data))
+                })
+            setPopulatedC(false)
+        }
+    },[popUpC])
+
 
     return (
         <div id='beneficiariesPage'>
@@ -118,13 +148,14 @@ function leaders() {
                             <div className='benfText'>{`${member.FName}  ${member.LName}`}</div>
                             <div className='benfText'>{member.Email}</div>
                             <div className='benfText'>{member.Phone}</div>
-                            <div className='benfText'>{member.DoB}</div>
+                            <div className='benfText'>{(member.DoB).slice(0,10)}</div>
                         </div>
                     ))}
                 </div>
             </div>
             <div id='addbenef'>
                 <button type="button" onClick={() => setPopUpB(true)} >Add Leader</button>
+                <button type="button" onClick={() => setPopUpC(true)} >View Promotions</button>
             </div>
     
             { 
@@ -179,6 +210,36 @@ function leaders() {
             </div>
             </div>
             }
+
+
+        { 
+        popUpC &&
+        <div id='popUpA'>
+            <h2>Promoted Leaders</h2>
+            <div id='PromotionData'>
+                <div id='tableHeadP'>
+                    <div className='promotedText'>ID</div>
+                    <div className='promotedText'>Name</div>
+                    <div className='promotedText'>Team ID</div>
+                </div>
+                <div id='Promotions'>
+                    {prom.map((member,key) => (
+                        <div className='promoted' key={key}>
+                            <div className='promotedText'>{member.V_ID}</div>
+                            <div className='promotedText'>{`${member.FName}  ${member.LName}`}</div>
+                            <div className='promotedText'>{member.TeamID}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            
+            <div>
+                <button type="button" onClick={() => resetc()}>Cancel</button>
+            </div>
+        
+            
+        </div>
+        }
     
             
         </div>

@@ -9,7 +9,7 @@ function Participation(props) {
 
   useEffect(() =>   {fetch("/api/volunteer/getParticipations", {
     method: "POST",
-    body:  JSON.stringify({V_ID:7}),
+    body:  JSON.stringify({V_ID:props.user.V_ID}),
     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
 })
 .then((response)=>{return response.json()})
@@ -31,10 +31,42 @@ function Participation(props) {
    
     useEffect(() => {
         if(populatedP) {
-            let temp = Participations
-            temp[Participations.length] = {"id":Participations.length+2,"Volunteer id": v_id,"Participation Type":ptype,"Bonus Type":btype,"Bonus Value":bvalue,"Date":date}
-            setParticipations(temp)
+            let temp = {"P_type":ptype,"Bonus_Type":btype,"B_value":bvalue,"P_Date":date,'V_ID':props.user.V_ID}
             setPopUpP(false)
+            fetch("/api/volunteer/addpart", {
+                method: "POST",
+                body:  JSON.stringify(temp),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+                .then((response)=>{return response.json()})
+                .then(() =>{fetch("/api/volunteer/getParticipations", {
+                    method: "POST",
+                    body:  JSON.stringify({V_ID:props.user.V_ID}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{
+                  setParticipations(JSON.parse(data))}
+                )
+                fetch("/api/leader/updatePoints", {
+                    method: "POST",
+                    body:  JSON.stringify({Points:parseInt(props.user.Points) + parseInt(bvalue),V_ID:props.user.V_ID}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then(()=>{
+                    fetch("/api/volunteer/selectvolunteer", {
+                        method: "POST",
+                        body:  JSON.stringify({V_ID:props.user.V_ID}),
+                        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                    })
+                    .then((response)=>{return response.json()})
+                    .then((data)=>{
+                      console.log(JSON.parse(data))
+                      props.setuser(JSON.parse(data)[0])}
+                    )}
+                ) 
+            })
 
             setv_id('')
             setptype('')
@@ -43,21 +75,23 @@ function Participation(props) {
             setPopulatedP(false)
         }
     },[populatedP])
-
+   
+   
     function addParticipation() {
-
-      setPopulatedP(true)
+        setPopulatedP(true); // Initially assume all fields are populated
       
-      if(ptype.trim().length === 0) {
-          setPopulatedP(false)
+        // Validation for ptype and btype (must be words)
+        if (!/^[a-zA-Z]+$/.test(ptype.trim())) {
+          setPopulatedP(false);
+          alert("Please enter a valid word for participation type.");
+        }
+        if (!/^[a-zA-Z]+$/.test(btype.trim())) {
+          setPopulatedP(false);
+          alert("Please enter a valid word for bonus type.");
+        }
+      
       }
-      if(btype.trim().length === 0) {
-          setPopulatedP(false)
-      }
-      if(bvalue.trim().length === 0) {
-          setPopulatedP(false)
-      }
-    }
+
     function reset() {
         setv_id('')
         setptype('')
@@ -67,6 +101,22 @@ function Participation(props) {
         setPopulatedP(false)
     }
   
+    function getBonusValue(btype) {
+        switch (btype) {
+          case "Attitude":
+            return 100;
+          case "Performance":
+            return 200;
+          case "Creative":
+            return 300;
+          case "Time":
+            return 400;
+          case "Target":
+            return 500;
+          default:
+            return 0; // Or any default value you prefer
+        }
+      }
 
     return (
     <div id='ParticipationsPage'>
@@ -108,13 +158,23 @@ function Participation(props) {
                 </div>
                 <div>
                     <label htmlFor='Bonus_Type'>Bonus Type</label>
-                    <input type="text" id="Bonus_Type" value={btype} onChange={(e) => setbtype(e.target.value)}/>
+                    <select id="Bonus_Type" value={btype} onChange={(e) => {
+                    setbtype(e.target.value);
+                    setbvalue(getBonusValue(e.target.value)); // Update bvalue based on selected type
+                    }}>
+                        <option value="test"></option>
+                        <option value="Attitude">Attitude</option>
+                        <option value="Performance">Performance</option>
+                        <option value="Creative">Creative</option>
+                        <option value="Time">Time</option>
+                        <option value="Target">Target</option>
+                    </select>
                 </div>
             </div>
             <div>
                 <div>
                     <label htmlFor='Bonus_Value'>Bonus Value</label>
-                    <input type="text" id="Bonus_Value" value={bvalue} onChange={(e) => setbvalue(e.target.value)}/>
+                    <input type="text" id="Bonus_Value" value={bvalue} readOnly/>
                 </div>
                
             </div>
