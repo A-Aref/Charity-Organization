@@ -17,7 +17,7 @@ function Aid() {
     const [popUpA,setPopUpA] = useState(false)
     const [quantity,setQuantity] = useState('')
     const [avialableQuantity,setAvialableQuantity] = useState('')
-    const [type,setType] = useState('food')
+    const [type,setType] = useState('')
     const [b_ID,setB_ID] = useState('')
     const [populatedA,setPopulatedA] = useState(false)
 
@@ -102,6 +102,12 @@ function Aid() {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(() => fetch("/api/leader/updateTotalQuantity", {
+                method: "POST",
+                body:  JSON.stringify({type:type,newQunantity:avialableQuantity-quantity}),
+                headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+            })
+            .then((response)=>{return response.json()}))
 
             setPopUpA(false)
 
@@ -125,8 +131,16 @@ function Aid() {
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})
-        .then((data) => {setAvialableQuantity(data)})
-    },[type])
+        .then((data) => {
+            if (data === '0')
+            {
+                setAvialableQuantity(data)
+            }
+            else
+            {
+                setAvialableQuantity(JSON.parse(data).Quantity)
+            }
+    })},[type])
 
     function reset() {
         setAddress('')
@@ -219,6 +233,7 @@ function Aid() {
                 <div>
                     <label htmlFor='Type'>Type</label>
                     <select name="Type" value={type} onChange={(e) => setType(e.target.value)}>
+                    <option value="" disabled>Select Aid Type</option>
                         <option value="food">Food</option>
                         <option value="clothes">Clothes</option>
                         <option value="medicine">Medicine</option>
@@ -229,7 +244,7 @@ function Aid() {
                 </div>
                 <div>
                     <label htmlFor='quantity'>Quantity   Avialable: {avialableQuantity}</label>
-                    <input type="text" id="quantity" value={quantity} onChange={(e) => setQuantity(e.target.value)}/>
+                    <input type="number" id="quantity" value={quantity} onChange={(e) => {e.target.value<=avialableQuantity && e.target.value>=0 ? setQuantity(e.target.value) : quantity}}/>
                 </div>
             </div>
             <div>

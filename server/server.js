@@ -52,7 +52,7 @@ app.post("/api/signinV", (req,res)=>{
 }) 
 
 app.post("/api/signinD", (req,res)=>{
-  con.query('SELECT * FROM donors where DonorID = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
+  con.query('SELECT * FROM donors where Email = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -186,8 +186,19 @@ app.post("/api/leader/createAid", (req,res)=>{
 })
 
 app.post("/api/leader/avialableQuantity", (req,res)=>{
-  console.log(req.body)
   con.query('Select  Quantity FROM total_quantity where D_Type = ?' ,[req.body.type], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("0")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+app.post("/api/leader/updateTotalQuantity", (req,res)=>{
+  con.query('Update total_quantity set Quantity= ? where D_Type = ?' ,[req.body.newQunantity,req.body.type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -197,7 +208,6 @@ app.post("/api/leader/avialableQuantity", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
-
 
 app.post("/api/leader/eventRequest", (req,res)=>{
   con.query('Update volunteers set Event_Request = ? where V_ID = ?' ,[req.body.Event,req.body.V_ID], function (err, result) {
@@ -211,8 +221,8 @@ app.post("/api/leader/eventRequest", (req,res)=>{
   });
 })
 
-app.get("/api/leader/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events', function (err, result) {
+app.post("/api/leader/getEvents", (req,res)=>{
+  con.query('SELECT * FROM Events where E_Date> ?',[req.body.date], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -223,7 +233,7 @@ app.get("/api/leader/getEvents", (req,res)=>{
   });
 })
 
-app.post("/api/leader/selectVechicle", (req,res)=>{
+app.post("/api/leader/selectVechicles", (req,res)=>{
   con.query('CALL SelectVehicle(?)',[req.body.Type], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
@@ -234,6 +244,20 @@ app.post("/api/leader/selectVechicle", (req,res)=>{
     return res.json(JSON.stringify(result[0]))
   });
 })
+
+app.post("/api/leader/selectedVechicle", (req,res)=>{
+  con.query('Update transportation set next_event = ? where D_ID = ?',[req.body.next,req.body.ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Beneficiariaries")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+
 
 app.get("/api/leader/selecttrans", (req,res)=>{
   con.query('SELECT D_ID, FirstName, LastName, Capacity, Is_Cargo FROM transportation', function (err, result) {
@@ -357,9 +381,20 @@ app.post("/api/Donor/creategeneraldonation", (req,res)=>{
   });  
 }) 
 
+app.post("/api/RegisterCheck", (req,res)=>{
+  con.query('select * from donors where Email = ?' ,[req.body.Email], function (err, result) {
+    if (err) throw err 
+    if (result[0] === undefined) 
+    {
+      console.log(err)
+      return res.json("Inserted successfully")
+    }
+    return res.json("Another account is using the same email") 
+  });  
+}) 
+
 app.post("/api/Register", (req,res)=>{
   con.query('INSERT INTO donors(Phone,Email,Address,Fname,Lname,Pass) VALUES (?, ?, ?, ?,?,?)' ,[req.body.Phone,req.body.Email,req.body.Address,req.body.Fname,req.body.Lname,req.body.Password], function (err, result) {
-    console.log("aywaan registrationnn")
     if (err) throw err 
     if (result[0] === undefined) 
     {
