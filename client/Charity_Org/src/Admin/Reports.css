@@ -87,8 +87,8 @@
     margin: 10px 30px;
 }
 
-#popUpV {
-    background-color: #373737;
+#popUpA {
+    /* background-color: #373737;
     display: flex;
     flex-direction: column;
     border-radius: 20px;
@@ -99,7 +99,23 @@
     left: 20%;
     top: 15%;
     padding: 50px;
-    padding-top: 0;
+    padding-top: 0; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: mediumseagreen;
+    border-radius: 10px 10px 0 0;
+    color: #1a1a1a;
+    margin: auto;
+    padding: 5px 30px;
+    margin-bottom: 10px;
 }
 
 #popUpV > div {
