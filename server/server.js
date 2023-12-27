@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234",
+  password: "0504217246T1s2M3m4M5",
   database: "charity_org1"
 });
 
@@ -58,6 +58,8 @@ app.post("/api/signinD", (req,res)=>{
     {
       return res.json("Not found")
     }
+    
+    
     return res.json(JSON.stringify(result[0]))
   });
 }) 
@@ -318,7 +320,8 @@ app.post("/api/Donor/updateAccount", (req,res)=>{
 })
 
 app.post("/api/Donor/createmoneydonation", (req,res)=>{
-  con.query('INSERT INTO moneydonations (D_Date,Delivery,Purpose,Currency,Amount) VALUES (?, ?, ?, ?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Purpose,req.body.Currency,req.body.Amount], function (err, result) {
+  
+  con.query('INSERT INTO moneydonations (D_Date,Delivery,Purpose,Currency,Amount,DonorID) VALUES (?, ?, ?, ?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Purpose,req.body.Currency,req.body.Amount,req.body.DonorID], function (err, result) {
     console.log("hello")
     if (err) throw err 
     if (result[0] === undefined)
@@ -332,7 +335,7 @@ app.post("/api/Donor/createmoneydonation", (req,res)=>{
 
 
 app.post("/api/Donor/createclothesdonation", (req,res)=>{
-  con.query('INSERT INTO clothes (D_Date,Delivery,Size,Quality,C_Type,Quantity) VALUES (?, ?, ?, ?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Size,req.body.Quality,req.body.C_Type,req.body.Capacity], function (err, result) {
+  con.query('INSERT INTO clothes (D_Date,Delivery,Size,Quality,C_Type,Quantity,DonorID) VALUES (?, ?, ?, ?,?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Size,req.body.Quality,req.body.C_Type,req.body.Capacity,req.body.DonorID], function (err, result) {
     console.log("aywaan")
     if (err) throw err 
     if (result[0] === undefined) 
@@ -345,7 +348,7 @@ app.post("/api/Donor/createclothesdonation", (req,res)=>{
 }) 
 
 app.post("/api/Donor/creategeneraldonation", (req,res)=>{
-  con.query('INSERT INTO generaldonations(D_Date,Delivery,Descrip,Quantity) VALUES (?, ?, ?, ?)' ,[req.body.D_Date,req.body.Delivery,req.body.Descrip,req.body.Quantity], function (err, result) {
+  con.query('INSERT INTO generaldonations(D_Date,Delivery,Descrip,Quantity,DonorID) VALUES (?, ?, ?, ?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Descrip,req.body.Quantity,req.body.DonorID], function (err, result) {
     console.log("aywaan3")
     if (err) throw err 
     if (result[0] === undefined) 
@@ -356,6 +359,93 @@ app.post("/api/Donor/creategeneraldonation", (req,res)=>{
     return res.json(JSON.stringify(result)) 
   });  
 }) 
+
+app.post("/api/Donor/upcoming_events", (req,res)=>{
+  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_Date>= ?',[req.body.date], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No  upcoming events ya bashaa")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+
+
+app.post("/api/Donor/event_registeration", (req,res)=>{
+  
+  
+    con.query('INSERT INTO event_d (EventID,DonorID) VALUES (?, ?)' ,[req.body.E_ID,req.body.DonorID], function (err, result) {
+     if (err) throw err
+     if (result[0] === undefined)
+     {
+       console.log(err)
+       return res.json("No Events")
+     }
+     return res.json(JSON.stringify(result))
+   });
+})
+
+
+app.post("/api/Donor/old_money_donations", (req,res)=>{
+  con.query('SELECT D_Date, Delivery, Purpose, Currency, Amount FROM moneydonations WHERE DonorID= ? AND D_Date<=? ',[req.body.donorid,req.body.date], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No money donations ya bakheel")
+    }
+    return res.json(JSON.stringify(result))
+  }); 
+})
+
+app.post("/api/Donor/old_general_donations", (req,res)=>{
+  con.query('SELECT D_Date, Delivery, Descrip, Quantity FROM generaldonations WHERE DonorID= ? AND D_Date<=?',[req.body.donorid,req.body.date], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No general donations ya negm")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Donor/old_clothes_donations", (req,res)=>{
+  con.query('SELECT D_Date, Delivery, Size, Quality, C_Type,Quantity FROM clothes WHERE DonorID = ? AND D_Date<=?',[req.body.donorid, req.body.date], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No previous clothes donation ya bashaa")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+
+
+
+app.post("/api/Donor/T_Total_assets", (req,res)=>{
+  con.query('Update total_quantity set Quantity =Quantity+?  where D_Type = ?' ,[req.body.Quantity,req.body.Type], function (err, result) {
+    console.log(req.body)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+
 
 app.post("/api/Register", (req,res)=>{
   con.query('INSERT INTO donors(Phone,Email,Address,Fname,Lname,Pass) VALUES (?, ?, ?, ?,?,?)' ,[req.body.Phone,req.body.Email,req.body.Address,req.body.Fname,req.body.Lname,req.body.Password], function (err, result) {
@@ -369,6 +459,11 @@ app.post("/api/Register", (req,res)=>{
     return res.json(JSON.stringify(result)) 
   });  
 }) 
+
+
+
+
+
 
 //Admin
 
