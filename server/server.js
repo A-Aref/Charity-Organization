@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234",
+  password: "Ahmed207@",
   database: "charity_org1"
 });
 
@@ -77,17 +77,6 @@ app.post("/api/leader/updateAccount", (req,res)=>{
   });
 })
 
-app.post("/api/volunteer/updateAccount", (req,res)=>{
-  con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("Not found")
-    }
-    return res.json(JSON.stringify(result[0]))
-  });
-})
 
 app.post("/api/leader/selectTeam", (req,res)=>{
   con.query('SELECT * FROM volunteers where TeamID = ? and V_ID != ?' ,[req.body.TeamID,req.body.V_ID], function (err, result) {
@@ -101,17 +90,7 @@ app.post("/api/leader/selectTeam", (req,res)=>{
   });
 })
 
-app.post("/api/volunteer/selectvolunteer", (req,res)=>{
-  con.query('SELECT * FROM volunteers where  V_ID = ?' ,[req.body.V_ID], function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("No volunteers")
-    }
-    return res.json(JSON.stringify(result))
-  });
-})
+
 
 
 app.post("/api/leader/selectTeamOrdered", (req,res)=>{
@@ -198,17 +177,7 @@ app.post("/api/leader/addBenef", (req,res)=>{
   });
 })
 
-app.post("/api/volunteer/addpart", (req,res)=>{
-  con.query('INSERT INTO participation VALUES (?, ?, ?, ?, ?)' ,[req.body.P_Date,req.body.P_type,req.body.B_value,req.body.Bonus_Type, req.body.V_ID], function (err, result) {
-    if (err) throw err
-    if (result[0] === undefined)
-    {
-      console.log(err)
-      return res.json("No team members")
-    }
-    return res.json(JSON.stringify(result))
-  });
-})
+
 app.post("/api/leader/createAid", (req,res)=>{
   con.query('INSERT INTO aid (A_Type, A_Date, Quantity, B_ID) VALUES (?, ?, ?, ?)' ,[req.body.A_Type,req.body.A_Date,req.body.Quantity,req.body.B_ID], function (err, result) {
     if (err) throw err
@@ -323,18 +292,42 @@ app.post("/api/leader/addtrans", (req,res)=>{
 
 //Volunteer
 
+app.post("/api/volunteer/updateAccount", (req,res)=>{
+  con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("Not found")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
+
+
 app.post("/api/volunteer/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events where E_ID = ?',[req.body.E_ID], function (err, result) {
+  con.query('call getEvents(?)',[req.body.E_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No team members")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 
+app.post("/api/volunteer/selectvolunteer", (req,res)=>{
+  con.query('call selectvolunteer(?)' ,[req.body.V_ID], function (err, result) {
+    if (err) throw err 
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No volunteers")
+    }
+    return res.json(JSON.stringify(result[0]))
+  });
+})
 
 
 app.post("/api/volunteer/selectVechicle", (req,res)=>{
@@ -374,6 +367,18 @@ app.post("/api/volunteer/getParticipations", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 }) 
+
+app.post("/api/volunteer/addpart", (req,res)=>{
+  con.query('INSERT INTO participation VALUES (?, ?, ?, ?, ?)' ,[req.body.P_Date,req.body.P_type,req.body.B_value,req.body.Bonus_Type, req.body.V_ID], function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No team members")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
 
 //Donor
 
@@ -544,8 +549,8 @@ app.get("/api/Admin/selectprom", (req,res)=>{
   });
 })
 
-app.get("/api/Admin/aidcount", (req,res)=>{
-  con.query('call assets_report1(?,?)',[req.body.Descrip,req.body.url], function (err, result) {
+app.post("/api/Admin/aidcount", (req,res)=>{
+  con.query('select count(A_ID) from aid where A_Date>=? and A_Date<=?',[req.body.mindate,req.body.maxdate], function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
@@ -558,13 +563,52 @@ app.get("/api/Admin/aidcount", (req,res)=>{
 })
 
 app.get("/api/Admin/get_tq", (req,res)=>{
-  con.query('call get_tq()', function (err, result) {
+  con.query('select * from total_quantity', function (err, result) {
     console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
       return res.json("No quantities Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr1", (req,res)=>{
+  con.query(' select distinct TeamID,count(TeamID) as Participations from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=? ) group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr1 No Teams Participated yet pr1")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr2", (req,res)=>{
+  con.query('select TeamID,sum(Points) as Individual from volunteers where TeamID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID)group by TeamID order by TeamID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr2 No Teams Participated yet pr2")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/pr3", (req,res)=>{
+  con.query('select T_ID,TPoints from teams where T_ID in(select distinct TeamID from volunteers where V_ID in (select V_ID from participation where P_Date>=? and P_Date<=?) group by TeamID) order by T_ID',[req.body.mindate,req.body.maxdate], function (err, result) {
+    console.log(result)
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("pr3 No Teams Participated yet")
     }
     return res.json(JSON.stringify(result))
   });
