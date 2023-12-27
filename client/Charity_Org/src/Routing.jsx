@@ -26,7 +26,7 @@ return(
                     <Route path='/Leader' element={<Leader view={setView} user={user}/>} exact/>
                 </Route>
                 <Route element={<PrivateRoute viewSet="volunteer" view={view}/>}>
-                    <Route path='/Volunteer' element={<Volunteer view={setView} user={user}/>} exact/>
+                    <Route path='/Volunteer' element={<Volunteer view={setView} user={user} setUser={setUser}/>} exact/>
                 </Route>
                 <Route element={<PrivateRoute viewSet="Donor" view={view}/>}>
                     <Route path='/Donor' element={<Donor view={setView} user={user}/>} exact/>
