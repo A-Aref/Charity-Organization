@@ -214,7 +214,7 @@ function leaders() {
 
         { 
         popUpC &&
-        <div id='popUpA'>
+        <div id='popUpP'>
             <h2>Promoted Leaders</h2>
             <div id='PromotionData'>
                 <div id='tableHeadP'>
