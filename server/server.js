@@ -258,7 +258,7 @@ app.post("/api/leader/eventRequest", (req,res)=>{
 })
 
 app.post("/api/leader/getEvents", (req,res)=>{
-  con.query('SELECT * FROM Events where E_Date> ?',[req.body.date], function (err, result) {
+  con.query('SELECT * FROM Events where E_Date >= ?',[req.body.date], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -469,7 +469,9 @@ app.post("/api/Admin/addevent", (req,res)=>{
 })
 
 app.post("/api/Admin/updateevent", (req,res)=>{
+  console.log(req.body)
   con.query('Update events set Descrip = ? , url = ? , Location = ? , E_date = ? where E_ID = ?' ,[req.body.Descrip,req.body.url,req.body.Location,req.body.E_Date,req.body.E_ID], function (err, result) {
+    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {

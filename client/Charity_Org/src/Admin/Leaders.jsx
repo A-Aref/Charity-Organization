@@ -214,20 +214,20 @@ function leaders() {
 
         { 
         popUpC &&
-        <div id='popUpB'>
+        <div id='popUpA'>
             <h2>Promoted Leaders</h2>
-            <div id='teamData'>
-                <div id='tableHead'>
-                    <div className='benfText idtable'>ID</div>
-                    <div className='benfText'>Name</div>
-                    <div className='benfText'>Team ID</div>
+            <div id='PromotionData'>
+                <div id='tableHeadP'>
+                    <div className='promotedText'>ID</div>
+                    <div className='promotedText'>Name</div>
+                    <div className='promotedText'>Team ID</div>
                 </div>
-                <div id='beneficiaries'>
+                <div id='Promotions'>
                     {prom.map((member,key) => (
-                        <div className='member' key={key}>
-                            <div className='benfText idtable'>{member.V_ID}</div>
-                            <div className='benfText'>{`${member.FName}  ${member.LName}`}</div>
-                            <div className='benfText'>{member.TeamID}</div>
+                        <div className='promoted' key={key}>
+                            <div className='promotedText'>{member.V_ID}</div>
+                            <div className='promotedText'>{`${member.FName}  ${member.LName}`}</div>
+                            <div className='promotedText'>{member.TeamID}</div>
                         </div>
                     ))}
                 </div>
