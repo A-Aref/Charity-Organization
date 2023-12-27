@@ -32,7 +32,7 @@ function Volunteer(props) {
     <div id="Head">
         <Navbar_V select={Select} user={props.user}/>
         
-        {select==1 && <Participation user={props.user}/>}
+        {select==1 && <Participation user={props.user} setuser={props.setUser}/>}
         {select==0 && <Events user={props.user}/>}
         {select==2 && <Account view={props.view} user={props.user}/>}
  
