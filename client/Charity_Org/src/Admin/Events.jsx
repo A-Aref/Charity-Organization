@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react'
 
 import './Events.css'
-import moment from 'moment'
 
 function Events(props) {
 
@@ -60,12 +59,11 @@ function Events(props) {
         }
     }
 
-    const currentDate = moment().format('YYYY-MM-DD')
 
     useEffect(() =>   {
         fetch("/api/leader/getEvents", {
             method: "POST",
-            body:  JSON.stringify({date:currentDate}),
+            body:  JSON.stringify({date:"1950-01-01"}),
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})
