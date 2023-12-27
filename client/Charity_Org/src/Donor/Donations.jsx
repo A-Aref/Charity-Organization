@@ -189,9 +189,16 @@ if(selectD_Type === "General") {
             })
             .then((response)=>{return response.json()})
             
-            
-
-            var hazl2oom6 = {"Quantity":amount,"Type":"Money"}
+            var AmountLE=amount;
+            if (currency==="EUR")
+            {
+                AmountLE=AmountLE*2
+            }
+            if (currency==="USD")
+            {
+                AmountLE=AmountLE*3
+            }
+            var hazl2oom6 = {"Quantity":AmountLE,"Type":"Money"}
             fetch("/api/Donor/T_Total_assets", {
                 method: "POST",
                 body:  JSON.stringify(hazl2oom6),
@@ -274,6 +281,9 @@ if(selectD_Type === "General") {
             <h1 id='Title'>Previous Donations</h1>
         </div>
         <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>Money Donations </h2>
+        </div>
             <div id='tableHead'>
             
                 <div className='benfText'>Amount</div>
@@ -299,6 +309,9 @@ if(selectD_Type === "General") {
 
 
         <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>General Donations </h2>
+        </div>
             <div id='tableHead'>
             
                 <div className='benfText'>Description</div>
@@ -323,6 +336,9 @@ if(selectD_Type === "General") {
 
 
         <div id='teamData'>
+        <div>
+            <h2 id='subTitle'>Clothes Donations </h2>
+        </div>
             <div id='tableHead'>
             
                 <div className='benfText'>Quantity</div>
@@ -371,7 +387,7 @@ if(selectD_Type === "General") {
                 <div>
                     <div>
                         <label htmlFor='Amount'>Amount</label>
-                        <input type="text" id="Amount" value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                        <input type="number" id="Amount" value={amount} onChange={(e) => setAmount(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
@@ -406,7 +422,7 @@ if(selectD_Type === "General") {
                 <div>
                     <div>
                         <label htmlFor='Capacity'>Quantity</label>
-                        <input type="text" id="Capacity" value={capacity} onChange={(e) => setcapacity(e.target.value)}/>
+                        <input type="number" id="Capacity" value={capacity} onChange={(e) => setcapacity(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
@@ -460,7 +476,7 @@ if(selectD_Type === "General") {
                 <div>
                     <div>
                         <label htmlFor='Quantity'>Quantity</label>
-                        <input type="text" id="Quantity" value={quantity} onChange={(e) => setquantity(e.target.value)}/>
+                        <input type="number" id="Quantity" value={quantity} onChange={(e) => setquantity(e.target.value)}/>
                     </div>
                     <div>
                         <label htmlFor='Date'>Date</label>
