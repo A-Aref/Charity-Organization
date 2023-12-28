@@ -52,7 +52,7 @@ function leaders(props) {
             setPopulatedB(false);
             alert("Please enter a valid last name.");
         }else
-        if (!/^[1-9]+$/.test(phone.trim())) {
+        if (!/^[0-9]+$/.test(phone.trim())) {
             setPopulatedB(false);
             alert("Please enter a valid phone number.");
         }

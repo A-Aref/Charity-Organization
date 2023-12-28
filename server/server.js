@@ -14,7 +14,7 @@ const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "1234",
-  database: "charity_org1"
+  database: "charity_org"
 });
 
 con.connect((err) => {
@@ -473,7 +473,7 @@ app.post("/api/Donor/registered_events", (req,res)=>{
 })
 
 app.post("/api/Donor/upcoming_eventsR", (req,res)=>{
-  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_ID IN (SELECT EventID from event_d WHERE DonorID != ?) and E_Date>= ?',[req.body.D_ID,req.body.date], function (err, result) {
+  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_ID NOT IN (SELECT EventID from event_d WHERE DonorID = ?) and E_Date>= ?',[req.body.D_ID,req.body.date], function (err, result) {
 
     if (err) throw err
     if (result[0] === undefined)

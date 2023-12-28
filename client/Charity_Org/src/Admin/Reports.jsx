@@ -237,7 +237,7 @@ function Reports() {
                             <div className='repText idtable'>Type</div>
                             <div className='repText'>Total Quantity</div>
                         </div>
-                        <div id='partic'>
+                        <div id='partic1'>
                             {ar2.map((member,key) => (
                                 <div className='Rmember' key={key}>
                                     <div className='repText idtable'>{member.A_Type}</div>

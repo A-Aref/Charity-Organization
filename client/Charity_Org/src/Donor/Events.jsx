@@ -89,7 +89,9 @@ useEffect(() => {
         .then((response)=>{return response.json()})
         .then((data)=>{
             if(data === "No upcoming events ya bashaa")
-            {}
+            {
+                setEventsR('')
+            }
             else
             {
                 setEventsR(JSON.parse(data))
@@ -154,7 +156,7 @@ useEffect(() => {
                 <select id="vehicle_select" value={ID} onChange={(e) => setID(e.target.value)}>
                     <option value="" disabled>Select Event ID</option>
                     {eventsR.map((events,key) => (
-                      <option value={events.E_ID} key={key}>{events.E_ID} </option>
+                      <option value={events.E_ID} key={key}>Description: {events.Descrip}, Date: {events.E_Date.slice(0,10)} </option>
                 ))}
                 </select>
             </div>

@@ -48,7 +48,7 @@ function trans() {
             setPopulatedB(false);
             alert("Please enter a valid last name.");
           }else
-          if (!/^[1-9]+$/.test(phone.trim())) {
+          if (!/^[0-9]+$/.test(phone.trim())) {
             setPopulatedB(false);
             alert("Please enter a valid phone num.");
           }
@@ -119,7 +119,7 @@ function trans() {
     return (
         <div id='beneficiariesPage'>
             <div>
-                <h1 id='Title'>Trans</h1>
+                <h1 id='Title'>Transportation</h1>
             </div>
             <div id='teamData'>
                 <div id='tableHead'>
@@ -140,7 +140,7 @@ function trans() {
                 </div>
             </div>
             <div id='addbenef'>
-                <button type="button" onClick={() => setPopUpB(true)} >Add trans</button>
+                <button type="button" onClick={() => setPopUpB(true)} >Add transportation</button>
             </div>
     
             { 

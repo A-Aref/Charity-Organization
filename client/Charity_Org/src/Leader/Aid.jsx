@@ -101,7 +101,6 @@ function Aid() {
 
         if(populatedA) {
             var temp = {"A_Type":type,"A_Date":date,"Quantity":quantity,"B_ID":b_ID}
-            //createAid() fetch
             fetch("/api/leader/createAid", {
                 method: "POST",
                 body:  JSON.stringify(temp),
@@ -244,7 +243,8 @@ function Aid() {
                     <option value="" disabled>Select Aid Type</option>
                         <option value="food">Food</option>
                         <option value="clothes">Clothes</option>
-                        <option value="medicine">Medicine</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="toys">Toys</option>
                         <option value="blankets">Blankets</option>
                         <option value="books">Books</option>
                         <option value="money">Money</option>

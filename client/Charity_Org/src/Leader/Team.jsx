@@ -10,9 +10,12 @@ function Team(props) {
     useEffect(() => {
         setPoints(Array(props.volunteers.length).fill(0))
         props.volunteers.forEach(element => {
-            if(element.best_member.data[0] === 1)
+            if(element.best_member !== null)
             {
-                setbestSelect(element.V_ID)
+                if(element.best_member.data[0] === 1)
+                {
+                    setbestSelect(element.V_ID)
+                }
             }    
         })
     },[props.volunteers])
@@ -51,7 +54,7 @@ function Team(props) {
             setPopulated(false)
             alert("Please enter a last name.");
         }
-        if (!/^[1-9]+$/.test(phone.trim())) {
+        if (!/^[0-9]+$/.test(phone.trim())) {
             setPopulated(false);
             alert("Please enter a valid phone num.");
           }
@@ -194,7 +197,7 @@ function Team(props) {
         })
     }
 
-    function updatePromoted (Rkey) {
+    function updatePromoted () {
         if(confirm("Are you sure you want to make this change"))
         {
             fetch("/api/leader/updatePromoted", {
@@ -258,7 +261,7 @@ function Team(props) {
             <select name='select_volunteer' value={request} onChange={(e) => setRequest(e.target.value)}>
                 <option value="" disabled >Request Promotion for volunteer</option>
                 {props.volunteers.map((volunteer,key) => (
-                volunteer.Promoted.data[0] === 0 && <option value={volunteer.V_ID} key={key}>{volunteer.FName} {volunteer.LName}</option>
+                volunteer.Promoted.data != undefined && volunteer.Promoted.data[0] === 0 && <option value={volunteer.V_ID} key={key}>{volunteer.FName} {volunteer.LName}</option>
                 ))}
             </select> 
             <button type="button" onClick={updatePromoted} disabled={popUpV || request === ""}>Request Promotion</button>

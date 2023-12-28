@@ -34,6 +34,7 @@ function Register(props)
   }
 
   function Registerbutt () {
+    setPopulated(true);
     if (!/^[a-zA-Z]+$/.test(fname.trim())) {
       setPopulated(false);
       alert("Please enter First name.");
@@ -66,10 +67,10 @@ function Register(props)
       reset()
       
     }else
-    if (!/^[0-9][0-9]{9}$/.test(phone.trim())) {
+    if (!/^[0-9]+$/.test(phone.trim())) {
       setPopulated(false);
-      alert("Please enter a valid 10-digit phone number starting with a number from 0-9.");
-  }
+      alert("Please enter a valid phone num.");
+      }
   }
 
     useEffect(() => {

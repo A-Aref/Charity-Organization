@@ -7,6 +7,7 @@ function Team(props) {
     const [teams,setteams] = useState([])
     const [loc,setloc] = useState('')
     const [dep,setdep] = useState('')
+    const [tPoints,settPoints] = useState('')
     const [leader,setleader] = useState('')
 
     useEffect(() =>   {
@@ -47,13 +48,16 @@ function Team(props) {
         if(leader.trim().length === 0) {
             setPopulated(false)
         }
+        if(tPoints.trim().length === 0) {
+            setPopulated(false)
+        }
         
     }
 
     useEffect(() => {
         if(populated) {
             
-            let addt = {"Location": loc, "Department":dep,"TPoints":0,"Leader":leader,"Best_Team":0}
+            let addt = {"Location": loc, "Department":dep,"TPoints":tPoints,"Leader":leader,"Best_Team":0}
             
 
             //update database
@@ -185,7 +189,10 @@ function Team(props) {
                 </div>
             </div>
             <div>
-                
+                <div>
+                    <label htmlFor='tPoints'>Team Points</label>
+                    <input type="number" id="tPoints" value={tPoints} onChange={(e) => settPoints(e.target.value)}/>
+                </div>
                 <div>
                     <label htmlFor='Email'>Leader</label>
                     <select name='select_leader' value={leader} onChange={(e) => setleader(e.target.value)}>
