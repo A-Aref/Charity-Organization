@@ -87,7 +87,82 @@ function Donations(props) {
 
     
     function createDonation() {
+if(selectD_Type === "Money")
+{
+        if (!amount.trim()) {
+            setPopulatedD(false);
+            alert("Amount is missing");
+          }
+          if (parseFloat(amount) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive amount ");
+        }
+          if (!purpose.trim()) {
+            setPopulatedD(false);
+            alert("Purpose is missing");
+        }
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please enter Date"); 
+        }
+        if (!currency.trim()) {
+            setPopulatedD(false);
+            alert("Please select currency");
+        }
+    }
 
+    if(selectD_Type === "Clothes")
+    {
+        if (!capacity.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter quantity");
+        }
+        if (parseFloat(capacity) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive quantity");
+        }
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter Date");
+        }
+        if (!type.trim()) {
+            setPopulatedD(false);
+            alert("Please select type");
+        }
+        if (!size.trim()) {
+            setPopulatedD(false);
+            alert("Please select size");
+        }
+        if (!quality.trim()) {
+            setPopulatedD(false);
+            alert("Please select quality");
+        }
+    }
+    if(selectD_Type === "General")
+    {
+
+        if (!quantity.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter quantity");
+        }
+        if (parseFloat(quantity) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive quantity");
+        }
+        
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter date");
+        }
+        if (!descr.trim()) {
+            setPopulatedD(false);
+            alert("Please select description");
+        }
+
+
+
+    }
+        
     setPopulatedD(true)
       if(selectD_Type === "Money") {
         
@@ -192,11 +267,11 @@ if(selectD_Type === "General") {
             var AmountLE=amount;
             if (currency==="EUR")
             {
-                AmountLE=AmountLE*2
+                AmountLE=AmountLE*34
             }
             if (currency==="USD")
             {
-                AmountLE=AmountLE*3
+                AmountLE=AmountLE*31
             }
             var hazl2oom6 = {"Quantity":AmountLE,"Type":"Money"}
             fetch("/api/Donor/T_Total_assets", {
@@ -399,6 +474,7 @@ if(selectD_Type === "General") {
                         <label htmlFor='Delivery'>Delivery</label>  
                         <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
                     </div>
+                    
                     <div>
                         <label htmlFor='Purpose'>Purpose</label>
                         <input type="text" id="Purpose" value={purpose} onChange={(e) => setpurpose(e.target.value)}/>

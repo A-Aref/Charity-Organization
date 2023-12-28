@@ -34,6 +34,44 @@ function Register(props)
   }
 
   function Registerbutt () {
+    if (!fname.trim()) {
+      setPopulated(false);
+      alert("First name is missing");
+    }
+    if (!lname.trim()) {
+      setPopulated(false);
+      alert("Last name is missing");
+    }
+    if (!email.trim()) {
+      setPopulated(false);
+      alert("Email is missing");
+    }
+    if (!address.trim()) {
+      setPopulated(false);
+      alert("Address is missing");
+    }
+    if (!pass.trim()) {
+      setPopulated(false);
+      alert("password is missing");
+    }
+    if (!cpass.trim()) {
+      setPopulated(false);
+      alert("Please confirm the password");
+    }
+    if(pass!=cpass)
+    {
+     
+      alert("Incorrect Password");
+      reset();
+      
+      
+    }
+    if (!/^[1-9]+$/.test(phone.trim())) {
+      setPopulated(false);
+      alert("Please enter a valid phone num.");
+    }
+
+
     setPopulated(true)
     if(fname.trim().length === 0) {
       setPopulated(false)    
@@ -108,7 +146,7 @@ function Register(props)
           <input type="text" id="Lname" value={lname} onChange={(e) => setlname(e.target.value)} placeholder='Last Name'/>
         </div>       
         <div>              
-          <input type="text" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)} placeholder='Phone'/>
+          <input type="number" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)} placeholder='Phone'/>
         </div>
         <div>
           <input type="text" id="Email" value={email} onChange={(e) => setemail(e.target.value)} placeholder='Email'/>
