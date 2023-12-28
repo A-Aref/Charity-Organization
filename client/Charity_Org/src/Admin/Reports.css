@@ -1,4 +1,4 @@
-#mainrep{
+ #mainrep{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -14,37 +14,20 @@
     text-align: center;
     
 }
-#teamPage {
+
+
+#teamDataR {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    justify-content: space-between;
-    text-align: center;
-}
-
-#Title {
-    margin: 10px auto;
-}
-
-#sort {
-    margin: 10px 30px;
-    position: absolute;
-    left: 0;
-}
-
-#teamData {
     background-color: #1a1a1a;
     margin: 20px 30px;
     border-radius: 10px;
 
+
 }
 
-#members {
-    overflow-y: auto;
-    height: 200px;
-}
 
-#tableHead {
+#tableHeadR {
     display: flex;
     justify-content: space-between;
     background-color: mediumseagreen;
@@ -55,9 +38,17 @@
     margin-bottom: 10px;
 }
 
-.member {
+.Rmember {
     display: flex;
-    flex-direction:column;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    padding: 5px 30px;
+}
+.Rmember1 {
+    display: flex;
+    flex-direction:row;
     justify-content: space-between;
     align-items: center;
     margin: auto;
@@ -72,38 +63,24 @@
     font-weight: 600;
 }
 
-.Points {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.point {
-    width: 100px;
-    text-align: left;
-}
-
-.PointsAdd {
-    width: 60px;
-    text-align: center;
+#popUpR {
     background-color: #373737;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    position:absolute;
+    width: 900px;
+    z-index: 1;
+    right: 20%;
+    left: 30%;
+    top: 15%;
+    padding: 50px;
+    padding-top: 0;
+    
 }
 
-.bestMember {
-    width: 150px; 
-}
-
-.radioBest {
-    width: 40px;
-    height: 20px;
-    margin: 0 30px;
-}
-
-#addPoints {
-    margin: 10px 30px;
-}
-
-#popUpA {
+#popUpR2 {
     background-color: #373737;
     display: flex;
     flex-direction: column;
@@ -119,18 +96,9 @@
 }
 
 
-#tableHead {
-    display: flex;
-    justify-content: space-between;
-    background-color: mediumseagreen;
-    border-radius: 10px 10px 0 0;
-    color: #1a1a1a;
-    margin: auto;
-    padding: 5px 30px;
-    margin-bottom: 10px;
-}
 
-#popUpA > div {
+
+#popUpR > div {
     margin: auto;
     display: flex;
     align-items: center;
@@ -138,29 +106,8 @@
     padding: none;
 }
 
-#popUpV > div > input{
-    width: 200px;
-}
 
-#Gender {
-    display: flex;
-    align-items: center;
-    margin-left: 30px;
-}
-
-#gender {
-    margin-right: 50px;
-}
-
-#Gender > div {
-    display: flex;
-}
-
-#Gender > div >  input {
-    width: 80px;
-}
-
-#popUpA > div {
+#popUpR > div {
     margin: auto;
     display: flex;
     align-items: center;
@@ -168,47 +115,37 @@
     padding: none;
 }
 
-#popUpB> div > input,#popUpA > div > input{
+#popUpR2> div > input,#popUpR > div > input{
     width: 200px;
 }
 
-#teamData {
+#teamDataR {
     background-color: #1a1a1a;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
 }
 
-#beneficiaries {
+#partic {
     overflow-y: auto;
     height: 350px;
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
 }
 
-#tableHead {
+#partic1 {
+    overflow-y: auto;
+    height: 350px;
     display: flex;
-    justify-content: space-between;
-    background-color: mediumseagreen;
-    border-radius: 10px 10px 0 0;
-    color: #1a1a1a;
-    margin: auto;
-    padding: 5px 30px;
-    margin-bottom: 10px;
-}
-.promoted {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-    padding: 5px 30px;
+    flex-direction: column;
 }
 
-.benfText {
+
+.repText {
     display: block;
     width: 150px;
     text-align: left;
     font-size: large;
     font-weight: 600;
 
-}
+} 

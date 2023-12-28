@@ -36,13 +36,20 @@ function Events(props) {
         
         if(descrip.trim().length === 0) {
             setPopulated(false)
-        }
-        if(url.trim().length === 0) {
-            setPopulated(false)
-        }
+            alert("Please enter a description.");
+        }else
         if(location.trim().length === 0) {
             setPopulated(false)
-        }
+            alert("Please enter a location.");
+        }else
+        if(date=='') {
+            setPopulated(false)
+            alert("Please choose a date.");
+        }else
+        if (!/^[a-zA-Z]+$/.test(descrip.trim())) {
+            setPopulated(false);
+            alert("Please enter a valid descrip.");
+          }
     }
     function updateevent() {
 
@@ -50,13 +57,20 @@ function Events(props) {
         
         if(descripu.trim().length === 0) {
             setPopulatedu(false)
-        }
-        if(urlu.trim().length === 0) {
-            setPopulatedu(false)
-        }
+            alert("Please enter a description.");
+        }else
         if(locationu.trim().length === 0) {
             setPopulatedu(false)
-        }
+            alert("Please enter a location.");
+        }else
+        if(dateu=='') {
+            setPopulatedu(false)
+            alert("Please choose a date.");
+        }else
+        if (!/^[a-zA-Z]+$/.test(descripu.trim())) {
+            setPopulatedu(false);
+            alert("Please enter a valid descrip.");
+          }
     }
 
 
@@ -88,7 +102,7 @@ function Events(props) {
             .then(()=>{
                 fetch("/api/leader/getEvents", {
                     method: "POST",
-                    body:  JSON.stringify({date:currentDate}),
+                    body:  JSON.stringify({date:"1950-01-01"}),
                     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
                 })
                 .then((response)=>{return response.json()})
@@ -100,6 +114,7 @@ function Events(props) {
             setdescrip('')
             seturl('')
             setlocation('')
+            setdate('')
             setPopulated(false)
         }
     },[populated])
@@ -119,7 +134,7 @@ function Events(props) {
             .then(()=>{
                 fetch("/api/leader/getEvents", {
                     method: "POST",
-                    body:  JSON.stringify({date:currentDate}),
+                    body:  JSON.stringify({date:"1950-01-01"}),
                     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
                 })
                 .then((response)=>{return response.json()})
@@ -131,6 +146,7 @@ function Events(props) {
             setdescripu('')
             seturlu('')
             setlocationu('')
+            setdateu('')
             setPopUpu(false)
             setPopulatedu(false)
         }

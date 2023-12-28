@@ -35,11 +35,17 @@ function Reports() {
             if(type=="report1")
             {
                 setPopUpA(true)
-            }
+            }else
             if(type=="report2")
             {
                 setPopUpB(true)
+            }else{
+                alert("Please choose a report type.");
             }
+        }
+        else
+        {
+            alert("Please choose a starting date.");
         }
     }
 
@@ -170,32 +176,41 @@ function Reports() {
         
         { 
         popUpA &&
-        <div id='popUpA'>
+        <div id='popUpR'>
             <h2>participation report</h2>
-            <div id='teamData'>
-                <div id='tableHead'>
-                    <div className='benfText idtable'>Team ID</div>
-                    <div className='benfText'>Participations</div>
-                    <div className='benfText'>Individual Points</div>
-                    <div className='benfText'>Team Points</div>
+            <div id='teamDataR'>
+                <div id='tableHeadR'>
+                    <div className='repText idtable'>Team ID</div>
+                    <div className='repText'>Participations</div>
+                    <div className='repText'>Individual Points</div>
+                    <div className='repText'>Team Points</div>
                 </div>
-                <div id='beneficiaries'>
-                    {pr1.map((member,key) => (
-                        <div className='member' key={key}>
-                            <div className='benfText idtable'>{member.TeamID}</div>
-                            <div className='benfText'>{member.Participations}</div>
-                        </div>
-                    ))}
-                    {pr2.map((member,key) => (
-                        <div className='member' key={key}>
-                            <div className='benfText idtable'>{member.Individual}</div>
-                        </div>
-                    ))}
-                    {pr3.map((member,key) => (
-                        <div className='member' key={key}>
-                            <div className='benfText idtable'>{member.TPoints}</div>
-                        </div>
-                    ))}
+                <div id='partic'>
+                    <div>
+                        {pr1.map((member,key) => (
+                            <div className='Rmember' key={key}>
+                                <div className='repText idtable'>{member.TeamID}</div>
+                                <div className='repText idtable'>{member.Participations}</div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div>
+                        {pr2.map((member,key) => (
+                            <div className='Rmember' key={key}>
+                                <div className='repText idtable'>{member.Individual}</div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div>
+                        {pr3.map((member,key) => (
+                            <div className='Rmember' key={key}>
+                                <div className='repText idtable'>{member.TPoints}</div>
+                            </div>
+                        ))}
+                    </div>
+                    
                 </div>
             </div>
             
@@ -207,26 +222,26 @@ function Reports() {
 
         { 
         popUpB &&
-        <div id='popUpB'>
+        <div id='popUpR2'>
             <h2>monthly assets report</h2>
             <div id="Data">
-            <div className="Fields">
                 <div className="inFields">
                     <p>Aids:</p>
                     <p>{aidcount.count}</p>   
                 </div>
+            <div className="Fields">
                 <div className="inFields">
                     <p>Quantity Handed Out</p>
-                    <div id='teamData'>
-                        <div id='tableHead'>
-                            <div className='benfText idtable'>Type</div>
-                            <div className='benfText'>Total Quantity</div>
+                    <div id='teamDataR'>
+                        <div id='tableHeadR'>
+                            <div className='repText idtable'>Type</div>
+                            <div className='repText'>Total Quantity</div>
                         </div>
-                        <div id='beneficiaries'>
+                        <div id='partic'>
                             {ar2.map((member,key) => (
-                                <div className='member' key={key}>
-                                    <div className='benfText idtable'>{member.A_Type}</div>
-                                    <div className='benfText'>{member.quantity}</div>
+                                <div className='Rmember' key={key}>
+                                    <div className='repText idtable'>{member.A_Type}</div>
+                                    <div className='repText'>{member.quantity}</div>
                                 </div>
                             ))}
                             
@@ -237,20 +252,17 @@ function Reports() {
             </div>
             <div className="Fields">
                 <div className="inFields">
-                      
-                </div>
-                <div className="inFields">
                     <p>Quantity Left</p>
-                    <div id='teamData'>
-                        <div id='tableHead'>
-                            <div className='benfText idtable'>Type</div>
-                            <div className='benfText'>Total Quantity</div>
+                    <div id='teamDataR'>
+                        <div id='tableHeadR'>
+                            <div className='repText '>Type</div>
+                            <div className='repText'>Total Quantity</div>
                         </div>
-                        <div id='beneficiaries'>
+                        <div id='partic1'>
                             {tq.map((member,key) => (
-                                <div className='member' key={key}>
-                                    <div className='benfText idtable'>{member.D_Type}</div>
-                                    <div className='benfText'>{member.Quantity}</div>
+                                <div className='Rmember1' key={key}>
+                                    <div className='repText '>{member.D_Type}</div>
+                                    <div className='repText'>{member.Quantity}</div>
                                 </div>
                             ))}
                             
