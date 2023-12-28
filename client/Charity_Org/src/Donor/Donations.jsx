@@ -9,7 +9,7 @@ function Donations(props) {
     const [generaldonation,setgeneralDonations] = useState([])
     const [clothes,setclothes] = useState([])
 
-//khaly balak mn donation.Describeall fee el mapping
+
 
 
     const [popUpD,setPopUpD] = useState(false)
@@ -92,22 +92,26 @@ if(selectD_Type === "Money")
         if (!amount.trim()) {
             setPopulatedD(false);
             alert("Amount is missing");
-          }
+          }else
           if (parseFloat(amount) <= 0) {
             setPopulatedD(false);
             alert("Please Enter positive amount ");
-        }
+        }else
           if (!purpose.trim()) {
             setPopulatedD(false);
             alert("Purpose is missing");
-        }
+        }else
         if (!date.trim()) {
             setPopulatedD(false);
             alert("Please enter Date"); 
-        }
+        }else
         if (!currency.trim()) {
             setPopulatedD(false);
             alert("Please select currency");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
         }
     }
 
@@ -116,26 +120,30 @@ if(selectD_Type === "Money")
         if (!capacity.trim()) {
             setPopulatedD(false);
             alert("Please Enter quantity");
-        }
+        }else
         if (parseFloat(capacity) <= 0) {
             setPopulatedD(false);
             alert("Please Enter positive quantity");
-        }
+        }else
         if (!date.trim()) {
             setPopulatedD(false);
             alert("Please Enter Date");
-        }
+        }else
         if (!type.trim()) {
             setPopulatedD(false);
             alert("Please select type");
-        }
+        }else
         if (!size.trim()) {
             setPopulatedD(false);
             alert("Please select size");
-        }
+        }else
         if (!quality.trim()) {
             setPopulatedD(false);
             alert("Please select quality");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
         }
     }
     if(selectD_Type === "General")
@@ -144,19 +152,22 @@ if(selectD_Type === "Money")
         if (!quantity.trim()) {
             setPopulatedD(false);
             alert("Please Enter quantity");
-        }
+        }else
         if (parseFloat(quantity) <= 0) {
             setPopulatedD(false);
             alert("Please Enter positive quantity");
-        }
-        
+        }else
         if (!date.trim()) {
             setPopulatedD(false);
             alert("Please Enter date");
-        }
+        }else
         if (!descr.trim()) {
             setPopulatedD(false);
             alert("Please select description");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
         }
 
 
@@ -170,19 +181,19 @@ if(selectD_Type === "Money")
       if(amount.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if( date.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(delivery.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(purpose.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(currency.trim().length === 0) {
         setPopulatedD(false)
         
@@ -263,6 +274,16 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_money_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setmoneyDonations(JSON.parse(data))
+                })
+            })  
             
             var AmountLE=amount;
             if (currency==="EUR")
@@ -303,6 +324,16 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_clothes_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setclothes(JSON.parse(data))
+                })
+            })  
 
            
             var hazl2oom6 = {"Quantity":capacity,"Type":"Clothes"}
@@ -328,6 +359,16 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_general_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setgeneralDonations(JSON.parse(data))
+                })
+            })  
             
               
             var hazl2oom6 = {"Quantity":quantity,"Type":descr}
@@ -471,8 +512,12 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                    <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
                     
                     <div>
@@ -507,8 +552,12 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                    <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
                    
                     <div>
@@ -561,8 +610,12 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                        <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
                    
                     <div>
