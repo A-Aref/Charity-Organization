@@ -1,6 +1,5 @@
 
 import { useEffect, useState } from 'react'
-import moment from 'moment'
 import "./Team.css"
 
 function Team(props) {
@@ -8,48 +7,32 @@ function Team(props) {
     const [teams,setteams] = useState([])
     const [loc,setloc] = useState('')
     const [dep,setdep] = useState('')
-    const [pts,setpts] = useState(0)
     const [leader,setleader] = useState('')
-    const [best,setbest] = useState('')
 
     useEffect(() =>   {
         fetch("/api/Admin/selectallteams")
         .then((response)=>{return response.json()})
-        .then((data)=>{setteams(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        .then((data)=>{setteams(JSON.parse(data))})
     },[])
 
-    const [points,setPoints] = useState([Array(10).fill(0)])
     const [bestSelect,setbestSelect] = useState('')
+
     useEffect(() => {
-        setPoints(Array(props.volunteers.length).fill(0))
-        props.volunteers.forEach(element => {
-            if(element.best_member.data[0] === 1)
+        teams.forEach(element => {
+            if(element.Best_Team !== null)
             {
-                setbestSelect(element.V_ID)
+                if(element.Best_Team.data[0] === 1)
+                {
+                    setbestSelect(element.T_ID)
+                }
             }    
         })
-    },[props.volunteers])
+    },[teams])
     
     
     const [popUpV,setPopUpV] = useState(false)
-    const [fName,setFName] = useState('')
-    const [lName,setLName] = useState('')
-    const [phone,setPhone] = useState('')
-    const [email,setEmail] = useState('')
-    const [gender,setGender] = useState('')
-    const [address,setAddress] = useState('')
-    const [doB,setDoB] = useState('')
     const [populated,setPopulated] = useState(false)
 
-    function changePoints (value,Rkey) {
-        if(value <= 500 && value >= 0)
-        {
-            let temp = points
-            temp[Rkey] = value
-            setPoints({...temp})
-        }
-    }
 
     function addteam() {
 
@@ -81,16 +64,27 @@ function Team(props) {
             })
             .then((response)=>{return response.json()})
             .then(()=>{
-                fetch("/api/leader/selectallteams", {
-                    method: "POST",
-                    body:  JSON.stringify(props.user),
-                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-                })
+                fetch("/api/Admin/selectallteams")
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  props.setteams(JSON.parse(data))
+                    setteams(JSON.parse(data))
+                    fetch("/api/Admin/updateleadersTeam",{
+                        method: "POST",
+                        body:  JSON.stringify({"T_ID":JSON.parse(data).slice(-1)[0].T_ID,"V_ID":leader}),
+                        headers: { 'Accept': 'application/json','Content-Type': 'application/json'}
+                    })
+                    .then((response)=>{return response.json()})
+                    .then(()=>{
+                        fetch("/api/Admin/selectleaders")
+                        .then((response)=>{return response.json()})
+                        .then((data)=>{
+                        props.setleader(JSON.parse(data))
+                        })
+                    })
+                  reset()
                 })
             })  
+            
             
         }
     },[populated])
@@ -99,48 +93,16 @@ function Team(props) {
         setPopUpV(false)
         setdep('')
         setloc('')
-        setpts('')
         setleader('')
-        setbest('')
         setPopulated(false)
     }
 
 
-    // function AddPoints () {
-    //     if(confirm("Are you sure you want to make this change"))
-    //     {
-    //         let temp = points
-    //         //update database
-    //     Promise.all(props.volunteers.map((member,key) => {
-    //         const sumPoints = parseInt(member.Points)+parseInt(points[key])
-    //         temp[key] = 0
-    //         fetch("/api/leader/updatePoints", {
-    //             method: "POST",
-    //             body:  JSON.stringify({V_ID:member.V_ID,Points:sumPoints}),
-    //             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-    //         })
-    //         .then((response)=>{return response.json()})
-    //         })).then(()=>{
-    //             fetch("/api/leader/selectTeam", {
-    //                 method: "POST",
-    //                 body:  JSON.stringify(props.user),
-    //                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-    //             })
-    //             .then((response)=>{return response.json()})
-    //             .then((data)=>{
-    //               props.setVolunteers(JSON.parse(data))
-    //             }).then(() => setPoints(Array(props.volunteers.length).fill(0)))
-    //         })
-            
-            
-    //     }
-
-    // }
 
     function changeBest (Rkey) {
         if(confirm("Are you sure you want to make this change"))
         {
-           Promise.all(props.teams.map((member) => {
+           Promise.all(teams.map((member) => {
             let selected = false
             if (member.T_ID === Rkey)
             {
@@ -155,14 +117,10 @@ function Team(props) {
             })
             .then((response)=>{return response.json()})
             })).then(()=>{
-                fetch("/api/leader/selectTeam", {
-                    method: "POST",
-                    body:  JSON.stringify(props.user),
-                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
-                })
+                fetch("/api/Admin/selectallteams")
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  props.setVolunteers(JSON.parse(data))
+                  props.setleader(JSON.parse(data))
                 })
             })
         } 
@@ -170,11 +128,10 @@ function Team(props) {
 
     function Sort () {
         fetch("/api/admin/orderteams")
-                .then((response)=>{return response.json()})
-                .then((data)=>{
-                  setteams(JSON.parse(data))
-                  console.log(JSON.parse(data))
-                })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+            setteams(JSON.parse(data))
+        })
     }
 
     return (
@@ -201,11 +158,10 @@ function Team(props) {
                         <div className='teamText'>{member.Department}</div>
                         <div className='Points'>
                             <div className='point'>{member.TPoints}</div>
-                            {/* <input type="number" className='PointsAdd' min='0' max="500" value={pts[key]} onChange={(e)=>{changePoints(e.target.value,key)}}/> */}
                         </div>
                         <div className='teamText'>{member.Leader}</div>
                         <div className='teamText bestMember'>
-                            <input type="radio" className='radioBest' checked={member.T_ID == best} onChange={() => changeBest(member.T_ID)}/>
+                            <input type="radio" className='radioBest' checked={member.T_ID == bestSelect} onChange={() => changeBest(member.T_ID)}/>
                         </div>
                     </div>
                 ))}
@@ -213,8 +169,6 @@ function Team(props) {
         </div>
 
         <div id='addPoints'>
-            {/* <button type="button" onClick={() => setPopUpV(true)} disabled={popUpV}>Add Volunteer</button>
-            <button type="button" onClick={AddPoints} disabled={popUpV}>Add points</button> */}
             <button type="button" onClick={() => setPopUpV(true)} disabled={popUpV}>Add Team</button>
         </div>
         {popUpV&&
@@ -234,7 +188,12 @@ function Team(props) {
                 
                 <div>
                     <label htmlFor='Email'>Leader</label>
-                    <input type="text" id="Email" value={leader} onChange={(e) => setleader(e.target.value)}/>
+                    <select name='select_leader' value={leader} onChange={(e) => setleader(e.target.value)}>
+                    <option value="" disabled > Select team leader</option>
+                    {props.leader.map((leader,key) => (
+                        leader.TeamID === null && <option value={leader.V_ID} key={key}>{leader.FName} {leader.LName}</option>
+                    ))}
+                    </select>
                 </div>
             </div>
 

@@ -14,7 +14,12 @@ function Participation(props) {
 })
 .then((response)=>{return response.json()})
 .then((data)=>{
-  setParticipations(JSON.parse(data))
+  if(data == "No previous participations")
+  {}
+  else
+  {
+    setParticipations(JSON.parse(data))
+  }
 })
 },[])
     
@@ -62,7 +67,6 @@ function Participation(props) {
                     })
                     .then((response)=>{return response.json()})
                     .then((data)=>{
-                      console.log(JSON.parse(data))
                       props.setuser(JSON.parse(data)[0])}
                     )}
                 ) 

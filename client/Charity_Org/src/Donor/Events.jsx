@@ -6,6 +6,7 @@ import './Events.css'
 function Events(props) {
 
     const [events, setEvents] = useState([])
+    const [eventsR, setEventsR] = useState([])
     
 
     const [popUpT, setPopUpT] = useState(false)
@@ -24,34 +25,47 @@ function Events(props) {
         setPopulatedE("")
        
     }
-   
-   
-
-
-
-
-
 
     useEffect(() =>   {
-        fetch("/api/Donor/upcoming_events", {
+        fetch("/api/Donor/upcoming_eventsR", {
             method: "POST",
-            body:  JSON.stringify({date:date}),
+            body:  JSON.stringify({date:date,D_ID:props.user.DonorID}),
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})
-        .then((data)=>{setEvents(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        .then((data)=>{
+            if(data === "No upcoming events ya bashaa")
+            {}
+            else
+            {
+                setEventsR(JSON.parse(data))
+            }
+        })
+    },[])
+
+    useEffect(() =>   {
+        fetch("/api/Donor/registered_events", {
+            method: "POST",
+            body:  JSON.stringify({D_ID:props.user.DonorID}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+            if(data === "No upcoming events ya bashaa")
+            {}
+            else
+            {
+                setEvents(JSON.parse(data))
+            }})
     },[])
 
     
     function createregistration () {
         setPopulatedE(true)
-        
-  
-  if(ID.trim().length === 0) {
-    setPopulatedE(false)
-}
-}
+        if(ID.trim().length === 0) {
+            setPopulatedE(false)
+        }
+    }
 
 
 
@@ -66,18 +80,42 @@ useEffect(() => {
             headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
         })
         .then((response)=>{return response.json()})
+        .then(() => {
+            fetch("/api/Donor/upcoming_eventsR", {
+            method: "POST",
+            body:  JSON.stringify({date:date,D_ID:props.user.DonorID}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+            if(data === "No upcoming events ya bashaa")
+            {}
+            else
+            {
+                setEventsR(JSON.parse(data))
+            }
+        })
+        fetch("/api/Donor/registered_events", {
+            method: "POST",
+            body:  JSON.stringify({D_ID:props.user.DonorID}),
+            headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+        })
+        .then((response)=>{return response.json()})
+        .then((data)=>{
+            if(data === "No upcoming events ya bashaa")
+            {}
+            else
+            {
+                setEvents(JSON.parse(data))
+            }
+        })
+        })
 
         setPopUpT(false)
         setID('')
         setPopulatedE(false)
     }
 },[populatedE])
-
-
-
-
-
-
 
 
     return (
@@ -115,7 +153,7 @@ useEffect(() => {
                 <label htmlFor='vehicle_select'>Select event</label>
                 <select id="vehicle_select" value={ID} onChange={(e) => setID(e.target.value)}>
                     <option value="" disabled>Select Event ID</option>
-                    {events.map((events,key) => (
+                    {eventsR.map((events,key) => (
                       <option value={events.E_ID} key={key}>{events.E_ID} </option>
                 ))}
                 </select>

@@ -43,26 +43,33 @@ function Team(props) {
 
         setPopulated(true)
         
-        if(fName.trim().length === 0) {
+        if(fName.trim().length === 0 || !/^[a-zA-Z]+$/.test(fName.trim())) {
+            setPopulated(false);
+            alert("Please enter a first name.");
+          }
+        if(lName.trim().length === 0 || !/^[a-zA-Z]+$/.test(lName.trim())) {
             setPopulated(false)
+            alert("Please enter a last name.");
         }
-        if(lName.trim().length === 0) {
-            setPopulated(false)
-        }
-        if(phone.trim().length === 0) {
-            setPopulated(false)
-        }
+        if (!/^[1-9]+$/.test(phone.trim())) {
+            setPopulated(false);
+            alert("Please enter a valid phone num.");
+          }
         if(email.trim().length === 0) {
             setPopulated(false)
+            alert("Please enter a valid email.");
         }
         if(address.trim().length === 0) {
             setPopulated(false)
+            alert("Please enter a address.");
         }
         if(doB.trim().length === 0) {
             setPopulated(false)
+            alert("Please enter a date of birth.");
         }
         if(gender.trim().length === 0) {
             setPopulated(false)
+            alert("Please select gender.");
         }
     }
 
@@ -254,7 +261,7 @@ function Team(props) {
                 volunteer.Promoted.data[0] === 0 && <option value={volunteer.V_ID} key={key}>{volunteer.FName} {volunteer.LName}</option>
                 ))}
             </select> 
-            <button type="button" onClick={updatePromoted} disabled={popUpV}>Request Promotion</button>
+            <button type="button" onClick={updatePromoted} disabled={popUpV || request === ""}>Request Promotion</button>
         </div>
         {popUpV &&
         <div id='popUpV'>

@@ -9,8 +9,6 @@ function Donations(props) {
     const [generaldonation,setgeneralDonations] = useState([])
     const [clothes,setclothes] = useState([])
 
-//khaly balak mn donation.Describeall fee el mapping
-
 
     const [popUpD,setPopUpD] = useState(false)
     const [selectD_Type,setSelectD_Type] = useState('')
@@ -59,7 +57,7 @@ function Donations(props) {
         })
         .then((response)=>{return response.json()})
         .then((data)=>{setmoneyDonations(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        })
     },[])
 
     useEffect(() =>   {
@@ -70,7 +68,7 @@ function Donations(props) {
         })
         .then((response)=>{return response.json()})
         .then((data)=>{setgeneralDonations(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        })
     },[])
 
     
@@ -82,7 +80,7 @@ function Donations(props) {
         })
         .then((response)=>{return response.json()})
         .then((data)=>{setclothes(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        })
     },[])
 
     
@@ -280,10 +278,11 @@ if(selectD_Type === "General") {
         <div>
             <h1 id='Title'>Previous Donations</h1>
         </div>
-        <div id='teamData'>
         <div>
             <h2 id='subTitle'>Money Donations </h2>
         </div>
+        <div id='teamData'>
+        
             <div id='tableHead'>
             
                 <div className='benfText'>Amount</div>
@@ -307,11 +306,11 @@ if(selectD_Type === "General") {
             </div>
         </div>
 
-
-        <div id='teamData'>
         <div>
             <h2 id='subTitle'>General Donations </h2>
         </div>
+        <div id='teamData'>
+        
             <div id='tableHead'>
             
                 <div className='benfText'>Description</div>
@@ -334,11 +333,11 @@ if(selectD_Type === "General") {
         </div>
 
 
-
-        <div id='teamData'>
         <div>
             <h2 id='subTitle'>Clothes Donations </h2>
         </div>
+        <div id='teamData'>
+        
             <div id='tableHead'>
             
                 <div className='benfText'>Quantity</div>

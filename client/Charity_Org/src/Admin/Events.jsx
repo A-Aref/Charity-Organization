@@ -88,7 +88,7 @@ function Events(props) {
             .then(()=>{
                 fetch("/api/leader/getEvents", {
                     method: "POST",
-                    body:  JSON.stringify({date:currentDate}),
+                    body:  JSON.stringify({date:"1950-01-01"}),
                     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
                 })
                 .then((response)=>{return response.json()})
@@ -119,7 +119,7 @@ function Events(props) {
             .then(()=>{
                 fetch("/api/leader/getEvents", {
                     method: "POST",
-                    body:  JSON.stringify({date:currentDate}),
+                    body:  JSON.stringify({date:"1950-01-01"}),
                     headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
                 })
                 .then((response)=>{return response.json()})

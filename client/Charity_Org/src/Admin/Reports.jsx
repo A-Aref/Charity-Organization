@@ -207,7 +207,7 @@ function Reports() {
 
         { 
         popUpB &&
-        <div id='popUpB'>
+        <div id='popUpReport1'>
             <h2>monthly assets report</h2>
             <div id="Data">
             <div className="Fields">

@@ -31,14 +31,13 @@ const con_online = mysql.createConnection({
 });
 
 
-
 con_online.connect((err) => {
   if (err) throw err;
   console.log("Connected online!");
 });
 */
 
-// Signin 
+//#################### Signin ################################//
 
 app.post("/api/signinV", (req,res)=>{
     con.query('SELECT * FROM volunteers where V_ID = ? and Pass = ?' ,[req.body.ID,req.body.Pass], function (err, result) {
@@ -64,9 +63,9 @@ app.post("/api/signinD", (req,res)=>{
   });
 }) 
 
+//###########################################################//
 
-//Leader
-
+//######################## Leader ###########################//
 app.post("/api/leader/updateAccount", (req,res)=>{
   con.query('Update volunteers set FName = ? , LName = ? , Email = ? , Phone = ? , Pass = ? where V_ID = ?' ,[req.body.FName,req.body.LName,req.body.Email,req.body.Phone,req.body.Pass,req.body.V_ID], function (err, result) {
     if (err) throw err
@@ -113,7 +112,7 @@ app.post("/api/leader/addVolunteer", (req,res)=>{
     if (result[0] === undefined)
     {
       console.log(err)
-      return res.json("No team members")
+      return res.json(JSON.stringify("No team members"))
     }
     return res.json(JSON.stringify(result))
   });
@@ -268,7 +267,7 @@ app.post("/api/leader/selectedVechicle", (req,res)=>{
 
 app.get("/api/leader/selecttrans", (req,res)=>{
   con.query('SELECT D_ID, FirstName, LastName, Capacity, Is_Cargo FROM transportation', function (err, result) {
-    console.log(result)
+
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -291,7 +290,9 @@ app.post("/api/leader/addtrans", (req,res)=>{
   });
 })
 
+//###########################################################//
 
+//###########################################################//
 //Volunteer
 
 app.post("/api/volunteer/updateAccount", (req,res)=>{
@@ -380,7 +381,7 @@ app.post("/api/volunteer/getParticipations", (req,res)=>{
     if (result[0] === undefined)
     {
       console.log(err)
-      return res.json("No team members")
+      return res.json("No previous participations")
     }
     return res.json(JSON.stringify(result))
   });
@@ -399,7 +400,9 @@ app.post("/api/volunteer/addpart", (req,res)=>{
 })
 
 //Donor
+//###########################################################//
 
+//###########################################################//
 
 app.post("/api/Donor/updateAccount", (req,res)=>{
   con.query('Update donors set Fname = ? , Lname = ? , Email = ? , Phone = ? , Pass = ? , Address = ? where DonorID = ?' ,[req.body.Fname,req.body.Lname,req.body.Email,req.body.Phone,req.body.Pass,req.body.Address,req.body.DonorID], function (err, result) {
@@ -418,7 +421,7 @@ app.post("/api/Donor/updateAccount", (req,res)=>{
 app.post("/api/Donor/createmoneydonation", (req,res)=>{
   
   con.query('INSERT INTO moneydonations (D_Date,Delivery,Purpose,Currency,Amount,DonorID) VALUES (?, ?, ?, ?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Purpose,req.body.Currency,req.body.Amount,req.body.DonorID], function (err, result) {
-    console.log("hello")
+
     if (err) throw err 
     if (result[0] === undefined)
     {
@@ -432,7 +435,7 @@ app.post("/api/Donor/createmoneydonation", (req,res)=>{
 
 app.post("/api/Donor/createclothesdonation", (req,res)=>{
   con.query('INSERT INTO clothes (D_Date,Delivery,Size,Quality,C_Type,Quantity,DonorID) VALUES (?, ?, ?, ?,?,?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Size,req.body.Quality,req.body.C_Type,req.body.Capacity,req.body.DonorID], function (err, result) {
-    console.log("aywaan")
+
     if (err) throw err 
     if (result[0] === undefined) 
     {
@@ -445,7 +448,7 @@ app.post("/api/Donor/createclothesdonation", (req,res)=>{
 
 app.post("/api/Donor/creategeneraldonation", (req,res)=>{
   con.query('INSERT INTO generaldonations(D_Date,Delivery,Descrip,Quantity,DonorID) VALUES (?, ?, ?, ?,?)' ,[req.body.D_Date,req.body.Delivery,req.body.Descrip,req.body.Quantity,req.body.DonorID], function (err, result) {
-    console.log("aywaan3")
+
     if (err) throw err 
     if (result[0] === undefined) 
     {
@@ -456,19 +459,31 @@ app.post("/api/Donor/creategeneraldonation", (req,res)=>{
   });  
 }) 
 
-app.post("/api/Donor/upcoming_events", (req,res)=>{
-  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_Date>= ?',[req.body.date], function (err, result) {
-    console.log(result)
+app.post("/api/Donor/registered_events", (req,res)=>{
+  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_ID IN (SELECT EventID from event_d WHERE DonorID = ?)',[req.body.D_ID], function (err, result) {
+
     if (err) throw err
     if (result[0] === undefined)
     {
       console.log(err)
-      return res.json("No  upcoming events ya bashaa")
+      return res.json("No upcoming events ya bashaa")
     }
     return res.json(JSON.stringify(result))
   });
 })
 
+app.post("/api/Donor/upcoming_eventsR", (req,res)=>{
+  con.query('SELECT E_ID,Descrip, Location, E_Date FROM events WHERE E_ID IN (SELECT EventID from event_d WHERE DonorID != ?) and E_Date>= ?',[req.body.D_ID,req.body.date], function (err, result) {
+
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No upcoming events ya bashaa")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
 
 
 app.post("/api/Donor/event_registeration", (req,res)=>{
@@ -490,7 +505,7 @@ app.post("/api/Donor/event_registeration", (req,res)=>{
 
 app.post("/api/Donor/old_money_donations", (req,res)=>{
   con.query('SELECT D_Date, Delivery, Purpose, Currency, Amount FROM moneydonations WHERE DonorID= ? AND D_Date<=? ',[req.body.donorid,req.body.date], function (err, result) {
-    console.log(result)
+
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -503,7 +518,6 @@ app.post("/api/Donor/old_money_donations", (req,res)=>{
 
 app.post("/api/Donor/old_general_donations", (req,res)=>{
   con.query('SELECT D_Date, Delivery, Descrip, Quantity FROM generaldonations WHERE DonorID= ? AND D_Date<=?',[req.body.donorid,req.body.date], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -516,7 +530,6 @@ app.post("/api/Donor/old_general_donations", (req,res)=>{
 
 app.post("/api/Donor/old_clothes_donations", (req,res)=>{
   con.query('SELECT D_Date, Delivery, Size, Quality, C_Type,Quantity FROM clothes WHERE DonorID = ? AND D_Date<=?',[req.body.donorid, req.body.date], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -532,7 +545,6 @@ app.post("/api/Donor/old_clothes_donations", (req,res)=>{
 
 app.post("/api/Donor/T_Total_assets", (req,res)=>{
   con.query('Update total_quantity set Quantity =Quantity+?  where D_Type = ?' ,[req.body.Quantity,req.body.Type], function (err, result) {
-    console.log(req.body)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -570,9 +582,9 @@ app.post("/api/Register", (req,res)=>{
 }) 
 
 
+//###########################################################//
 
-
-
+//######################### Admin ###########################//
 
 //Admin
 
@@ -589,9 +601,7 @@ app.post("/api/Admin/addevent", (req,res)=>{
 })
 
 app.post("/api/Admin/updateevent", (req,res)=>{
-  console.log(req.body)
   con.query('Update events set Descrip = ? , url = ? , Location = ? , E_date = ? where E_ID = ?' ,[req.body.Descrip,req.body.url,req.body.Location,req.body.E_Date,req.body.E_ID], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -601,9 +611,10 @@ app.post("/api/Admin/updateevent", (req,res)=>{
     return res.json(JSON.stringify(result[0]))
   });
 })
+
 app.get("/api/Admin/selectallteams", (req,res)=>{
   con.query('SELECT T_ID, Location, Department, TPoints, Leader, Best_Team FROM teams', function (err, result) {
-    console.log(result)
+    
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -615,8 +626,19 @@ app.get("/api/Admin/selectallteams", (req,res)=>{
 })
 
 app.get("/api/Admin/selectleaders", (req,res)=>{
-  con.query('SELECT V_ID, FName, LName, Email, Phone, DoB FROM volunteers WHERE VRole="Head"', function (err, result) {
-    console.log(result)
+  con.query('SELECT * FROM volunteers WHERE VRole="Head"', function (err, result) {
+    if (err) throw err
+    if (result[0] === undefined)
+    {
+      console.log(err)
+      return res.json("No Heads Yet ya 7ob")
+    }
+    return res.json(JSON.stringify(result))
+  });
+})
+
+app.post("/api/Admin/updateleadersTeam", (req,res)=>{
+  con.query('update volunteers set TeamID = ? where V_ID = ?',[req.body.T_ID,req.body.V_ID], function (err, result) {
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -653,7 +675,6 @@ app.post("/api/leader/addteam", (req,res)=>{
 
 app.get("/api/Admin/selectprom", (req,res)=>{
   con.query('SELECT V_ID, FName, LName, TeamID FROM volunteers WHERE Promoted=1', function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -666,7 +687,6 @@ app.get("/api/Admin/selectprom", (req,res)=>{
 
 app.post("/api/Admin/aidcount", (req,res)=>{
   con.query('call assets_report1(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -679,7 +699,6 @@ app.post("/api/Admin/aidcount", (req,res)=>{
 
 app.post("/api/Admin/ar2", (req,res)=>{
   con.query('call assets_report2(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -692,7 +711,6 @@ app.post("/api/Admin/ar2", (req,res)=>{
 
 app.get("/api/Admin/get_tq", (req,res)=>{
   con.query('call get_tq', function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -705,7 +723,6 @@ app.get("/api/Admin/get_tq", (req,res)=>{
 
 app.post("/api/Admin/pr1", (req,res)=>{
   con.query('call participation_report1(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -718,7 +735,6 @@ app.post("/api/Admin/pr1", (req,res)=>{
 
 app.post("/api/Admin/pr2", (req,res)=>{
   con.query('call participation_report2(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -731,7 +747,6 @@ app.post("/api/Admin/pr2", (req,res)=>{
 
 app.post("/api/Admin/pr3", (req,res)=>{
   con.query('call participation_report3(?,?)',[req.body.mindate,req.body.maxdate], function (err, result) {
-    console.log(result)
     if (err) throw err
     if (result[0] === undefined)
     {
@@ -765,5 +780,7 @@ app.get("/api/admin/orderteams", (req,res)=>{
     return res.json(JSON.stringify(result))
   });
 })
+
+//###########################################################//
 
 var listener = app.listen(5000,()=>{console.log(listener.address().port)})

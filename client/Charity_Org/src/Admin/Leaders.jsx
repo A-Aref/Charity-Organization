@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import moment from 'moment'
 import "./Leaders.css"
 
-function leaders() {
-    const [leaders,setleaders] = useState([])
+function leaders(props) {
+    
     const [prom,setprom] = useState([])
     const [phone,setphone] = useState('')
     const [email,setemail] = useState('')
@@ -70,12 +70,7 @@ function leaders() {
     const [popUpC,setPopUpC] = useState(false)
     const [populatedC,setPopulatedC] = useState(false)
 
-    useEffect(() =>   {
-        fetch("/api/Admin/selectleaders")
-        .then((response)=>{return response.json()})
-        .then((data)=>{setleaders(JSON.parse(data))
-        console.log(JSON.parse(data))})
-    },[])
+   
 
 
     useEffect(() => {
@@ -95,11 +90,11 @@ function leaders() {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
-            .then((data)=>{
+            .then(()=>{
                 fetch("/api/Admin/selectleaders")
                 .then((response)=>{return response.json()})
                 .then((data)=>{
-                  setleaders(JSON.parse(data))
+                  props.setleader(JSON.parse(data))
                 })
             })  
 
@@ -121,7 +116,6 @@ function leaders() {
                 .then((response)=>{return response.json()})
                 .then((data)=>{
                   setprom(JSON.parse(data))
-                  console.log(JSON.parse(data))
                 })
             setPopulatedC(false)
         }
@@ -142,7 +136,7 @@ function leaders() {
                     <div className='benfText'>Date of birth</div>
                 </div>
                 <div id='beneficiaries'>
-                    {leaders.map((member,key) => (
+                    {props.leader.map((member,key) => (
                         <div className='member' key={key}>
                             <div className='benfText idtable'>{member.V_ID}</div>
                             <div className='benfText'>{`${member.FName}  ${member.LName}`}</div>

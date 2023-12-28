@@ -46,7 +46,6 @@ function Events(props) {
         })
         .then((response)=>{return response.json()})
         .then((data)=>{
-            console.log(data)
           if(data === "no events found"){
             props.seteventconfirm(true)
           }

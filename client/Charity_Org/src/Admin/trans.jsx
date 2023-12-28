@@ -59,8 +59,7 @@ function trans() {
     useEffect(() =>   {
         fetch("/api/leader/selecttrans")
         .then((response)=>{return response.json()})
-        .then((data)=>{settransportation(JSON.parse(data))
-        console.log(JSON.parse(data))})
+        .then((data)=>{settransportation(JSON.parse(data))})
     },[])
 
 

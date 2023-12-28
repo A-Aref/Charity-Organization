@@ -36,17 +36,21 @@ function Aid() {
 
         setPopulatedB(true)
         
-        if(fName.trim().length === 0) {
+        if(fName.trim().length === 0 || !/^[a-zA-Z]+$/.test(fName.trim())) {
+            setPopulatedB(false);
+            alert("Please enter a first name.");
+          }
+        if(lName.trim().length === 0 || !/^[a-zA-Z]+$/.test(lName.trim())) {
             setPopulatedB(false)
-        }
-        if(lName.trim().length === 0) {
-            setPopulatedB(false)
+            alert("Please enter a last name.");
         }
         if(status.trim().length === 0) {
             setPopulatedB(false)
+            alert("Please enter status.");
         }
         if(address.trim().length === 0) {
             setPopulatedB(false)
+            alert("Please enter an address.");
         }
     }
 
@@ -85,9 +89,11 @@ function Aid() {
         
         if(type.trim().length === 0) {
             setPopulatedA(false)
+            alert("Please enter a type.");
         }
         if(quantity.trim().length === 0) {
             setPopulatedA(false)
+            alert("Please enter a quantity.");
         }
     }
 
