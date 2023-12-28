@@ -76,7 +76,7 @@
     padding-top: 0;
 }
 
-#popUpA {
+#popUpP {
     background-color: #373737;
     display: flex;
     flex-direction: column;
@@ -99,7 +99,7 @@
     padding: 10px;
 }
 
-#popUpA > div {
+#popUpP > div {
     margin: auto;
     display: flex;
     align-items: center;

@@ -29,15 +29,17 @@ function Reports() {
     
     function showreport()
     {
-        setpopulated(true)
         
-        if(type=="report1")
+        if(mindate!='')
         {
-            setPopUpA(true)
-        }
-        if(type=="report2")
-        {
-            setPopUpB(true)
+            if(type=="report1")
+            {
+                setPopUpA(true)
+            }
+            if(type=="report2")
+            {
+                setPopUpB(true)
+            }
         }
     }
 
@@ -145,21 +147,26 @@ function Reports() {
 
     return (
 
-    <div>
-        <div>
-             <label htmlFor='Type'>Report Type </label>
-                <select name="Type" value={type} onChange={(e) => settype(e.target.value)}>
-                    <option value="" disabled>Select Report Type</option>
-                    <option value="report1" >Participation Report</option>
-                    <option value="report2">Monthly assets report</option>
-                </select>
-        </div>
+    <div id='mbut'>
+        <div id='mainrep'>
+            <div>
+                <label htmlFor='Type'>Report Type </label>
+                    <select name="Type" value={type} onChange={(e) => settype(e.target.value)}>
+                        <option value="" disabled>Select Report Type</option>
+                        <option value="report1" >Participation Report</option>
+                        <option value="report2">Monthly assets report</option>
+                    </select>
+            </div>
 
-        <div>
-             <label htmlFor='Type'>Month</label>
-             <input type="date" id="date" value={mindate} onChange={(e) => setmindate(e.target.value)} required/>
+            <div>
+                <label htmlFor='Type'>Month</label>
+                <input type="date" id="date" value={mindate} onChange={(e) => setmindate(e.target.value)} required/>
+            </div>
+            
         </div>
-        <button type="button" onClick={showreport}>Show Report</button>
+        <div >
+            <button type="button" onClick={showreport} >Show Report</button>
+        </div>
         
         { 
         popUpA &&
@@ -206,21 +213,49 @@ function Reports() {
             <div className="Fields">
                 <div className="inFields">
                     <p>Aids:</p>
-                    <p>{aidcount[1]}</p>   
+                    <p>{aidcount.count}</p>   
                 </div>
                 <div className="inFields">
                     <p>Quantity Handed Out</p>
+                    <div id='teamData'>
+                        <div id='tableHead'>
+                            <div className='benfText idtable'>Type</div>
+                            <div className='benfText'>Total Quantity</div>
+                        </div>
+                        <div id='beneficiaries'>
+                            {ar2.map((member,key) => (
+                                <div className='member' key={key}>
+                                    <div className='benfText idtable'>{member.A_Type}</div>
+                                    <div className='benfText'>{member.quantity}</div>
+                                </div>
+                            ))}
+                            
+                        </div>
+                    </div>
                        
                 </div> 
             </div>
             <div className="Fields">
                 <div className="inFields">
-                    <p>Quantity Added </p>
-                        
+                      
                 </div>
                 <div className="inFields">
                     <p>Quantity Left</p>
-                       
+                    <div id='teamData'>
+                        <div id='tableHead'>
+                            <div className='benfText idtable'>Type</div>
+                            <div className='benfText'>Total Quantity</div>
+                        </div>
+                        <div id='beneficiaries'>
+                            {tq.map((member,key) => (
+                                <div className='member' key={key}>
+                                    <div className='benfText idtable'>{member.D_Type}</div>
+                                    <div className='benfText'>{member.Quantity}</div>
+                                </div>
+                            ))}
+                            
+                        </div>
+                    </div>
                 </div>   
                   
             </div>
