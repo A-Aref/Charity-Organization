@@ -10,6 +10,8 @@ function Donations(props) {
     const [clothes,setclothes] = useState([])
 
 
+
+
     const [popUpD,setPopUpD] = useState(false)
     const [selectD_Type,setSelectD_Type] = useState('')
     const [amount,setAmount] = useState('')
@@ -85,7 +87,93 @@ function Donations(props) {
 
     
     function createDonation() {
+if(selectD_Type === "Money")
+{
+        if (!amount.trim()) {
+            setPopulatedD(false);
+            alert("Amount is missing");
+          }else
+          if (parseFloat(amount) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive amount ");
+        }else
+          if (!purpose.trim()) {
+            setPopulatedD(false);
+            alert("Purpose is missing");
+        }else
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please enter Date"); 
+        }else
+        if (!currency.trim()) {
+            setPopulatedD(false);
+            alert("Please select currency");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
+        }
+    }
 
+    if(selectD_Type === "Clothes")
+    {
+        if (!capacity.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter quantity");
+        }else
+        if (parseFloat(capacity) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive quantity");
+        }else
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter Date");
+        }else
+        if (!type.trim()) {
+            setPopulatedD(false);
+            alert("Please select type");
+        }else
+        if (!size.trim()) {
+            setPopulatedD(false);
+            alert("Please select size");
+        }else
+        if (!quality.trim()) {
+            setPopulatedD(false);
+            alert("Please select quality");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
+        }
+    }
+    if(selectD_Type === "General")
+    {
+
+        if (!quantity.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter quantity");
+        }else
+        if (parseFloat(quantity) <= 0) {
+            setPopulatedD(false);
+            alert("Please Enter positive quantity");
+        }else
+        if (!date.trim()) {
+            setPopulatedD(false);
+            alert("Please Enter date");
+        }else
+        if (!descr.trim()) {
+            setPopulatedD(false);
+            alert("Please select description");
+        }else
+        if (delivery=="") {
+            setPopulatedD(false);
+            alert("Please select delivery option");
+        }
+
+
+
+    }
+        
     setPopulatedD(true)
       if(selectD_Type === "Money") {
         
@@ -93,19 +181,19 @@ function Donations(props) {
       if(amount.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if( date.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(delivery.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(purpose.trim().length === 0) {
         setPopulatedD(false)
         
-    }
+    }else
     if(currency.trim().length === 0) {
         setPopulatedD(false)
         
@@ -186,15 +274,25 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_money_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setmoneyDonations(JSON.parse(data))
+                })
+            })  
             
             var AmountLE=amount;
             if (currency==="EUR")
             {
-                AmountLE=AmountLE*2
+                AmountLE=AmountLE*34
             }
             if (currency==="USD")
             {
-                AmountLE=AmountLE*3
+                AmountLE=AmountLE*31
             }
             var hazl2oom6 = {"Quantity":AmountLE,"Type":"Money"}
             fetch("/api/Donor/T_Total_assets", {
@@ -226,6 +324,16 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_clothes_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setclothes(JSON.parse(data))
+                })
+            })  
 
            
             var hazl2oom6 = {"Quantity":capacity,"Type":"Clothes"}
@@ -251,6 +359,16 @@ if(selectD_Type === "General") {
                 headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
             })
             .then((response)=>{return response.json()})
+            .then(()=>{
+                fetch("/api/Donor/old_general_donations", {
+                    method: "POST",
+                    body:  JSON.stringify({"donorid":props.user.DonorID,"date":currdate}),
+                    headers: { 'Accept': 'application/json','Content-Type': 'application/json'}, 
+                })
+                .then((response)=>{return response.json()})
+                .then((data)=>{setgeneralDonations(JSON.parse(data))
+                })
+            })  
             
               
             var hazl2oom6 = {"Quantity":quantity,"Type":descr}
@@ -395,9 +513,14 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                    <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
+                    
                     <div>
                         <label htmlFor='Purpose'>Purpose</label>
                         <input type="text" id="Purpose" value={purpose} onChange={(e) => setpurpose(e.target.value)}/>
@@ -430,8 +553,12 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                    <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
                    
                     <div>
@@ -484,8 +611,12 @@ if(selectD_Type === "General") {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='Delivery'>Delivery</label>  
-                        <input type="text" id="Delivery" value={delivery} onChange={(e) => setdelivery(e.target.value)}/>
+                        <label htmlFor='Delivery'>Delivery</label>
+                        <select  value={delivery} onChange={(e) => setdelivery(e.target.value)}>
+                        <option value="" disabled>Select method</option>
+                        <option value="1">Delivery</option>
+                        <option value="0">Not Delivery</option>
+                        </select>
                     </div>
                    
                     <div>

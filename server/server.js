@@ -693,7 +693,7 @@ app.post("/api/Admin/aidcount", (req,res)=>{
       console.log(err)
       return res.json("No aids Yet ya 7ob")
     }
-    return res.json(JSON.stringify(result[0]))
+    return res.json(JSON.stringify(result[0][0]))
   });
 })
 
@@ -705,7 +705,7 @@ app.post("/api/Admin/ar2", (req,res)=>{
       console.log(err)
       return res.json("No aids Yet ya 7ob")
     }
-    return res.json(JSON.stringify(result))
+    return res.json(JSON.stringify(result[0]))
   });
 })
 

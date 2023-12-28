@@ -34,28 +34,42 @@ function Register(props)
   }
 
   function Registerbutt () {
-    setPopulated(true)
-    if(fname.trim().length === 0) {
-      setPopulated(false)    
-    }
-    if( lname.trim().length === 0) {
-      setPopulated(false)
-    }
-    if(email.trim().length === 0) {
-      setPopulated(false)
-    }
-    if(phone.trim().length === 0) {
-      setPopulated(false)
-    }
-    if(address.trim().length === 0) {
-      setPopulated(false)    
-    }
-    if(pass.trim().length === 0) {
-      setPopulated(false) 
-    }
-    if(cpass.trim().length === 0) {
-      setPopulated(false)
-    }
+    if (!/^[a-zA-Z]+$/.test(fname.trim())) {
+      setPopulated(false);
+      alert("Please enter First name.");
+    }else
+    if (!/^[a-zA-Z]+$/.test(lname.trim())) {
+      setPopulated(false);
+      alert("Please enter Last name.");
+    }else
+    if (!email.trim()) {
+      setPopulated(false);
+      alert("Email is missing");
+    }else
+    if (!address.trim()) {
+      setPopulated(false);
+      alert("Address is missing");
+    }else
+    if (!pass.trim()) {
+      setPopulated(false);
+      alert("password is missing");
+    }else
+    if (!cpass.trim()) {
+      setPopulated(false);
+      alert("Please confirm the password");
+    }else
+    if(pass!=cpass)
+    {
+     
+      alert("Incorrect Password");
+      setPopulated(false);
+      reset()
+      
+    }else
+    if (!/^[0-9][0-9]{9}$/.test(phone.trim())) {
+      setPopulated(false);
+      alert("Please enter a valid 10-digit phone number starting with a number from 0-9.");
+  }
   }
 
     useEffect(() => {
@@ -108,7 +122,7 @@ function Register(props)
           <input type="text" id="Lname" value={lname} onChange={(e) => setlname(e.target.value)} placeholder='Last Name'/>
         </div>       
         <div>              
-          <input type="text" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)} placeholder='Phone'/>
+          <input type="number" id="Phone" value={phone} onChange={(e) => setphone(e.target.value)} placeholder='Phone'/>
         </div>
         <div>
           <input type="text" id="Email" value={email} onChange={(e) => setemail(e.target.value)} placeholder='Email'/>

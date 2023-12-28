@@ -16,27 +16,42 @@ function trans() {
 
         setPopulatedB(true)
         
+        
         if(fname.trim().length === 0) {
             setPopulatedB(false)
-        }
+            alert("Please enter a first name.");
+        }else
         if(lname.trim().length === 0) {
-            setPopulatedB(false)
-        }
+            alert("Please enter a last name.");
+        }else
         if(phone.trim().length === 0) {
             setPopulatedB(false)
-        }
+            alert("Please enter a phone number.");
+        }else
         if(plate.trim().length === 0) {
             setPopulatedB(false)
-        }
+            alert("Please enter a plate number.");
+        }else
         if(prodyear.trim().length === 0) {
             setPopulatedB(false)
-        }
-        if(capacity.trim().length === 0) {
+            alert("Please enter production year.");
+        }else
+        if(capacity== 0) {
             setPopulatedB(false)
-        }
-        if(iscargo.trim().length === 0) {
-            setPopulatedB(false)
-        }
+            alert("Please enter capacity.");
+        }else
+        if (!/^[a-zA-Z]+$/.test(fname.trim())) {
+            setPopulatedB(false);
+            alert("Please enter a valid first name.");
+          }else
+          if (!/^[a-zA-Z]+$/.test(lname.trim())) {
+            setPopulatedB(false);
+            alert("Please enter a valid last name.");
+          }else
+          if (!/^[1-9]+$/.test(phone.trim())) {
+            setPopulatedB(false);
+            alert("Please enter a valid phone num.");
+          }
     }
 
     function reset() {
